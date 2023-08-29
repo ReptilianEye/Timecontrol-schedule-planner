@@ -23,4 +23,7 @@ interface InstructorDao {
 
     @Query("SELECT * FROM instructors_data_table")
     fun getAllInstructors(): Flow<List<Instructor>>
+
+    @Query("SELECT * FROM instructors_data_table WHERE id = :id")
+    fun getInstructorById(id: Int)
 }

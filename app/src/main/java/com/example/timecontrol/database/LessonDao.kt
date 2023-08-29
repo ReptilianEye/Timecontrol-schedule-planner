@@ -25,4 +25,7 @@ interface LessonDao {
     @Transaction
     @Query("SELECT * FROM lessons_data_table")
     fun getAllLessons(): Flow<List<LessonWithStudentAndInstructor>>
+
+    @Query("SELECT * FROM lessons_data_table WHERE id = :id")
+    fun getLessonById(id: Int)
 }
