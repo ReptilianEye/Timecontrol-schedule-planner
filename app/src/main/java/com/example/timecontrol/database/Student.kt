@@ -12,24 +12,24 @@ data class Student(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
-    @ColumnInfo(name = "student_phone_number")
+    @ColumnInfo(name = "phone_number")
     val phoneNumber: String,
 
-    @ColumnInfo(name = "student_name")
+    @ColumnInfo(name = "name")
     val name: String,
 
-    @ColumnInfo(name = "student_lastname")
+    @ColumnInfo(name = "lastname")
     val lastname: String,
 
-    @ColumnInfo(name = "student_level")
+    @ColumnInfo(name = "level")
     val level: String,
 
-    @ColumnInfo(name = "student_birth_date")
+    @ColumnInfo(name = "birth_date")
     val birthDate: LocalDate,
 
-    @ColumnInfo(name = "student_arrival_date")
+    @ColumnInfo(name = "arrival_date")
     val arrivalDate: LocalDate,
 
-    @ColumnInfo(name = "student_departure_date")
+    @ColumnInfo(name = "departure_date")
     val departureDate: LocalDate,
 )

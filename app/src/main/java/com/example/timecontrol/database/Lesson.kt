@@ -11,18 +11,18 @@ data class Lesson(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
-    @ColumnInfo(name = "lesson_date")
+    @ColumnInfo(name = "date")
     val date: LocalDate,
 
-    @ColumnInfo(name = "lesson_duration")
+    @ColumnInfo(name = "duration")
     val duration: Int,
 
-    @ColumnInfo(name = "lesson_level_after")
+    @ColumnInfo(name = "level_after")
     val levelAfter: String,
 
-    @ColumnInfo(name = "lesson_student_id")
+    @ColumnInfo(name = "student_id")
     val studentId: Int,
 
-    @ColumnInfo(name = "lesson_instructor_id")
+    @ColumnInfo(name = "instructor_id")
     val instructorId: Int
 )

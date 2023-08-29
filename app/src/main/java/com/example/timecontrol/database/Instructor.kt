@@ -10,21 +10,21 @@ data class Instructor(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
 
-    @ColumnInfo(name = "instructor_phone_number")
+    @ColumnInfo(name = "phone_number")
     val phoneNumber: String,
 
-    @ColumnInfo(name = "instructor_name")
+    @ColumnInfo(name = "name")
     val name: String,
 
-    @ColumnInfo(name = "instructor_lastname")
+    @ColumnInfo(name = "lastname")
     val lastname: String,
 
-    @ColumnInfo(name = "instructor_nickname")
+    @ColumnInfo(name = "nickname")
     val nickname: String,
 
-    @ColumnInfo(name = "instructor_arrival_date")
+    @ColumnInfo(name = "arrival_date")
     val arrivalDate: LocalDate,
 
-    @ColumnInfo(name = "instructor_departure_date")
+    @ColumnInfo(name = "departure_date")
     val departureDate: LocalDate,
 )
