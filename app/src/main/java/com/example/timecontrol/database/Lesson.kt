@@ -24,8 +24,5 @@ data class Lesson(
     val studentId: Int,
 
     @ColumnInfo(name = "lesson_instructor_id")
-    val instructorId: Int,
-
-    @Embedded
-    val student: Student
+    val instructorId: Int
 )
