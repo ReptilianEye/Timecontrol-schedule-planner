@@ -5,54 +5,70 @@ class AppRepository(private val appDatabase: AppDatabase) {
     private val lessonDao = appDatabase.lessonDao()
     private val studentDao = appDatabase.studentDao()
 
+    val instructors = instructorDao.getAllInstructors()
+    val lessons = lessonDao.getAllLessons()
+    val students = studentDao.getAllStudents()
+
     //Instructor operations
-    fun getInstructorById(id: Int){
-        instructorDao.getInstructorById(id)
+    fun getInstructorById(id: Int) {
+        return instructorDao.getInstructorById(id)
+    }
+
+    suspend fun deleteAllInstructors() {
+        return instructorDao.deleteAll()
     }
 
     suspend fun insertInstructor(instructor: Instructor) {
-        instructorDao.insertInstructor(instructor)
+        return instructorDao.insertInstructor(instructor)
     }
 
     suspend fun updateInstructor(instructor: Instructor) {
-        instructorDao.updateInstructor(instructor)
+        return instructorDao.updateInstructor(instructor)
     }
 
     suspend fun deleteInstructor(instructor: Instructor) {
-        instructorDao.deleteInstructor(instructor)
+        return instructorDao.deleteInstructor(instructor)
     }
 
     //Lesson operations
-    fun getLessonById(id: Int){
-        lessonDao.getLessonById(id)
+    fun getLessonById(id: Int) {
+        return lessonDao.getLessonById(id)
+    }
+
+    suspend fun deleteAllLessons() {
+        return lessonDao.deleteAll()
     }
 
     suspend fun insertLesson(lesson: Lesson) {
-        lessonDao.insertLesson(lesson)
+        return lessonDao.insertLesson(lesson)
     }
 
     suspend fun updateLesson(lesson: Lesson) {
-        lessonDao.updateLesson(lesson)
+        return lessonDao.updateLesson(lesson)
     }
 
     suspend fun deleteLesson(lesson: Lesson) {
-        lessonDao.deleteLesson(lesson)
+        return lessonDao.deleteLesson(lesson)
     }
 
     //Student operations
-    fun getStudentById(id: Int){
-        studentDao.getStudentById(id)
+    fun getStudentById(id: Int) {
+        return studentDao.getStudentById(id)
+    }
+
+    suspend fun deleteAllStudents() {
+        return studentDao.deleteAll()
     }
 
     suspend fun insertStudent(student: Student) {
-        studentDao.insertStudent(student)
+        return studentDao.insertStudent(student)
     }
 
     suspend fun updateStudent(student: Student) {
-        studentDao.updateStudent(student)
+        return studentDao.updateStudent(student)
     }
 
     suspend fun deleteStudent(student: Student) {
-        studentDao.deleteStudent(student)
+        return studentDao.deleteStudent(student)
     }
 }
