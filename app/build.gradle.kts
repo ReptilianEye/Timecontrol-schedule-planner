@@ -3,8 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp") version "1.8.10-1.0.9"
     id("com.google.relay") version "0.3.08"
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
-
 android {
     namespace = "com.example.timecontrol"
     compileSdk = 33
@@ -63,7 +63,12 @@ dependencies {
     ksp("androidx.room:room-compiler:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2") //support for coroutines
 
-    implementation ("androidx.navigation:navigation-compose:2.5.3")
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    //Ktor - Http Client
+    implementation("io.ktor:ktor-client-android:2.1.3")
+    implementation("androidx.core:core-ktx:1.9.0")
 
 
     implementation("androidx.core:core-ktx:1.9.0")
@@ -74,7 +79,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation ("androidx.compose.material:material:1.4.0")
+    implementation("androidx.compose.material:material:1.4.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

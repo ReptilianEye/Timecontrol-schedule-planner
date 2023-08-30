@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.timecontrol.ui.theme.TimecontrolTheme
 import com.example.timecontrol.uppernavbar.UpperNavbar
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.android.Android
 
 class MainActivity : ComponentActivity() {
     private val sharedPreferences by lazy { getSharedPreferences("Timecontrol", MODE_PRIVATE) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
