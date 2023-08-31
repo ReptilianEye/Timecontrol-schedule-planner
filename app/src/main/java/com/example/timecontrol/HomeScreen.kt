@@ -22,16 +22,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.timecontrol.calendaritem.CalendarItem
+import com.example.timecontrol.data.dto.Quote
 import com.example.timecontrol.quote.Quote
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(quote: Quote) {
+
     val context = LocalContext.current
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -39,7 +40,8 @@ fun HomeScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Quote(
-            content = "Siema", author = "ziomek 1", modifier = Modifier
+            author = quote.author,
+            content = quote.quote, modifier = Modifier
                 .width(345.dp)
                 .height(140.dp)
         )
@@ -116,8 +118,3 @@ fun HomeScreen() {
     }
 }
 
-@Preview
-@Composable
-fun PreviewHome() {
-    HomeScreen()
-}
