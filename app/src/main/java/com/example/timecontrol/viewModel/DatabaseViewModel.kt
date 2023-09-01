@@ -9,7 +9,7 @@ import com.example.timecontrol.database.LessonWithStudentAndInstructor
 import com.example.timecontrol.database.Student
 import com.example.timecontrol.database.StudentWithLessons
 
-class TrainingViewModel(private val repository: AppRepository): ViewModel() {
+class ViewModel(private val repository: AppRepository): ViewModel() {
     val instructors = repository.instructors
     val lessons = repository.lessons
     val students = repository.students
