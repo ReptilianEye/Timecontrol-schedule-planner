@@ -22,8 +22,8 @@ interface InstructorDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM instructors_data_table")
-    fun getAllInstructors(): Flow<List<Instructor>>
+    fun getAllInstructors(): Flow<List<InstructorWithLessons>>
 
     @Query("SELECT * FROM instructors_data_table WHERE id = :id")
-    fun getInstructorById(id: Int)
+    fun getInstructorById(id: Int): InstructorWithLessons
 }

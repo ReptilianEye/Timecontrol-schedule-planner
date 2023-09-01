@@ -10,7 +10,7 @@ class AppRepository(private val appDatabase: AppDatabase) {
     val students = studentDao.getAllStudents()
 
     //Instructor operations
-    fun getInstructorById(id: Int) {
+    fun getInstructorById(id: Int): InstructorWithLessons {
         return instructorDao.getInstructorById(id)
     }
 
@@ -31,7 +31,7 @@ class AppRepository(private val appDatabase: AppDatabase) {
     }
 
     //Lesson operations
-    fun getLessonById(id: Int) {
+    fun getLessonById(id: Int): LessonWithStudentAndInstructor {
         return lessonDao.getLessonById(id)
     }
 
@@ -52,7 +52,7 @@ class AppRepository(private val appDatabase: AppDatabase) {
     }
 
     //Student operations
-    fun getStudentById(id: Int) {
+    fun getStudentById(id: Int): StudentWithLessons {
         return studentDao.getStudentById(id)
     }
 
