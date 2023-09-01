@@ -6,8 +6,8 @@ import com.example.timecontrol.database.AppRepository
 
 class DatabaseViewModelFactory (private val repository: AppRepository): ViewModelProvider.Factory {
     override fun <T: ViewModel> create(modelClass: Class<T>):T {
-        if(modelClass.isAssignableFrom(ViewModel::class.java)) {
-            return ViewModel(repository) as T
+        if(modelClass.isAssignableFrom(DatabaseViewModel::class.java)) {
+            return DatabaseViewModel(repository) as T
         }
         throw  IllegalArgumentException("Unknown ViewModel Class")
     }
