@@ -1,0 +1,132 @@
+{
+  "name": "calendar_item",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "p48u97ZvCHr4B9GxuEsXNn",
+    "node": "45:157",
+    "version": "4078784918",
+    "component-id": "e0f13eeb544efb63795b395450e752b2d574daeb"
+  },
+  "default": "CalendarItem",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "Mon"
+      },
+      {
+        "type": "text",
+        "id": "1.07"
+      }
+    ],
+    "modes": {
+      "CalendarItem": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "4.0",
+              "top": "12.0",
+              "right": "4.0",
+              "bottom": "12.0"
+            },
+            "border-radius": "5.0",
+            "tap-handler": "$on Click",
+            "main-axis-align": "start",
+            "children": [
+              "Mon",
+              "1.07"
+            ],
+            "item-spacing": "10.0",
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.8509803921568627"
+            },
+            "clip-content": "false"
+          },
+          {
+            "id": "Mon",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$day of week",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "line-height": "1.2102272851126534",
+            "typeface": "Inter"
+          },
+          {
+            "id": "1.07",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "43.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$date",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align-vertical": "center",
+            "line-height": "1.2102272851126534",
+            "typeface": "Inter"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "on Click": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "day of week": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "date": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "CalendarItem",
+      "size": {
+        "width": 42.0,
+        "height": 66.0
+      },
+      "parameters": {
+        "day of week": "Mon",
+        "date": "01.07"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
