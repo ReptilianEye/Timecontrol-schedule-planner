@@ -48,7 +48,8 @@ fun RootLayout(quote: Quote) {
                 .height(85.dp)
                 .fillMaxWidth()
         )
-        HomeScreen(quote)// Navhost in final version
+//        HomeScreen(quote)// Navhost in final version
+        StudentsScreen(students = emptyList())
     }
 }
 
