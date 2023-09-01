@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
 @Database(entities = [Instructor::class, Lesson::class, Student::class], version = 1)
+@TypeConverters(LocalDateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun instructorDao(): InstructorDao
     abstract fun lessonDao(): LessonDao
