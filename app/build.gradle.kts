@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp") version "1.8.10-1.0.9"
     id("com.google.relay") version "0.3.08"
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
 }
 android {
     namespace = "com.example.timecontrol"
@@ -67,9 +68,18 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
     //Ktor - Http Client
-    implementation("io.ktor:ktor-client-android:2.1.3")
-    implementation("androidx.core:core-ktx:1.9.0")
+    val ktor_version = "1.6.3"
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-android:$ktor_version")
+    implementation("io.ktor:ktor-client-serialization:$ktor_version")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+
+    implementation("androidx.preference:preference-ktx:1.2.1")
+
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
