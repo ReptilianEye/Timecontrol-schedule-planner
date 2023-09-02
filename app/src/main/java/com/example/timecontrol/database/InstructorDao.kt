@@ -25,5 +25,5 @@ interface InstructorDao {
     fun getAllInstructors(): Flow<List<InstructorWithLessons>>
 
     @Query("SELECT * FROM instructors_data_table WHERE id = :id")
-    fun getInstructorById(id: Int): InstructorWithLessons
+    suspend fun getInstructorById(id: Int): InstructorWithLessons
 }
