@@ -1,5 +1,6 @@
 package com.example.timecontrol
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,16 +25,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.timecontrol.calendaritem.CalendarItem
 import com.example.timecontrol.data.dto.Quote
 import com.example.timecontrol.quote.Quote
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20
+import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
-fun HomeScreen(quote: Quote) {
-
-    val context = LocalContext.current
+fun HomeScreen(quote: Quote, navController: NavController, viewModel: DatabaseViewModel, context: Context) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp),
