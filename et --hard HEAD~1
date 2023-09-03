@@ -1,0 +1,169 @@
+[33mcommit 30d5a6d2f19cb1ac825bc1b08164eb85ff0d1938[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Sat Sep 2 14:09:04 2023 +0200
+
+    arrows and changed com.ggogle.relay version - needed to run app with implemented UI
+
+[33mcommit 85977a1a6a8f6413cdd4836bb635abd55f6f2bec[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Merge: a30b8b6 a3fc3ce
+Author: Bartosz Klęczar <128930025+bartekkleczar@users.noreply.github.com>
+Date:   Fri Sep 1 23:10:14 2023 +0200
+
+    Merge pull request #7 from ReptilianEye/view-model
+    
+    view model implementation
+
+[33mcommit a3fc3ce058c0f81cd74206c6da51bfab0fed1920[m[33m ([m[1;31morigin/view-model[m[33m)[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Fri Sep 1 23:08:52 2023 +0200
+
+    Renamed view model class
+
+[33mcommit 8b4181a7a6510a4104301cf066e685bb3998d6ae[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Fri Sep 1 19:53:07 2023 +0200
+
+    view model implementation
+
+[33mcommit a30b8b619a314e970f5751309881b6592f872264[m
+Merge: 267fef4 b0b2ddb
+Author: Piotr Rzadkowski <81797728+ReptilianEye@users.noreply.github.com>
+Date:   Fri Sep 1 14:08:50 2023 +0200
+
+    Merge pull request #6 from ReptilianEye/datebase_fix
+    
+    Datebase fix
+
+[33mcommit b0b2ddbbf496aff095de4ec44b2abb2848efa044[m
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Fri Sep 1 13:40:37 2023 +0200
+
+    adding new relations and filling lacking return type of few functions
+
+[33mcommit cc3800902ef8e15179e835b4cbb95bbd58731fcb[m
+Merge: e073c54 267fef4
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Fri Sep 1 10:19:10 2023 +0200
+
+    Merge branch 'main' of https://github.com/ReptilianEye/Timecontrol---schedule-planner
+
+[33mcommit 267fef44fa9a0032645ca3778c0b8d8146802ec0[m
+Merge: c361270 0e8f750
+Author: Piotr Rzadkowski <81797728+ReptilianEye@users.noreply.github.com>
+Date:   Fri Sep 1 10:18:26 2023 +0200
+
+    Merge pull request #5 from ReptilianEye/HomeScreen
+    
+    Home screen and quote api implemented
+
+[33mcommit e073c541eb9bb6ea587b1bb54e8d4bf1eaa4dbce[m
+Merge: c09fd76 c361270
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Thu Aug 31 13:57:18 2023 +0200
+
+    Merge branch 'main' of https://github.com/ReptilianEye/Timecontrol---schedule-planner
+
+[33mcommit 0e8f750d31bad00cc6784855f50e38a34cde9968[m
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Thu Aug 31 13:55:03 2023 +0200
+
+    collecting quote from api finished
+
+[33mcommit c3612705449e72f48723238a8c9d6f4dd29b3cdb[m
+Merge: 6cf2c84 1173042
+Author: Bartosz Klęczar <128930025+bartekkleczar@users.noreply.github.com>
+Date:   Thu Aug 31 12:57:16 2023 +0200
+
+    Merge pull request #4 from ReptilianEye/database
+    
+    Database
+
+[33mcommit 1173042b38de991f77c2a4d4cfb57b88172266fd[m[33m ([m[1;31morigin/database[m[33m)[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Wed Aug 30 20:19:23 2023 +0200
+
+    added function clearing table and added values with every ocject from table
+
+[33mcommit c09fd76de7f4865b5a97073b2f630fd52176c853[m
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Wed Aug 30 19:01:30 2023 +0200
+
+    started to implementing collecting quote from api
+
+[33mcommit 0d88f9554fda3614bd01d741d2578d83e80fa0f0[m
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Wed Aug 30 17:55:44 2023 +0200
+
+    Almost finished Home Screen UI
+
+[33mcommit c551571b7425d59563161cb4de219f8600c65a02[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Tue Aug 29 23:24:47 2023 +0200
+
+    Code for app database and repository + getById function for all daos
+
+[33mcommit 6cf2c84aa5ef785616d6c3ecf040b1e990784ebf[m
+Merge: eedb487 a414df1
+Author: Bartosz Klęczar <128930025+bartekkleczar@users.noreply.github.com>
+Date:   Tue Aug 29 15:34:59 2023 +0200
+
+    Merge pull request #2 from ReptilianEye/database
+    
+    database object classes, daos for them and type converter for LocalDate
+
+[33mcommit a414df1250e03b65efb7afa0ce7b77088ee9a615[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Tue Aug 29 15:32:21 2023 +0200
+
+    removed table name from column name in all tables
+
+[33mcommit 5205a89371466f9daa8f19710ab6c79fae14ccfe[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Tue Aug 29 15:25:40 2023 +0200
+
+    deleted unnecessary @Embedded annotation in Lesson class
+
+[33mcommit e5e8252029597aa1ec5a2052a3378c802627766d[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Tue Aug 29 15:12:48 2023 +0200
+
+    database object classes, daos for them and type converter for LocalDate
+
+[33mcommit eedb487a73144654bcd1d770e9e0a7c25e8d732a[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Mon Aug 28 23:04:34 2023 +0200
+
+    ksp + logo rename
+
+[33mcommit b3c8f0315917a914f49109db10d1856c8c7c1d64[m
+Merge: 12828bc fe66706
+Author: Bartosz Klęczar <128930025+bartekkleczar@users.noreply.github.com>
+Date:   Mon Aug 28 22:54:40 2023 +0200
+
+    Merge pull request #1 from ReptilianEye/dependencies
+    
+    room dep
+
+[33mcommit fe6670646c691f8ea0e5d191118f41b84270fdbd[m[33m ([m[1;31morigin/dependencies[m[33m)[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Mon Aug 28 22:51:10 2023 +0200
+
+    room dep
+
+[33mcommit 12828bce6369db676e3c8c80abdca60aeb1acc9e[m
+Author: bartekkleczar <kleczarbartosz.pv@gmail.com>
+Date:   Mon Aug 28 22:48:48 2023 +0200
+
+    test
+
+[33mcommit 5bf91df05d7d180b3b1ac8a72163aa0e73315be2[m
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Mon Aug 28 22:42:18 2023 +0200
+
+    updated logo and .gitignore
+
+[33mcommit b97096476edc7f300efb7457a869d633dfe16492[m
+Author: ReptilianEye <piotr.rzadkowski@outlook.com>
+Date:   Mon Aug 28 22:35:56 2023 +0200
+
+    initialize project

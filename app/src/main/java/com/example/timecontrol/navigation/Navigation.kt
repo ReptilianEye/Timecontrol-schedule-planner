@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.timecontrol.HomeScreen
 import com.example.timecontrol.MainActivity
 import com.example.timecontrol.RootLayout
+import com.example.timecontrol.ScheduleScreen
 import com.example.timecontrol.StudentsScreen
 import com.example.timecontrol.data.dto.Quote
 import com.example.timecontrol.viewModel.DatabaseViewModel
@@ -20,15 +21,15 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
         //Home Screen
         composable(route = Screen.HomeScreen.route) {
             RootLayout(navController = navController,
-            localization = 1,
+                localization = 1,
                 content = {
-                HomeScreen(
-                    quote = quote,
-                    navController = navController,
-                    viewModel = viewModel,
-                    context = context
-                )
-            })
+                    HomeScreen(
+                        quote = quote,
+                        navController = navController,
+                        viewModel = viewModel,
+                        context = context
+                    )
+                })
         }
 
         //Students Screen
@@ -36,8 +37,17 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
             RootLayout(navController = navController,
                 localization = 0,
                 content = {
-                StudentsScreen()
-            })
+                    StudentsScreen()
+                })
+        }
+
+        //Schedule Screen
+        composable(route = Screen.StudentsScreen.route) {
+            RootLayout(navController = navController,
+                localization = 0,
+                content = {
+                    ScheduleScreen()
+                })
         }
     }
 
