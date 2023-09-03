@@ -42,9 +42,9 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
         }
 
         //Schedule Screen
-        composable(route = Screen.StudentsScreen.route) {
+        composable(route = Screen.ScheduleScreen.route) {
             RootLayout(navController = navController,
-                localization = 0,
+                localization = 2,
                 content = {
                     ScheduleScreen()
                 })
