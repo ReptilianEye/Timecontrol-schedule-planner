@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val White80 = Color(0xFFF6F4EB)
 
+val Blue10 = Color(0xFFC2E6F8)
 val Blue20 = Color(0xFF91C8E4)
 val Blue30 = Color(0xFF749BC2)
 val Blue40 = Color(0xFF4682A9)

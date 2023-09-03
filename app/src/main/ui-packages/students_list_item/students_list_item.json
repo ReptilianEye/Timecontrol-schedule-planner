@@ -1,0 +1,571 @@
+{
+  "name": "students_list_item",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "p48u97ZvCHr4B9GxuEsXNn",
+    "node": "108:349",
+    "version": "4096648673",
+    "component-id": "30344fbfcdf34710e2b819c20f25d7d6190d8112"
+  },
+  "default": "StudentsListItem",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "Level"
+      },
+      {
+        "type": "group",
+        "id": "Group 1"
+      },
+      {
+        "type": "text",
+        "id": "<departure>"
+      },
+      {
+        "type": "group",
+        "id": "access_time/Style6"
+      },
+      {
+        "type": "text",
+        "id": "<place>"
+      },
+      {
+        "type": "group",
+        "id": "place"
+      },
+      {
+        "type": "text",
+        "id": "<tel no.>"
+      },
+      {
+        "type": "group",
+        "id": "phone/Style6"
+      },
+      {
+        "type": "text",
+        "id": "<student name>"
+      },
+      {
+        "type": "group",
+        "id": "person/Style6"
+      },
+      {
+        "type": "vector",
+        "id": "Info"
+      },
+      {
+        "type": "vector",
+        "id": "Ellipse 1"
+      },
+      {
+        "type": "text",
+        "id": "2I"
+      },
+      {
+        "type": "vector",
+        "id": "Vector"
+      },
+      {
+        "type": "vector",
+        "id": "Vector_place"
+      },
+      {
+        "type": "vector",
+        "id": "Vector_phone"
+      },
+      {
+        "type": "vector",
+        "id": "Vector_person"
+      }
+    ],
+    "modes": {
+      "StudentsListItem": {
+        "rules": [
+          {
+            "id": "top_level",
+            "border-radius": "20.0",
+            "tap-handler": "$on Click",
+            "stroke-width": "1.0",
+            "stroke-color": {
+              "alpha": "0.4",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "is-structured": "false",
+            "children": [
+              "Level",
+              "Group 1",
+              "<departure>",
+              "access_time/Style6",
+              "<place>",
+              "place",
+              "<tel no.>",
+              "phone/Style6",
+              "<student name>",
+              "person/Style6",
+              "Info"
+            ],
+            "background-color": "$background"
+          },
+          {
+            "id": "Level",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "19.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "69.0"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Level",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "Group 1",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "10.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "18.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "50.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "50.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "Ellipse 1",
+              "2I"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "<departure>",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "268.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "74.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$departure date",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "access_time/Style6",
+            "margin": {
+              "left": "236.0",
+              "top": "70.0",
+              "right": "130.0",
+              "bottom": "8.0"
+            },
+            "is-structured": "false",
+            "children": [
+              "Vector"
+            ]
+          },
+          {
+            "id": "<place>",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "100.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "73.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$place of stay",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "place",
+            "margin": {
+              "left": "68.0",
+              "top": "70.0",
+              "right": "298.0",
+              "bottom": "8.0"
+            },
+            "is-structured": "false",
+            "children": [
+              "Vector_place"
+            ]
+          },
+          {
+            "id": "<tel no.>",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "100.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "42.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "148.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$tel no",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "phone/Style6",
+            "margin": {
+              "left": "68.0",
+              "top": "39.0",
+              "right": "298.0",
+              "bottom": "39.0"
+            },
+            "is-structured": "false",
+            "children": [
+              "Vector_phone"
+            ]
+          },
+          {
+            "id": "<student name>",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "98.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "8.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "197.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "22.0"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$name",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "person/Style6",
+            "margin": {
+              "left": "68.0",
+              "top": "8.0",
+              "right": "298.0",
+              "bottom": "70.0"
+            },
+            "is-structured": "false",
+            "children": [
+              "Vector_person"
+            ]
+          },
+          {
+            "id": "Info",
+            "margin": {
+              "left": "348.0",
+              "top": "14.0",
+              "right": "17.0",
+              "bottom": "63.0"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "info.svg"
+          },
+          {
+            "id": "Ellipse 1",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "50.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "50.0"
+              }
+            },
+            "vector-content": "ellipse_1.svg"
+          },
+          {
+            "id": "2I",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "6.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "7.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "39.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "36.0"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$level",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align-vertical": "center",
+            "text-size": "20.0",
+            "line-height": "1.2102272033691406",
+            "typeface": "Inter"
+          },
+          {
+            "id": "Vector",
+            "margin": "2.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "vector.svg"
+          },
+          {
+            "id": "Vector_place",
+            "margin": {
+              "left": "4.0",
+              "top": "2.1612548828125",
+              "right": "4.0",
+              "bottom": "2.1612548828125"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "vector_place.svg"
+          },
+          {
+            "id": "Vector_phone",
+            "margin": {
+              "left": "3.01806640625",
+              "top": "3.0181884765625",
+              "right": "3.0181884765625",
+              "bottom": "3.01812744140625"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "vector_phone.svg"
+          },
+          {
+            "id": "Vector_person",
+            "margin": "4.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "vector_person.svg"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "background": {
+      "data-type": "color",
+      "required": false,
+      "description": ""
+    },
+    "on Click": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "departure date": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "place of stay": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "tel no": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "name": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "level": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "StudentsListItem",
+      "size": {
+        "width": 390.0,
+        "height": 102.0
+      },
+      "parameters": {
+        "background": {
+          "alpha": "1.0",
+          "hue": "49.09090909090915",
+          "saturation": "0.044715447154471614",
+          "value": "0.9647058823529412"
+        },
+        "departure date": "<departure>",
+        "place of stay": "<place>",
+        "tel no": "<tel no.>",
+        "name": "<student name>",
+        "level": "2I"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
