@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,7 +28,7 @@ import com.example.timecontrol.ui.theme.White80
 
 @Composable
 fun StudentsScreen() {
-    Box(modifier = Modifier.fillMaxSize())
+    Box()
     {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),

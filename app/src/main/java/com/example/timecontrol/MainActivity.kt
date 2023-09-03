@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -116,7 +117,10 @@ fun RootLayout(navController: NavController, localization: Int, content: @Compos
                 .height(85.dp)
                 .fillMaxWidth()
         )
-        content()
+        Box(modifier=Modifier.fillMaxHeight(0.88f)){
+            content()
+
+        }
         BotNavBar(navController = navController, localization = localization)
     }
 }
