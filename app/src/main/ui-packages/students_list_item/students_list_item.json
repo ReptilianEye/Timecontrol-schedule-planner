@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "p48u97ZvCHr4B9GxuEsXNn",
     "node": "108:349",
-    "version": "4091791044",
+    "version": "4096648673",
     "component-id": "30344fbfcdf34710e2b819c20f25d7d6190d8112"
   },
   "default": "StudentsListItem",
@@ -113,48 +113,7 @@
               "person/Style6",
               "Info"
             ],
-            "fills": [
-              {
-                "color": {},
-                "opacity": "1.0",
-                "fill-type": "lineargradient",
-                "blend-mode": "normal",
-                "color-stops": [
-                  {
-                    "color": {
-                      "alpha": "1.0",
-                      "hue": "0.0",
-                      "saturation": "0.0",
-                      "value": "1.0"
-                    },
-                    "color-stop-position": "0.87"
-                  },
-                  {
-                    "color": {
-                      "alpha": "1.0",
-                      "hue": "0.0",
-                      "saturation": "0.025974025974025882",
-                      "value": "0.30196078431372547"
-                    },
-                    "color-stop-position": "1.0"
-                  }
-                ],
-                "gradient-handle-positions": [
-                  {
-                    "x": "0.5",
-                    "y": "0.0"
-                  },
-                  {
-                    "x": "0.5",
-                    "y": "1.0"
-                  },
-                  {
-                    "x": "0.0",
-                    "y": "0.0"
-                  }
-                ]
-              }
-            ]
+            "background-color": "$background"
           },
           {
             "id": "Level",
@@ -548,6 +507,11 @@
     }
   },
   "parameters": {
+    "background": {
+      "data-type": "color",
+      "required": false,
+      "description": ""
+    },
     "on Click": {
       "data-type": "void-callback",
       "required": false,
@@ -587,6 +551,12 @@
         "height": 102.0
       },
       "parameters": {
+        "background": {
+          "alpha": "1.0",
+          "hue": "49.09090909090915",
+          "saturation": "0.044715447154471614",
+          "value": "0.9647058823529412"
+        },
         "departure date": "<departure>",
         "place of stay": "<place>",
         "tel no": "<tel no.>",
