@@ -10,7 +10,7 @@ class AppRepository(private val appDatabase: AppDatabase) {
     val students = studentDao.getAllStudents()
 
     //Instructor operations
-    fun getInstructorById(id: Int): InstructorWithLessons {
+    suspend fun getInstructorById(id: Int): InstructorWithLessons {
         return instructorDao.getInstructorById(id)
     }
 

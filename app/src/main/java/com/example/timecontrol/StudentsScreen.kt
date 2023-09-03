@@ -22,9 +22,11 @@ import com.example.timecontrol.studentslistitem.StudentsListItem
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.ui.theme.White80
+// TODO when datebase connected
+// fun StudentsScreen(students: List<Student>) {
 
 @Composable
-fun StudentsScreen(students: List<Student>) {
+fun StudentsScreen() {
     Box(modifier = Modifier.fillMaxSize())
     {
         LazyColumn(
@@ -84,4 +86,3 @@ fun StudentsScreen(students: List<Student>) {
         }
     }
 }
-
