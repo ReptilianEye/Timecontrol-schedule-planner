@@ -1,6 +1,7 @@
 package com.example.timecontrol.viewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.timecontrol.database.AppRepository
 import com.example.timecontrol.database.Instructor
 import com.example.timecontrol.database.InstructorWithLessons
@@ -8,72 +9,119 @@ import com.example.timecontrol.database.Lesson
 import com.example.timecontrol.database.LessonWithStudentAndInstructor
 import com.example.timecontrol.database.Student
 import com.example.timecontrol.database.StudentWithLessons
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-class ViewModel(private val repository: AppRepository): ViewModel() {
+class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     val instructors = repository.instructors
     val lessons = repository.lessons
     val students = repository.students
 
     //Instructor operations
     fun getInstructorById(id: Int): InstructorWithLessons {
-        return repository.getInstructorById(id)
+        val result: Deferred<InstructorWithLessons> = viewModelScope.async(Dispatchers.IO) {
+            repository.getInstructorById(id)
+        }
+        val final = runBlocking(Dispatchers.IO) {
+             result.await()
+        }
+        return final
     }
 
-    suspend fun deleteAllInstructors() {
-        return repository.deleteAllInstructors()
+     fun deleteAllInstructors() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllInstructors()
+        }
     }
 
-    suspend fun insertInstructor(instructor: Instructor) {
-        return repository.insertInstructor(instructor)
+     fun insertInstructor(instructor: Instructor) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertInstructor(instructor)
+        }
     }
 
-    suspend fun updateInstructor(instructor: Instructor) {
-        return repository.updateInstructor(instructor)
+     fun updateInstructor(instructor: Instructor) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateInstructor(instructor)
+        }
     }
 
-    suspend fun deleteInstructor(instructor: Instructor) {
-        return repository.deleteInstructor(instructor)
+     fun deleteInstructor(instructor: Instructor) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteInstructor(instructor)
+        }
     }
 
     //Lesson operations
     fun getLessonById(id: Int): LessonWithStudentAndInstructor {
-        return repository.getLessonById(id)
+        val result: Deferred<LessonWithStudentAndInstructor> = viewModelScope.async(Dispatchers.IO) {
+            repository.getLessonById(id)
+        }
+        val final = runBlocking(Dispatchers.IO) {
+            result.await()
+        }
+        return final
     }
 
-    suspend fun deleteAllLessons() {
-        return repository.deleteAllLessons()
+     fun deleteAllLessons() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllLessons()
+        }
     }
 
-    suspend fun insertLesson(lesson: Lesson) {
-        return repository.insertLesson(lesson)
+     fun insertLesson(lesson: Lesson) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertLesson(lesson)
+        }
     }
 
-    suspend fun updateLesson(lesson: Lesson) {
-        return repository.updateLesson(lesson)
+     fun updateLesson(lesson: Lesson) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateLesson(lesson)
+        }
     }
 
-    suspend fun deleteLesson(lesson: Lesson) {
-        return repository.deleteLesson(lesson)
+     fun deleteLesson(lesson: Lesson) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteLesson(lesson)
+        }
     }
 
     //Student operations
     fun getStudentById(id: Int): StudentWithLessons {
-        return repository.getStudentById(id)
+        val result: Deferred<StudentWithLessons> = viewModelScope.async(Dispatchers.IO) {
+            repository.getStudentById(id)
+        }
+        val final = runBlocking(Dispatchers.IO) {
+            result.await()
+        }
+        return final
     }
 
-    suspend fun deleteAllStudents() {
-        return repository.deleteAllStudents()
+     fun deleteAllStudents() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllStudents()
+        }
     }
 
-    suspend fun insertStudent(student: Student) {
-        return repository.insertStudent(student)
+     fun insertStudent(student: Student) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertStudent(student)
+        }
     }
 
-    suspend fun updateStudent(student: Student) {
-        return repository.updateStudent(student)
+     fun updateStudent(student: Student) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateStudent(student)
+        }
     }
 
-    suspend fun deleteStudent(student: Student) {
-        return repository.deleteStudent(student)
+     fun deleteStudent(student: Student) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteStudent(student)
+        }
     }
 }
