@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -27,6 +28,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -53,7 +56,9 @@ import com.example.timecontrol.database.Instructor
 import com.example.timecontrol.navigation.BottomNavigationItem
 import com.example.timecontrol.navigation.Navigation
 import com.example.timecontrol.navigation.Screen
+import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.ui.theme.TimecontrolTheme
+import com.example.timecontrol.ui.theme.White80
 import com.example.timecontrol.uppernavbar.UpperNavbar
 import com.example.timecontrol.viewModel.DatabaseViewModelFactory
 import com.example.timecontrol.viewModel.DatabaseViewModel
@@ -132,9 +137,18 @@ fun BotNavBar(navController: NavController, localization: Int = 1) {
     ) {
         Scaffold(
             bottomBar = ({
-                        NavigationBar {
+                        NavigationBar(
+                            containerColor = BlueLogo,
+                        ) {
                             MainActivity.navItems.forEachIndexed { index, item ->
                                 NavigationBarItem(
+                                    colors = NavigationBarItemDefaults.colors(
+                                        selectedTextColor = Color.Black,
+                                        selectedIconColor = Color.Black,
+                                        indicatorColor = White80,
+                                        unselectedTextColor = Color.Black,
+                                        unselectedIconColor = Color.Black
+                                    ),
                                     selected = selectedItemIndex == index,
                                     onClick = {
                                         selectedItemIndex = index
