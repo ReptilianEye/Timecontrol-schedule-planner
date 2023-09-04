@@ -81,7 +81,7 @@ fun StudentsScreen() {
             containerColor = BlueLogo
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.add_vector),
+                painter = painterResource(id = R.drawable.add),
                 contentDescription = "Add Student"
             )
         }
