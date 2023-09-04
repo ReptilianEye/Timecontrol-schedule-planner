@@ -47,7 +47,7 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
                     level = student.level,
                     name = student.name,
                     telNo = student.phoneNumber,
-                    //placeOfStay = student.placeOfStay, - WAITS FOR DATABASE MIGRATION
+                    placeOfStay = student.placeOfStay,
                     departureDate = student.departureDate.format(DateTimeFormatter.ofPattern("dd.MM"))
                         .toString(),
                     onClick = {},
