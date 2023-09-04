@@ -55,6 +55,9 @@ android {
 
 dependencies {
 
+    // .collectAsStateWithLifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
+
     //Icons
     implementation("androidx.compose.material:material-icons-extended")
 

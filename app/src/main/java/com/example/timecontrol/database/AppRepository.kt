@@ -7,6 +7,8 @@ class AppRepository(private val appDatabase: AppDatabase) {
 
     val instructors = instructorDao.getAllInstructors()
     val lessons = lessonDao.getAllLessons()
+
+    val studentsWithLessons = studentDao.getAllStudentsWithLessons()
     val students = studentDao.getAllStudents()
 
     //Instructor operations

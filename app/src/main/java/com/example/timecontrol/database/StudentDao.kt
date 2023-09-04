@@ -22,7 +22,10 @@ interface StudentDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM students_data_table")
-    fun getAllStudents(): Flow<List<StudentWithLessons>>
+    fun getAllStudentsWithLessons(): Flow<List<StudentWithLessons>>
+
+    @Query("SELECT * FROM students_data_table")
+    fun getAllStudents(): Flow<List<Student>>
 
     @Query("SELECT * FROM students_data_table WHERE id = :id")
     fun getStudentById(id: Int): StudentWithLessons

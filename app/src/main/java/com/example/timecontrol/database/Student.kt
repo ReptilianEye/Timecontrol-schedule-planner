@@ -27,8 +27,8 @@ data class Student(
     @ColumnInfo(name = "birth_date")
     val birthDate: LocalDate,
 
-    @ColumnInfo(name = "place_of_stay")
-    val placeOfStay: String,
+//    @ColumnInfo(name = "place_of_stay") - WAITS FOR DATABASE MIGRATION
+//    val placeOfStay: String,
 
     @ColumnInfo(name = "arrival_date")
     val arrivalDate: LocalDate,

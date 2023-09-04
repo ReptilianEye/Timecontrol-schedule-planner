@@ -50,6 +50,7 @@ import com.example.timecontrol.data.dto.Quote
 import com.example.timecontrol.database.AppDatabase
 import com.example.timecontrol.database.AppRepository
 import com.example.timecontrol.database.Instructor
+import com.example.timecontrol.database.Student
 import com.example.timecontrol.navigation.BottomNavigationItem
 import com.example.timecontrol.navigation.Navigation
 import com.example.timecontrol.navigation.Screen
