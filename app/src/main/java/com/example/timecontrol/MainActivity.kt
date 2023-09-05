@@ -118,8 +118,7 @@ fun RootLayout(navController: NavController, localization: Int, content: @Compos
                 .fillMaxWidth()
         )
         Box(modifier = Modifier.fillMaxHeight(0.88f)) {
-//            content()
-            AddStudent()
+            content()
         }
         BotNavBar(navController = navController, localization = localization)
     }
