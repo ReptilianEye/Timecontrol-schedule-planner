@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -41,9 +42,7 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
-            var i = 0
-            items(students) { student ->
-
+            itemsIndexed(students) { index, student ->
                 StudentsListItem(
                     level = student.level,
                     name = student.name,
@@ -52,12 +51,11 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
                     departureDate = student.departureDate.format(DateTimeFormatter.ofPattern("dd.MM"))
                         .toString(),
                     onClick = {},
-                    background = if (i % 2 == 0) White80 else Blue10,
+                    background = if (index % 2 == 0) White80 else Blue10,
                     modifier = Modifier
                         .width(390.dp)
                         .height(102.dp)
                 )
-                i += 1
             }
         }
         FloatingActionButton(
