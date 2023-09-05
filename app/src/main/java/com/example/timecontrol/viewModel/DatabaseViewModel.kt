@@ -18,6 +18,8 @@ import kotlinx.coroutines.runBlocking
 class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     val instructors = repository.instructors
     val lessons = repository.lessons
+
+    val studentsWithLessons = repository.studentsWithLessons
     val students = repository.students
 
     //Instructor operations
