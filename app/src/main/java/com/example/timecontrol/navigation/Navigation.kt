@@ -6,6 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.timecontrol.AddStudent
 import com.example.timecontrol.HomeScreen
 import com.example.timecontrol.RootLayout
 import com.example.timecontrol.ScheduleScreen
@@ -46,6 +47,15 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
                 localization = 2,
                 content = {
                     ScheduleScreen()
+                })
+        }
+
+        //Add Student Screen
+        composable(route = Screen.AddStudentScreen.route) {
+            RootLayout(navController = navController,
+                localization = 0,
+                content = {
+                    AddStudent(viewModel = viewModel, navController = navController)
                 })
         }
     }

@@ -41,8 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.timecontrol.database.Levels
+import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.ui.theme.BlueLogo
+import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -51,7 +54,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun AddStudent() {
+fun AddStudent(viewModel: DatabaseViewModel, navController: NavController) {
     var name by rememberSaveable {
         mutableStateOf("")
     }
@@ -274,7 +277,9 @@ fun AddStudent() {
                 .height(40.dp)
                 .width(80.dp)
                 .align(Alignment.BottomCenter),
-            onClick = { /*TODO*/ },
+            onClick = {
+                navController.navigate(Screen.StudentsScreen.route)
+            },
             containerColor = BlueLogo
         ) {
             Text(text = "Save", fontWeight = FontWeight.Bold)
