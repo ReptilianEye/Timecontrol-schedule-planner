@@ -41,8 +41,9 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
+            var i = 0
             items(students) { student ->
-                var i = 0
+
                 StudentsListItem(
                     level = student.level,
                     name = student.name,
