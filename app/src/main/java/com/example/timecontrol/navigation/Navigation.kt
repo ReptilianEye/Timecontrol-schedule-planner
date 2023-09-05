@@ -2,12 +2,11 @@ package com.example.timecontrol.navigation
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.timecontrol.HomeScreen
-import com.example.timecontrol.MainActivity
 import com.example.timecontrol.RootLayout
 import com.example.timecontrol.ScheduleScreen
 import com.example.timecontrol.StudentsScreen
@@ -37,7 +36,7 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
             RootLayout(navController = navController,
                 localization = 0,
                 content = {
-                    StudentsScreen()
+                    StudentsScreen(viewModel = viewModel, navController = navController)
                 })
         }
 
