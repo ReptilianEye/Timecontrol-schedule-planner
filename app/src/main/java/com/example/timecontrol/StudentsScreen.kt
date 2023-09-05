@@ -2,6 +2,7 @@ package com.example.timecontrol
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -67,7 +68,7 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
             containerColor = BlueLogo
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.add_vector),
+                painter = painterResource(id = R.drawable.add),
                 contentDescription = "Add Student"
             )
         }

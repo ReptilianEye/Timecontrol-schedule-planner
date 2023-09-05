@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -100,7 +101,9 @@ fun RootLayout(navController: NavController, localization: Int, content: @Compos
                 .height(85.dp)
                 .fillMaxWidth()
         )
-        content()
+        Box(modifier = Modifier.fillMaxHeight(0.88f)) {
+            content()
+        }
         BotNavBar(navController = navController, localization = localization)
     }
 }
@@ -116,27 +119,27 @@ fun BotNavBar(navController: NavController, localization: Int = 1) {
     ) {
         Scaffold(
             bottomBar = ({
-                        NavigationBar {
-                            MainActivity.navItems.forEachIndexed { index, item ->
-                                NavigationBarItem(
-                                    selected = selectedItemIndex == index,
-                                    onClick = {
-                                        selectedItemIndex = index
-                                        navController.navigate(item.route)
-                                    },
-                                    label = {
-                                        Text(text = item.title)
-                                    },
-                                    icon = {
-                                        Box {
-                                            Icon(
-                                                imageVector = item.icon,
-                                                contentDescription = item.title
-                                            )
-                                        }
-                                    })
-                            }
-                        }
+                NavigationBar {
+                    MainActivity.navItems.forEachIndexed { index, item ->
+                        NavigationBarItem(
+                            selected = selectedItemIndex == index,
+                            onClick = {
+                                selectedItemIndex = index
+                                navController.navigate(item.route)
+                            },
+                            label = {
+                                Text(text = item.title)
+                            },
+                            icon = {
+                                Box {
+                                    Icon(
+                                        imageVector = item.icon,
+                                        contentDescription = item.title
+                                    )
+                                }
+                            })
+                    }
+                }
             })
         ) {}
     }
