@@ -245,9 +245,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                         val icon = if (expanded) Icons.Filled.KeyboardArrowUp
                         else Icons.Filled.KeyboardArrowDown
 
-                        Column(
-//                            modifier = Modifier.weight(1f)
-                        ) {
+                        Column {
                             OutlinedTextField(value = state.placeOfStay,
                                 onValueChange = {
                                     addStudentViewModel.onEvent(
@@ -334,7 +332,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                                     Checkbox(checked = levelsCheckState[i].value,
                                         onCheckedChange = {
                                             if (it) for (j in 0..i) levelsCheckState[j].value =
-                                                true //check all lower levels and itself
+                                                true //mark all lower levels and itself
                                             else levelsCheckState[i].value = false //uncheck
                                         })
                                     Text(
