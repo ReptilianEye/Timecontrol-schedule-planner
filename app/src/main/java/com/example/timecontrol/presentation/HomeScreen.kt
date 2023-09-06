@@ -1,4 +1,4 @@
-package com.example.timecontrol
+package com.example.timecontrol.presentation
 
 import android.content.Context
 import android.widget.Toast
@@ -20,14 +20,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.timecontrol.R
 import com.example.timecontrol.calendaritem.CalendarItem
-import com.example.timecontrol.data.dto.Quote
+import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.quote.Quote
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20

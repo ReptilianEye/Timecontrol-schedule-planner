@@ -1,7 +1,6 @@
-package com.example.timecontrol.data
+package com.example.timecontrol.preferences
 
-import android.content.SharedPreferences
-import com.example.timecontrol.data.dto.Quote
+import com.example.timecontrol.preferences.dto.Quote
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.features.json.JsonFeature
