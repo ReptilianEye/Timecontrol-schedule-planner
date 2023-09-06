@@ -1,4 +1,4 @@
-package com.example.timecontrol.data.dto
+package com.example.timecontrol.preferences.dto
 
 import kotlinx.serialization.Serializable
 

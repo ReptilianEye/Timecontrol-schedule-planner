@@ -1,8 +1,7 @@
-package com.example.timecontrol.data
+package com.example.timecontrol.preferences
 
-import android.content.SharedPreferences
 import com.example.timecontrol.BuildConfig
-import com.example.timecontrol.data.dto.Quote
+import com.example.timecontrol.preferences.dto.Quote
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.get
@@ -23,12 +22,12 @@ class QuoteControllerImpl(val sharedPreferences: MyPreferences, val client: Http
     private val apiKey = BuildConfig.QUOTE_API_KEY
 
     override suspend fun getTodayQuote(): Quote {
-        if (sharedPreferences.getInt(savedDate, -1) == getDayOfYear()) {
+        if (getSavedDate() == getDayOfYear()) {
             return Quote(
                 quote = getContent(),
                 author = getAuthor(),
                 category = category
-            ) //Is not working
+            )
         }
         val newQuote: Quote = fetchQuote()
         saveNewQuote(newQuote)

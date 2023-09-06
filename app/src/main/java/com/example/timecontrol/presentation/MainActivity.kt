@@ -1,4 +1,4 @@
-package com.example.timecontrol
+package com.example.timecontrol.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,14 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Kitesurfing
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,12 +23,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import com.example.timecontrol.data.MyPreferences
-import com.example.timecontrol.data.QuoteController
-import com.example.timecontrol.data.dto.Quote
+import com.example.timecontrol.R
+import com.example.timecontrol.preferences.MyPreferences
+import com.example.timecontrol.preferences.QuoteController
+import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.database.AppDatabase
 import com.example.timecontrol.database.AppRepository
 import com.example.timecontrol.navigation.BottomNavigationItem
@@ -72,19 +69,19 @@ class MainActivity : ComponentActivity() {
         val navItems = listOf(
             BottomNavigationItem(
                 title = "Students",
-                icon = Icons.Filled.Kitesurfing,
+                icon = R.drawable.students_icon,
                 hasNews = false,
                 route = Screen.StudentsScreen.route
             ),
             BottomNavigationItem(
                 title = "Home",
-                icon = Icons.Filled.Home,
+                icon = R.drawable.home_icon,
                 hasNews = false,
                 route = Screen.HomeScreen.route
             ),
             BottomNavigationItem(
                 title = "Schedule",
-                icon = Icons.Filled.CalendarToday,
+                icon = R.drawable.schedule_icon,
                 hasNews = false,
                 route = Screen.ScheduleScreen.route
             )
@@ -127,13 +124,10 @@ fun BotNavBar(navController: NavController, localization: Int = 1) {
                                 selectedItemIndex = index
                                 navController.navigate(item.route)
                             },
-                            label = {
-                                Text(text = item.title)
-                            },
                             icon = {
                                 Box {
                                     Icon(
-                                        imageVector = item.icon,
+                                        painter = painterResource(id = item.icon),
                                         contentDescription = item.title
                                     )
                                 }

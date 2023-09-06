@@ -1,4 +1,4 @@
-package com.example.timecontrol.data
+package com.example.timecontrol.preferences
 
 import android.content.Context
 import androidx.preference.PreferenceManager

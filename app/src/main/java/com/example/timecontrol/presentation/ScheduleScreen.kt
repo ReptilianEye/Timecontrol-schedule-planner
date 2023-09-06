@@ -1,4 +1,4 @@
-package com.example.timecontrol
+package com.example.timecontrol.presentation
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text

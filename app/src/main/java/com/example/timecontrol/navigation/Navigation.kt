@@ -2,16 +2,15 @@ package com.example.timecontrol.navigation
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.timecontrol.AddStudent
-import com.example.timecontrol.HomeScreen
-import com.example.timecontrol.RootLayout
-import com.example.timecontrol.ScheduleScreen
-import com.example.timecontrol.StudentsScreen
-import com.example.timecontrol.data.dto.Quote
+import com.example.timecontrol.presentation.AddStudent
+import com.example.timecontrol.presentation.HomeScreen
+import com.example.timecontrol.presentation.RootLayout
+import com.example.timecontrol.presentation.ScheduleScreen
+import com.example.timecontrol.presentation.StudentsScreen
+import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
@@ -55,7 +54,7 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
             RootLayout(navController = navController,
                 localization = 0,
                 content = {
-                    AddStudent(viewModel = viewModel, navController = navController)
+                    AddStudent(databaseViewModel = viewModel, navController = navController)
                 })
         }
     }
