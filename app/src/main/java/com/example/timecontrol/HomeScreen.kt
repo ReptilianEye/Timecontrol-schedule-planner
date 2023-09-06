@@ -34,7 +34,12 @@ import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
-fun HomeScreen(quote: Quote, navController: NavController, viewModel: DatabaseViewModel, context: Context) {
+fun HomeScreen(
+    quote: Quote,
+    navController: NavController,
+    viewModel: DatabaseViewModel,
+    context: Context
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp),
