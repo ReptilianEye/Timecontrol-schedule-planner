@@ -6,6 +6,7 @@ sealed class AddStudentEvent {
     data class FirstNameChanged(val firstName: String) : AddStudentEvent()
     data class LastNameChanged(val lastName: String) : AddStudentEvent()
     data class PhoneNumberChanged(val phoneNumber: String) : AddStudentEvent()
+    data class emailChanged(val email: String) : AddStudentEvent()
     data class BirthDateChanged(val birthDate: LocalDate) : AddStudentEvent()
     data class PlaceOfStayChanged(val placeOfStay: String) : AddStudentEvent()
     data class ArrivalDateChanged(val arrivalDate: LocalDate) : AddStudentEvent()

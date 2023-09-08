@@ -52,11 +52,11 @@ class QuoteControllerImpl(val sharedPreferences: MyPreferences, val client: Http
     }
 
     private fun getAuthor(): String {
-        return sharedPreferences.getString(author, "") ?: ""
+        return sharedPreferences.getString(author, "")
     }
 
     private fun getContent(): String {
-        return sharedPreferences.getString(content, "") ?: ""
+        return sharedPreferences.getString(content, "")
     }
 
     private suspend fun fetchQuote(): Quote {

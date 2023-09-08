@@ -68,6 +68,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 //TODO - make as a Dialog not separate screen
+// TODO - add email as an input
 @Composable
 fun AddStudent(
     databaseViewModel: DatabaseViewModel,

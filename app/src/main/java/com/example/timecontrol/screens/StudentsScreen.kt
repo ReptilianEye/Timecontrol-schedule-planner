@@ -47,12 +47,12 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
             itemsIndexed(students) { index, student ->
                 StudentsListItem(
                     level = student.level,
-                    name = student.name,
+                    name = student.firstName,
                     telNo = student.phoneNumber,
                     placeOfStay = student.placeOfStay,
                     departureDate = student.departureDate.format(DateTimeFormatter.ofPattern("dd.MM"))
                         .toString(),
-                    onClick = {},
+                    onClick = { navController.navigate(Screen.StudentDetailsScreen.withArgs(student.id.toString())) },
                     background = if (index % 2 == 0) White80 else Blue10,
                     modifier = Modifier
                         .width(390.dp)

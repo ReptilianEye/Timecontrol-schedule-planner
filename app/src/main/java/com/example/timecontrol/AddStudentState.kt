@@ -15,6 +15,9 @@ data class AddStudentState(
     val phoneNumber: String = "",
     val phoneNumberError: String? = null,
 
+    val email: String = "",
+    val emailError: String? = null,
+
     val birthDate: LocalDate = LocalDate.now(),
     val birthDateError: String? = null,
 
