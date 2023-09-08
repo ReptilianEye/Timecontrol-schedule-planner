@@ -1,4 +1,4 @@
-package com.example.timecontrol.presentation
+package com.example.timecontrol.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 producer = { value = controller.getTodayQuote() })
             TimecontrolTheme {
                 // A surface container using the 'background' color from the theme
-                Navigation(viewModel = viewModel, context = this, quote = quote.value)
+                Navigation(viewModel = viewModel, context = this, quote = quote.value, owner = this)
             }
         }
 

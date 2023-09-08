@@ -62,20 +62,20 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
     //Room
-    implementation("androidx.room:room-runtime:2.5.2")
-    testImplementation("junit:junit:4.12")
-    annotationProcessor("androidx.room:room-compiler:2.5.2")
-    ksp("androidx.room:room-compiler:2.5.2")
-    implementation("androidx.room:room-ktx:2.5.2") //support for coroutines
+    val roomVersion = "2.5.2"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    annotationProcessor("androidx.room:room-compiler:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion") //support for coroutines
 
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.5.3")
 
     //Ktor - Http Client
-    val ktor_version = "1.6.3"
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-android:$ktor_version")
-    implementation("io.ktor:ktor-client-serialization:$ktor_version")
+    val ktorVersion = "1.6.3"
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-android:$ktorVersion")
+    implementation("io.ktor:ktor-client-serialization:$ktorVersion")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
 
@@ -91,6 +91,7 @@ dependencies {
     //Input Validation
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1")
 
+    testImplementation("junit:junit:4.12")
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.2")

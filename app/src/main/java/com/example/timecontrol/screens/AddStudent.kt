@@ -1,4 +1,4 @@
-package com.example.timecontrol.presentation
+package com.example.timecontrol.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.border
@@ -31,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,51 +47,44 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
-import com.example.timecontrol.database.Student
 import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.ui.theme.BlueLogo
+import com.example.timecontrol.AddStudentEvent
+import com.example.timecontrol.viewModel.AddStudentViewModel
+import com.example.timecontrol.viewModel.AddStudentViewModelFactory
 import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModel.DatabaseViewModelFactory
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+//TODO - make as a Dialog not separate screen
 @Composable
-fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavController) {
-
-    val addStudentViewModel = viewModel<AddStudentViewModel>()
-    val state = addStudentViewModel.state
+fun AddStudent(
+    databaseViewModel: DatabaseViewModel,
+    navController: NavController,
+    owner: ViewModelStoreOwner
+) {
+    val addStudentViewModel = ViewModelProvider(
+        owner,
+        AddStudentViewModelFactory(databaseViewModel)
+    )[AddStudentViewModel::class.java]
+    val state by addStudentViewModel.state.collectAsState()
     val context = LocalContext.current
 
     LaunchedEffect(key1 = context) {
         addStudentViewModel.validationEvents.collect { event ->
             when (event) {
                 is AddStudentViewModel.ValidationEvent.Success -> {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        databaseViewModel.insertStudent(
-                            Student(
-                                id = 0,
-                                name = state.firstName,
-                                lastname = state.lastName,
-                                phoneNumber = state.phoneNumber,
-                                birthDate = state.birthDate,
-                                placeOfStay = state.placeOfStay,
-                                arrivalDate = state.arrivalDate,
-                                departureDate = state.departureDate,
-                                level = state.level
-                            )
-                        )
-                    }
                     Toast.makeText(
                         context, "Student has been added successfully!", Toast.LENGTH_LONG
                     ).show()
@@ -154,13 +148,13 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                         OutlinedTextField(
                             value = state.firstName,
                             onValueChange = {
-                                addStudentViewModel.onEvent(AddStudentFormEvent.FirstNameChanged(it))
+                                addStudentViewModel.onEvent(AddStudentEvent.FirstNameChanged(it))
                             },
                             isError = state.firstNameError != null,
                             label = { Text(text = "Name") },
                         )
                         if (state.firstNameError != null) {
-                            Text(text = state.firstNameError, color = MaterialTheme.colors.error)
+                            Text(text = state.firstNameError!!, color = MaterialTheme.colors.error)
                         }
                     }
 
@@ -170,7 +164,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             value = state.lastName,
                             onValueChange = {
                                 addStudentViewModel.onEvent(
-                                    AddStudentFormEvent.LastNameChanged(
+                                    AddStudentEvent.LastNameChanged(
                                         it
                                     )
                                 )
@@ -178,7 +172,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             label = { Text(text = "Last Name") },
                         )
                         if (state.lastNameError != null) {
-                            Text(text = state.lastNameError, color = MaterialTheme.colors.error)
+                            Text(text = state.lastNameError!!, color = MaterialTheme.colors.error)
                         }
                     }
                 }
@@ -193,7 +187,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             value = state.phoneNumber,
                             onValueChange = {
                                 addStudentViewModel.onEvent(
-                                    AddStudentFormEvent.PhoneNumberChanged(
+                                    AddStudentEvent.PhoneNumberChanged(
                                         it
                                     )
                                 )
@@ -202,7 +196,10 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         )
                         if (state.phoneNumberError != null) {
-                            Text(text = state.phoneNumberError, color = MaterialTheme.colors.error)
+                            Text(
+                                text = state.phoneNumberError!!,
+                                color = MaterialTheme.colors.error
+                            )
                         }
                     }
                     Column(modifier = Modifier.weight(1f)) {
@@ -211,7 +208,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             value = formattedBirthDate,
                             onValueChange = {
                                 addStudentViewModel.onEvent(
-                                    AddStudentFormEvent.BirthDateChanged(
+                                    AddStudentEvent.BirthDateChanged(
                                         LocalDate.parse(it)
                                     )
                                 )
@@ -225,7 +222,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             },
                         )
                         if (state.birthDateError != null) {
-                            Text(text = state.birthDateError, color = MaterialTheme.colors.error)
+                            Text(text = state.birthDateError!!, color = MaterialTheme.colors.error)
                         }
                     }
 
@@ -249,7 +246,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             OutlinedTextField(value = state.placeOfStay,
                                 onValueChange = {
                                     addStudentViewModel.onEvent(
-                                        AddStudentFormEvent.PlaceOfStayChanged(
+                                        AddStudentEvent.PlaceOfStayChanged(
                                             it
                                         )
                                     )
@@ -267,7 +264,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                                 defaultPlaces.forEach { place ->
                                     DropdownMenuItem(onClick = {
                                         addStudentViewModel.onEvent(
-                                            AddStudentFormEvent.PlaceOfStayChanged(
+                                            AddStudentEvent.PlaceOfStayChanged(
                                                 place
                                             )
                                         )
@@ -279,7 +276,10 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             }
                         }
                         if (state.placeOfStayError != null) {
-                            Text(text = state.placeOfStayError, color = MaterialTheme.colors.error)
+                            Text(
+                                text = state.placeOfStayError!!,
+                                color = MaterialTheme.colors.error
+                            )
                         }
                     }
                     Column(
@@ -290,7 +290,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                             value = formattedDepartureDate,
                             onValueChange = {
                                 addStudentViewModel.onEvent(
-                                    AddStudentFormEvent.DepartureDateChanged(
+                                    AddStudentEvent.DepartureDateChanged(
                                         LocalDate.parse(it)
                                     )
                                 )
@@ -346,7 +346,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                         }
                     }
                     if (state.levelError != null) {
-                        Text(text = state.levelError, color = MaterialTheme.colors.error)
+                        Text(text = state.levelError!!, color = MaterialTheme.colors.error)
                     }
                 }
 
@@ -361,13 +361,13 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
                 .align(Alignment.BottomCenter), onClick = {
 
                 addStudentViewModel.onEvent(
-                    AddStudentFormEvent.LevelChanged(
+                    AddStudentEvent.LevelChanged(
                         getMaxLevel(
                             levelsCheckState
                         )
                     )
                 )
-                addStudentViewModel.onEvent(AddStudentFormEvent.Submit)
+                addStudentViewModel.onEvent(AddStudentEvent.SaveStudent)
             }, containerColor = BlueLogo
         ) {
             Text(text = "Save", fontWeight = FontWeight.Bold)
@@ -388,7 +388,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
             ),
             allowedDateValidator = { it < LocalDate.now() }) {
             addStudentViewModel.onEvent(
-                AddStudentFormEvent.BirthDateChanged(
+                AddStudentEvent.BirthDateChanged(
                     it
                 )
             )
@@ -407,7 +407,7 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
             ),
             allowedDateValidator = { it > LocalDate.now() }) {
             addStudentViewModel.onEvent(
-                AddStudentFormEvent.DepartureDateChanged(
+                AddStudentEvent.DepartureDateChanged(
                     it
                 )
             )
@@ -418,6 +418,8 @@ fun AddStudent(databaseViewModel: DatabaseViewModel, navController: NavControlle
 }
 
 fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>): String {
-    val poz = levelsCheckState.lastIndexOf(mutableStateOf(true))
-    return if (poz != -1) Levels[poz].level else "D"
+    for (i in levelsCheckState.lastIndex downTo 0)
+        if (levelsCheckState[i].value)
+            return Levels[i].level
+    return "D"
 }

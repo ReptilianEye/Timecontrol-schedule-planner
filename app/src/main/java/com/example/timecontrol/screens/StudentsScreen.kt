@@ -1,4 +1,4 @@
-package com.example.timecontrol.presentation
+package com.example.timecontrol.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,6 +37,9 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
 
     Box(modifier = Modifier.fillMaxSize())
     {
+        if (students.isEmpty())
+            Text(text = "No students have been added yet...")
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(3.dp)
@@ -66,7 +70,7 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add),
-                contentDescription = "Add Student"
+                contentDescription = "Add Student", modifier = Modifier.fillMaxSize(0.5f)
             )
         }
     }

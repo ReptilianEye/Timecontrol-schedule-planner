@@ -1,8 +1,11 @@
-package com.example.timecontrol.validation
+package com.example.timecontrol
 
+import com.example.timecontrol.database.Student
 import java.time.LocalDate
 
-data class AddStudentFormState(
+data class AddStudentState(
+    val students: List<Student> = emptyList(),
+
     val firstName: String = "",
     val firstNameError: String? = null,
 
@@ -25,5 +28,9 @@ data class AddStudentFormState(
     val departureDateError: String? = null,
 
     val level: String = "",
-    val levelError: String? = null
+    val levelError: String? = null,
+
+    val sortType: StudentsSortType = StudentsSortType.TIME_ADDED,
+    val filterType: StudentsFilterType = StudentsFilterType.ALL
+
 )
