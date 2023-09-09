@@ -2,19 +2,25 @@ package com.example.timecontrol.navigation
 
 import android.content.Context
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.timecontrol.presentation.AddStudent
-import com.example.timecontrol.presentation.HomeScreen
-import com.example.timecontrol.presentation.RootLayout
-import com.example.timecontrol.presentation.ScheduleScreen
-import com.example.timecontrol.presentation.StudentsScreen
+import com.example.timecontrol.screens.AddStudent
+import com.example.timecontrol.screens.HomeScreen
+import com.example.timecontrol.screens.RootLayout
+import com.example.timecontrol.screens.ScheduleScreen
+import com.example.timecontrol.screens.StudentsScreen
 import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
-fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
+fun Navigation(
+    viewModel: DatabaseViewModel,
+    context: Context,
+    quote: Quote,
+    owner: ViewModelStoreOwner
+) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         //Home Screen
@@ -54,7 +60,7 @@ fun Navigation(viewModel: DatabaseViewModel, context: Context, quote: Quote) {
             RootLayout(navController = navController,
                 localization = 0,
                 content = {
-                    AddStudent(databaseViewModel = viewModel, navController = navController)
+                    AddStudent(databaseViewModel = viewModel, navController = navController, owner)
                 })
         }
     }

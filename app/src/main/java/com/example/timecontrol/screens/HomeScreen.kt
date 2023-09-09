@@ -1,4 +1,4 @@
-package com.example.timecontrol.presentation
+package com.example.timecontrol.screens
 
 import android.content.Context
 import android.widget.Toast
