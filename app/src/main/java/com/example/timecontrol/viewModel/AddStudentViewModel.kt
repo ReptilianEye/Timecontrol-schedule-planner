@@ -78,7 +78,7 @@ class AddStudentViewModel(
 
             is AddStudentEvent.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = event.phoneNumber) }
 
-            is AddStudentEvent.emailChanged -> _state.update { it.copy(email = event.email) }
+            is AddStudentEvent.EmailChanged -> _state.update { it.copy(email = event.email) }
 
             is AddStudentEvent.BirthDateChanged -> _state.update { it.copy(birthDate = event.birthDate) }
 
