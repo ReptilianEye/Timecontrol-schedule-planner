@@ -28,18 +28,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import com.example.timecontrol.R
-import com.example.timecontrol.preferences.MyPreferences
-import com.example.timecontrol.preferences.QuoteController
-import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.database.AppDatabase
 import com.example.timecontrol.database.AppRepository
 import com.example.timecontrol.navigation.BottomNavigationItem
 import com.example.timecontrol.navigation.Navigation
 import com.example.timecontrol.navigation.Screen
+import com.example.timecontrol.preferences.MyPreferences
+import com.example.timecontrol.preferences.QuoteController
+import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.ui.theme.TimecontrolTheme
 import com.example.timecontrol.uppernavbar.UpperNavbar
-import com.example.timecontrol.viewModel.DatabaseViewModelFactory
 import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModel.DatabaseViewModelFactory
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: DatabaseViewModel

@@ -10,11 +10,13 @@ import java.time.LocalDate
 data class Student(
     @PrimaryKey(autoGenerate = true) val id: Int,
 
-    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "name") val firstName: String,
 
-    @ColumnInfo(name = "lastname") val lastname: String,
+    @ColumnInfo(name = "lastname") val lastName: String,
 
     @ColumnInfo(name = "phone_number") val phoneNumber: String,
+
+    @ColumnInfo(name = "email") val email: String,
 
     @ColumnInfo(name = "birth_date") val birthDate: LocalDate,
 

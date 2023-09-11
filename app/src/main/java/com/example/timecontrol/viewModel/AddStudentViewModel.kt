@@ -10,6 +10,7 @@ import com.example.timecontrol.database.Student
 import com.example.timecontrol.validation.use_case.ValidateArrivalDate
 import com.example.timecontrol.validation.use_case.ValidateBirthDate
 import com.example.timecontrol.validation.use_case.ValidateDepartureDate
+import com.example.timecontrol.validation.use_case.ValidateEmail
 import com.example.timecontrol.validation.use_case.ValidateFirstName
 import com.example.timecontrol.validation.use_case.ValidateLastName
 import com.example.timecontrol.validation.use_case.ValidateLevel
@@ -30,6 +31,7 @@ class AddStudentViewModel(
     private val validateFirstName: ValidateFirstName = ValidateFirstName(),
     private val validateLastName: ValidateLastName = ValidateLastName(),
     private val validatePhoneNumber: ValidatePhoneNumber = ValidatePhoneNumber(),
+    private val validateEmail: ValidateEmail = ValidateEmail(),
     private val validateBirthDate: ValidateBirthDate = ValidateBirthDate(),
     private val validatePlaceOfStay: ValidatePlaceOfStay = ValidatePlaceOfStay(),
     private val validateArrivalDate: ValidateArrivalDate = ValidateArrivalDate(),
@@ -76,6 +78,8 @@ class AddStudentViewModel(
 
             is AddStudentEvent.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = event.phoneNumber) }
 
+            is AddStudentEvent.EmailChanged -> _state.update { it.copy(email = event.email) }
+
             is AddStudentEvent.BirthDateChanged -> _state.update { it.copy(birthDate = event.birthDate) }
 
             is AddStudentEvent.PlaceOfStayChanged -> _state.update { it.copy(placeOfStay = event.placeOfStay) }
@@ -99,7 +103,8 @@ class AddStudentViewModel(
     private fun submitData() {
         val firstNameResult = validateFirstName.execute(state.value.firstName)
         val lastNameResult = validateLastName.execute(state.value.lastName)
-        val telNoResult = validatePhoneNumber.execute(state.value.phoneNumber)
+        val phoneNumberResult = validatePhoneNumber.execute(state.value.phoneNumber)
+        val emailResult = validateEmail.execute(state.value.email)
         val birthDateResult = validateBirthDate.execute(state.value.birthDate)
         val placeOfStayResult = validatePlaceOfStay.execute(state.value.placeOfStay)
         val arrivalDateResult = validateArrivalDate.execute(state.value.arrivalDate)
@@ -109,7 +114,8 @@ class AddStudentViewModel(
         val hasError = listOf(
             firstNameResult,
             lastNameResult,
-            telNoResult,
+            phoneNumberResult,
+            emailResult,
             birthDateResult,
             placeOfStayResult,
             arrivalDateResult,
@@ -121,7 +127,8 @@ class AddStudentViewModel(
             it.copy(
                 firstNameError = firstNameResult.errorMessage,
                 lastNameError = lastNameResult.errorMessage,
-                phoneNumberError = telNoResult.errorMessage,
+                phoneNumberError = phoneNumberResult.errorMessage,
+                emailError = emailResult.errorMessage,
                 birthDateError = birthDateResult.errorMessage,
                 placeOfStayError = placeOfStayResult.errorMessage,
                 arrivalDateError = arrivalDateResult.errorMessage,
@@ -134,9 +141,10 @@ class AddStudentViewModel(
 
         val new = Student(
             id = 0,
-            name = state.value.firstName,
-            lastname = state.value.lastName,
+            firstName = state.value.firstName,
+            lastName = state.value.lastName,
             phoneNumber = state.value.phoneNumber,
+            email = state.value.email,
             birthDate = state.value.birthDate,
             placeOfStay = state.value.placeOfStay,
             arrivalDate = state.value.arrivalDate,
@@ -148,7 +156,6 @@ class AddStudentViewModel(
             async { validationEventChannel.send(ValidationEvent.Success) }
         }
         resetState()
-        // if decided to add new student in dialog window instead of new screen
 //        reset(state)  - https://www.youtube.com/watch?v=bOd3wO0uFr8 29:00
     }
 
