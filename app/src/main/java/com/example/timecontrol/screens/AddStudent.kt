@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
-import com.example.timecontrol.AddStudentEvent
+import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
 import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
 import com.example.timecontrol.navigation.Screen

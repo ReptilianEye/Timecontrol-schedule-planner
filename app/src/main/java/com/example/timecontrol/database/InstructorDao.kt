@@ -18,12 +18,12 @@ interface InstructorDao {
     @Delete
     suspend fun deleteInstructor(instructor: Instructor)
 
-    @Query("DELETE FROM instructors_data_table")
+    @Query("DELETE FROM Instructors")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM instructors_data_table")
+    @Query("SELECT * FROM Instructors")
     fun getAllInstructors(): Flow<List<InstructorWithLessons>>
 
-    @Query("SELECT * FROM instructors_data_table WHERE id = :id")
+    @Query("SELECT * FROM Instructors WHERE id = :id")
     suspend fun getInstructorById(id: Int): InstructorWithLessons
 }

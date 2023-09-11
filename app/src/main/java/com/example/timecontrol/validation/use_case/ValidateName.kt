@@ -23,3 +23,7 @@ class ValidateLastName : ValidateName() {
 //    override fun execute(lastName: String): ValidationResult = super.execute(lastName)
 }
 
+class ValidateNickname : ValidateName() {
+    override val fieldName = "Nickname"
+}
+

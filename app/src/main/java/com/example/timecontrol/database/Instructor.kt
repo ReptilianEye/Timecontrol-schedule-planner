@@ -5,26 +5,21 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.time.LocalDate
 
-@Entity(tableName = "instructors_data_table")
+@Entity(tableName = "Instructors")
 data class Instructor(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int,
 
-    @ColumnInfo(name = "phone_number")
-    val phoneNumber: String,
+    @ColumnInfo(name = "name") val firstName: String,
 
-    @ColumnInfo(name = "name")
-    val name: String,
+    @ColumnInfo(name = "lastname") val lastName: String,
 
-    @ColumnInfo(name = "lastname")
-    val lastname: String,
+    @ColumnInfo(name = "nickname") val nickname: String,
 
-    @ColumnInfo(name = "nickname")
-    val nickname: String,
+    @ColumnInfo(name = "phone_number") val phoneNumber: String,
 
-    @ColumnInfo(name = "arrival_date")
-    val arrivalDate: LocalDate,
+    @ColumnInfo(name = "is_stationary") val isStationary: Boolean,
 
-    @ColumnInfo(name = "departure_date")
-    val departureDate: LocalDate,
+    @ColumnInfo(name = "arrival_date") val arrivalDate: LocalDate,
+
+    @ColumnInfo(name = "departure_date") val departureDate: LocalDate,
 )

@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 import java.time.LocalDate
 
 
-@Entity(tableName = "students_data_table")
+@Entity(tableName = "Students")
 data class Student(
     @PrimaryKey(autoGenerate = true) val id: Int,
 
