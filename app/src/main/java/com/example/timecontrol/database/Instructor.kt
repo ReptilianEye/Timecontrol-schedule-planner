@@ -30,15 +30,6 @@ fun Instructor.getFullName(): String {
     return "$firstName $lastName"
 }
 
-fun Instructor.prettyQualification(): String {
-    return when (qualification) {
-        InstructorQualification.ASSISTANT -> "Assistant"
-        InstructorQualification.LVL1 -> "Instructor Level 1"
-        InstructorQualification.LVL2 -> "Instructor Level 2"
-        InstructorQualification.LVL3 -> "Instructor Level 3"
-        InstructorQualification.EXAMINER -> "Examiner"
-    }
-}
 
 enum class InstructorQualification {
     ASSISTANT,

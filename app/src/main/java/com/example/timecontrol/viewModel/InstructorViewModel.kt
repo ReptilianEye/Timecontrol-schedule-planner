@@ -125,7 +125,7 @@ class InstructorViewModel(
             id = 0,
             firstName = state.value.firstName,
             lastName = state.value.lastName,
-            nickname = state.value.nickname,
+            nickname = if (state.value.nickname != "") state.value.nickname else state.value.firstName,
             isStationary = state.value.isStationary,
             qualification = state.value.qualification,
             phoneNumber = state.value.phoneNumber,
