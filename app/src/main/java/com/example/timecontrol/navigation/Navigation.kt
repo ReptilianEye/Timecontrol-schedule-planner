@@ -42,10 +42,24 @@ fun Navigation(
                 StudentsScreen(viewModel = viewModel, navController = navController)
             })
         }
+        //Add Student Screen
+        composable(route = Screen.AddStudentScreen.route) {
+            RootLayout(navController = navController, localization = 0, content = {
+                AddStudent(
+                    databaseViewModel = viewModel,
+                    navController = navController,
+                    owner = owner
+                )
+            })
+        }
         //Instructors Screen
         composable(route = Screen.InstructorsScreen.route) {
             RootLayout(navController = navController, localization = 3, content = {
-                InstructorsScreen(viewModel = viewModel, navController = navController)
+                InstructorsScreen(
+                    databaseViewModel = viewModel,
+                    navController = navController,
+                    owner = owner
+                )
             })
         }
         //Schedule Screen
@@ -55,12 +69,7 @@ fun Navigation(
             })
         }
 
-        //Add Student Screen
-        composable(route = Screen.AddStudentScreen.route) {
-            RootLayout(navController = navController, localization = 0, content = {
-                AddStudent(databaseViewModel = viewModel, navController = navController, owner)
-            })
-        }
+
         composable(
             route = Screen.StudentDetailsScreen.route + "/{index}",
             arguments = listOf(navArgument("index") {

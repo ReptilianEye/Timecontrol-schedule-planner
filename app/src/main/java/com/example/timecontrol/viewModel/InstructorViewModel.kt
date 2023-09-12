@@ -11,6 +11,7 @@ import com.example.timecontrol.validation.use_case.ValidateFirstName
 import com.example.timecontrol.validation.use_case.ValidateLastName
 import com.example.timecontrol.validation.use_case.ValidateNickname
 import com.example.timecontrol.validation.use_case.ValidatePhoneNumber
+import com.example.timecontrol.validation.use_case.ValidateQualification
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorEvent
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorState
 import com.example.timecontrol.viewModelHelp.instructor.InstructorsSortType
@@ -31,6 +32,7 @@ class InstructorViewModel(
     private val validateLastName: ValidateLastName = ValidateLastName(),
     private val validateNickname: ValidateNickname = ValidateNickname(),
     private val validatePhoneNumber: ValidatePhoneNumber = ValidatePhoneNumber(),
+    private val validateQualification: ValidateQualification = ValidateQualification(),
     private val validateArrivalDate: ValidateArrivalDate = ValidateArrivalDate(),
     private val validateDepartureDate: ValidateDepartureDate = ValidateDepartureDate(),
     private val databaseViewModel: DatabaseViewModel  // nie jestem przekonany
@@ -72,6 +74,7 @@ class InstructorViewModel(
             is AddInstructorEvent.LastNameChanged -> _state.update { it.copy(lastName = event.lastName) }
             is AddInstructorEvent.NicknameChanged -> _state.update { it.copy(nickname = event.nickname) }
             is AddInstructorEvent.IsStationaryChanged -> _state.update { it.copy(isStationary = event.isStationary) }
+            is AddInstructorEvent.QualificationChanged -> _state.update { it.copy(qualification = event.qualification) }
             is AddInstructorEvent.PhoneNumberChanged -> _state.update { it.copy(phoneNumber = event.phoneNumber) }
             is AddInstructorEvent.ArrivalDateChanged -> _state.update { it.copy(arrivalDate = event.arrivalDate) }
             is AddInstructorEvent.DepartureDateChanged -> _state.update { it.copy(departureDate = event.departureDate) }
@@ -80,6 +83,8 @@ class InstructorViewModel(
 
             is AddInstructorEvent.SortInstructors -> _sortType.value = event.sortType
             is AddInstructorEvent.FilterInstructors -> _filterType.value = event.filterType
+            AddInstructorEvent.HideDialog -> _state.update { it.copy(isAddingInstructor = false) }
+            AddInstructorEvent.ShowDialog -> _state.update { it.copy(isAddingInstructor = true) }
         }
     }
 
@@ -87,6 +92,7 @@ class InstructorViewModel(
         val firstNameResult = validateFirstName.execute(state.value.firstName)
         val lastNameResult = validateLastName.execute(state.value.lastName)
         val nicknameResult = validateNickname.execute(state.value.nickname)
+        val qualificationResult = validateQualification.execute(state.value.qualification)
         val phoneNumberResult = validatePhoneNumber.execute(state.value.phoneNumber)
         val arrivalDateResult = validateArrivalDate.execute(state.value.arrivalDate)
         val departureDateResult = validateDepartureDate.execute(state.value.departureDate)
@@ -95,6 +101,7 @@ class InstructorViewModel(
             firstNameResult,
             lastNameResult,
             nicknameResult,
+            qualificationResult,
             phoneNumberResult,
             arrivalDateResult,
             departureDateResult,
@@ -105,6 +112,7 @@ class InstructorViewModel(
                 firstNameError = firstNameResult.errorMessage,
                 lastNameError = lastNameResult.errorMessage,
                 nicknameError = nicknameResult.errorMessage,
+                qualificationError = qualificationResult.errorMessage,
                 phoneNumberError = phoneNumberResult.errorMessage,
                 arrivalDateError = arrivalDateResult.errorMessage,
                 departureDateError = departureDateResult.errorMessage,
@@ -119,6 +127,7 @@ class InstructorViewModel(
             lastName = state.value.lastName,
             nickname = state.value.nickname,
             isStationary = state.value.isStationary,
+            qualification = state.value.qualification,
             phoneNumber = state.value.phoneNumber,
             arrivalDate = state.value.arrivalDate,
             departureDate = state.value.departureDate,

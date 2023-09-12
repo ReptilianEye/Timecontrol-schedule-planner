@@ -16,12 +16,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.timecontrol.prettyDate
 import com.example.timecontrol.studentsinfo.StudentsInfo
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.White80
 import com.example.timecontrol.viewModel.DatabaseViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun StudentDetailsScreen(
@@ -91,6 +90,3 @@ fun RowScope.TableCell(
     )
 }
 
-fun prettyDate(data: LocalDate, pattern: String = "dd.MM"): String {
-    return data.format(DateTimeFormatter.ofPattern(pattern))
-}

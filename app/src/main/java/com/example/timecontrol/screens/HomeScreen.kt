@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,10 +57,10 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
 //                        modifier = Modifier.height(172.dp)
         ) {
-            val students by viewModel.students.collectAsStateWithLifecycle(initialValue = emptyList())
-            val instructors by viewModel.instructors.collectAsStateWithLifecycle(initialValue = emptyList())
+            val students by viewModel.students.collectAsState(emptyList())
+            val instructors by viewModel.instructors.collectAsState(emptyList())
             StatsTile(
-                content = students.size.toString(), title = "Students Currenly", onClick = {
+                content = students.size.toString(), title = "Students Currently", onClick = {
                     navController.navigate(Screen.StudentsScreen.route)
                 }, modifier = Modifier.size(180.dp)
             )

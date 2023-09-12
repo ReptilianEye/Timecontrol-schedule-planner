@@ -30,7 +30,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -53,6 +52,7 @@ import androidx.navigation.NavController
 import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
 import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
+import com.example.timecontrol.getMaxLevel
 import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.AddStudentViewModel
@@ -416,9 +416,3 @@ fun AddStudent(
 
 }
 
-fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>): String {
-    for (i in levelsCheckState.lastIndex downTo 0)
-        if (levelsCheckState[i].value)
-            return Levels[i].level
-    return "D"
-}
