@@ -5,7 +5,7 @@
     "type": "figma",
     "file": "p48u97ZvCHr4B9GxuEsXNn",
     "node": "172:178",
-    "version": "4145497260",
+    "version": "4154329466",
     "component-id": "a45bb72efe1ea06d4624005c144a25a02c5a3714"
   },
   "default": "InstructorDetails",
@@ -113,6 +113,19 @@
               "bottom": "20.0"
             },
             "border-radius": "15.0",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "5.0",
+              "offset-y": "5.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
             "main-axis-align": "start",
             "cross-axis-align": "start",
             "children": [

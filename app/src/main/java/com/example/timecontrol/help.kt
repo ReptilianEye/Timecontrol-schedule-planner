@@ -3,7 +3,9 @@ package com.example.timecontrol
 import androidx.compose.runtime.MutableState
 import com.example.timecontrol.database.InstructorQualification
 import com.example.timecontrol.database.Levels
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 //get max level from checked for student input
@@ -12,9 +14,9 @@ fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>): String {
     return "D"
 }
 
-fun prettyDate(data: LocalDate, pattern: String = "dd.MM"): String {
-    return data.format(DateTimeFormatter.ofPattern(pattern))
-}
+fun LocalDate.pretty(pattern: String = "dd.MM"): String =
+    this.format(DateTimeFormatter.ofPattern(pattern))
+
 
 //fun qualificationToString(qualification: InstructorQualification): String {
 //    return when (qualification) {
@@ -42,6 +44,9 @@ object QualificationHelper {
         return QualificationPairs.first { it.first == qualification }.second
     }
 }
+
+fun LocalDate.toMillis() = this.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
+fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()
 
 //fun getListOfQualificationPairs(): List<Pair<InstructorQualification, String>> {
 //    return listOf(
