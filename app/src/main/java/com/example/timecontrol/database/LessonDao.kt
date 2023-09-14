@@ -19,13 +19,13 @@ interface LessonDao {
     @Delete
     suspend fun deleteLesson(lesson: Lesson)
 
-    @Query("DELETE FROM lessons_data_table")
+    @Query("DELETE FROM Lessons")
     suspend fun deleteAll()
 
     @Transaction
-    @Query("SELECT * FROM lessons_data_table")
+    @Query("SELECT * FROM Lessons")
     fun getAllLessons(): Flow<List<LessonWithStudentAndInstructor>>
 
-    @Query("SELECT * FROM lessons_data_table WHERE id = :id")
+    @Query("SELECT * FROM Lessons WHERE id = :id")
     fun getLessonById(id: Int): LessonWithStudentAndInstructor
 }

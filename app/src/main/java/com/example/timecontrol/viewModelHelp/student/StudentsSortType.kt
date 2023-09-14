@@ -1,4 +1,4 @@
-package com.example.timecontrol
+package com.example.timecontrol.viewModelHelp.student
 
 enum class StudentsSortType {
     TIME_ADDED,

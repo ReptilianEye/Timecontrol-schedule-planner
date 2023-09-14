@@ -1,0 +1,656 @@
+{
+  "name": "instructor_details",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "p48u97ZvCHr4B9GxuEsXNn",
+    "node": "172:178",
+    "version": "4154329466",
+    "component-id": "a45bb72efe1ea06d4624005c144a25a02c5a3714"
+  },
+  "default": "InstructorDetails",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "PersonalDetails"
+      },
+      {
+        "type": "group",
+        "id": "PhoneNumberFrame"
+      },
+      {
+        "type": "group",
+        "id": "DatesFrames"
+      },
+      {
+        "type": "group",
+        "id": "TeachingFrames"
+      },
+      {
+        "type": "text",
+        "id": "Nickname"
+      },
+      {
+        "type": "text",
+        "id": "FullName"
+      },
+      {
+        "type": "text",
+        "id": "Qualification"
+      },
+      {
+        "type": "group",
+        "id": "phone"
+      },
+      {
+        "type": "text",
+        "id": "PhoneNumber"
+      },
+      {
+        "type": "vector",
+        "id": "PhoneIcon"
+      },
+      {
+        "type": "group",
+        "id": "calendar_today"
+      },
+      {
+        "type": "text",
+        "id": "arrivalDate"
+      },
+      {
+        "type": "text",
+        "id": "dash"
+      },
+      {
+        "type": "text",
+        "id": "departureDate"
+      },
+      {
+        "type": "vector",
+        "id": "calendarIcon"
+      },
+      {
+        "type": "group",
+        "id": "StudentsToughtFrame"
+      },
+      {
+        "type": "group",
+        "id": "TeachingHoursFrame"
+      },
+      {
+        "type": "text",
+        "id": "Students tought:"
+      },
+      {
+        "type": "text",
+        "id": "sn"
+      },
+      {
+        "type": "text",
+        "id": "Teaching hours:"
+      },
+      {
+        "type": "text",
+        "id": "hn"
+      }
+    ],
+    "modes": {
+      "InstructorDetails": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "10.0",
+              "top": "10.0",
+              "right": "10.0",
+              "bottom": "20.0"
+            },
+            "border-radius": "15.0",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "5.0",
+              "offset-y": "5.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
+            "children": [
+              "PersonalDetails",
+              "PhoneNumberFrame",
+              "DatesFrames",
+              "TeachingFrames"
+            ],
+            "item-spacing": "15.0",
+            "background-color": "$background"
+          },
+          {
+            "id": "PersonalDetails",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "cross-axis-align": "start",
+            "children": [
+              "Nickname",
+              "FullName",
+              "Qualification"
+            ],
+            "item-spacing": "5.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "PhoneNumberFrame",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "phone",
+              "PhoneNumber"
+            ],
+            "item-spacing": "5.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "DatesFrames",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "calendar_today",
+              "arrivalDate",
+              "dash",
+              "departureDate"
+            ],
+            "item-spacing": "5.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "TeachingFrames",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "140.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "35.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "StudentsToughtFrame",
+              "TeachingHoursFrame"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Nickname",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$nickname",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "16.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "FullName",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$fullName",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "10.0",
+            "line-height": "1.2102272033691406",
+            "typeface": "Inter"
+          },
+          {
+            "id": "Qualification",
+            "opacity": "0.800000011920929",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$qualification",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "phone",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "15.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "15.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "PhoneIcon"
+            ]
+          },
+          {
+            "id": "PhoneNumber",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$phoneNumber",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "PhoneIcon",
+            "margin": {
+              "left": "1.8863525390625",
+              "top": "1.8863525390625",
+              "right": "1.88623046875",
+              "bottom": "1.8863525390625"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "phone_icon.svg"
+          },
+          {
+            "id": "calendar_today",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "18.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "17.052642822265625"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "calendarIcon"
+            ]
+          },
+          {
+            "id": "arrivalDate",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$arrivalDate",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "dash",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "6.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "-",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "departureDate",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$departureDate",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "calendarIcon",
+            "margin": {
+              "left": "1.5",
+              "top": "0.710540771484375",
+              "right": "1.5",
+              "bottom": "0.71051025390625"
+            },
+            "tap-handler": "$onClick",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "vector-content": "calendar_icon.svg"
+          },
+          {
+            "id": "StudentsToughtFrame",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "140.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
+            "children": [
+              "Students tought:",
+              "sn"
+            ],
+            "item-spacing": "10.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "TeachingHoursFrame",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "20.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "140.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "cross-axis-align": "start",
+            "children": [
+              "Teaching hours:",
+              "hn"
+            ],
+            "item-spacing": "10.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "Students tought:",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Students tought:",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "sn",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$students",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "Teaching hours:",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Teaching hours:",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "hn",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "30.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$hours",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "background": {
+      "data-type": "color",
+      "required": false,
+      "description": ""
+    },
+    "nickname": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "fullName": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "qualification": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "phoneNumber": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "arrivalDate": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "departureDate": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "onClick": {
+      "data-type": "void-callback",
+      "required": false,
+      "description": ""
+    },
+    "students": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "hours": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "InstructorDetails",
+      "size": {
+        "width": 160.0,
+        "height": 190.0
+      },
+      "parameters": {
+        "background": {
+          "alpha": "1.0",
+          "hue": "200.2409638554217",
+          "saturation": "0.3640350877192983",
+          "value": "0.8941176470588236"
+        },
+        "nickname": "Nickname",
+        "fullName": "Tomasz Brzeczyszczykiewicz",
+        "qualification": "Qualification",
+        "phoneNumber": "999999999",
+        "arrivalDate": "10.10.23",
+        "departureDate": "10.10.23",
+        "students": "sn",
+        "hours": "hn"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

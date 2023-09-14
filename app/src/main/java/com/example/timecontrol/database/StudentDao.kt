@@ -18,15 +18,15 @@ interface StudentDao {
     @Delete
     suspend fun deleteStudent(student: Student)
 
-    @Query("DELETE FROM students_data_table")
+    @Query("DELETE FROM Students")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM students_data_table")
+    @Query("SELECT * FROM Students")
     fun getAllStudentsWithLessons(): Flow<List<StudentWithLessons>>
 
-    @Query("SELECT * FROM students_data_table")
+    @Query("SELECT * FROM Students")
     fun getAllStudents(): Flow<List<Student>>
 
-    @Query("SELECT * FROM students_data_table WHERE id = :id")
+    @Query("SELECT * FROM Students WHERE id = :id")
     fun getStudentById(id: Int): StudentWithLessons
 }

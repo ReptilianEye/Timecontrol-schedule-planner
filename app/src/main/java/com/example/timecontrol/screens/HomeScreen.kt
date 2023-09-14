@@ -17,6 +17,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,9 +26,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.timecontrol.R
 import com.example.timecontrol.calendaritem.CalendarItem
+import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.quote.Quote
 import com.example.timecontrol.statstile.StatsTile
@@ -35,10 +39,7 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
 fun HomeScreen(
-    quote: Quote,
-    navController: NavController,
-    viewModel: DatabaseViewModel,
-    context: Context
+    quote: Quote, navController: NavController, viewModel: DatabaseViewModel, context: Context
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -47,7 +48,8 @@ fun HomeScreen(
     ) {
         Quote(
             author = quote.author,
-            content = quote.quote, modifier = Modifier
+            content = quote.quote,
+            modifier = Modifier
                 .width(345.dp)
                 .height(140.dp)
         )
@@ -55,14 +57,18 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
 //                        modifier = Modifier.height(172.dp)
         ) {
-            repeat(2) {
-                StatsTile(
-                    content = "10", title = "abc", onClick = {
-                        Toast.makeText(context, "Dziala", Toast.LENGTH_LONG).show()
-                    }, modifier = Modifier.size(180.dp)
-                )
-            }
-
+            val students by viewModel.students.collectAsState(emptyList())
+            val instructors by viewModel.instructors.collectAsState(emptyList())
+            StatsTile(
+                content = students.size.toString(), title = "Students Currently", onClick = {
+                    navController.navigate(Screen.StudentsScreen.route)
+                }, modifier = Modifier.size(180.dp)
+            )
+            StatsTile(
+                content = instructors.size.toString(), title = "Instructors Currently", onClick = {
+                    navController.navigate(Screen.InstructorsScreen.route)
+                }, modifier = Modifier.size(180.dp)
+            )
         }
         Box(
             modifier = Modifier
@@ -79,8 +85,7 @@ fun HomeScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     IconButton(onClick = {/*TODO*/ }) {
                         Icon(
@@ -102,8 +107,7 @@ fun HomeScreen(
                 }
                 Divider(thickness = 1.dp, color = Color.Black, modifier = Modifier.padding(10.dp))
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {

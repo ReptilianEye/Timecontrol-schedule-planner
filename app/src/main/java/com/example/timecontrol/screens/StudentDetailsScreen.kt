@@ -16,12 +16,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.timecontrol.pretty
 import com.example.timecontrol.studentsinfo.StudentsInfo
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.White80
 import com.example.timecontrol.viewModel.DatabaseViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun StudentDetailsScreen(
@@ -38,9 +37,9 @@ fun StudentDetailsScreen(
                 fullName = "${student.student.firstName} ${student.student.lastName}",
                 phoneNumber = student.student.phoneNumber,
                 email = student.student.email,
-                arrivalDate = prettyDate(student.student.arrivalDate),
-                departureDate = prettyDate(student.student.departureDate),
-                birthDate = prettyDate(student.student.birthDate, "dd.MM.YY"),
+                arrivalDate = student.student.arrivalDate.pretty(),
+                departureDate = student.student.departureDate.pretty(),
+                birthDate = student.student.birthDate.pretty("dd.MM.YY"),
                 placeOfStay = student.student.placeOfStay,
                 onEditClicked = {/* TODO - add edit functionality */ })
         }
@@ -64,7 +63,7 @@ fun StudentDetailsScreen(
         }
         itemsIndexed(student.lessons) { i, lesson ->
             Row(Modifier.background(if (i % 2 == 0) White80 else Blue10)) {
-                TableCell(text = prettyDate(lesson.date))
+                TableCell(text = lesson.date.pretty())
                 TableCell(text = lesson.levelAfter)
                 TableCell(text = lesson.duration.toString() + "min.")
                 TableCell(
@@ -91,6 +90,3 @@ fun RowScope.TableCell(
     )
 }
 
-fun prettyDate(data: LocalDate, pattern: String = "dd.MM"): String {
-    return data.format(DateTimeFormatter.ofPattern(pattern))
-}

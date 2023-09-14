@@ -1,4 +1,4 @@
-package com.example.timecontrol
+package com.example.timecontrol.viewModelHelp.student
 
 import com.example.timecontrol.database.Student
 import java.time.LocalDate

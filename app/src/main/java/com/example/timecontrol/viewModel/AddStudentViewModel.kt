@@ -2,10 +2,10 @@ package com.example.timecontrol.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timecontrol.AddStudentEvent
-import com.example.timecontrol.AddStudentState
-import com.example.timecontrol.StudentsFilterType
-import com.example.timecontrol.StudentsSortType
+import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
+import com.example.timecontrol.viewModelHelp.student.AddStudentState
+import com.example.timecontrol.viewModelHelp.student.StudentsFilterType
+import com.example.timecontrol.viewModelHelp.student.StudentsSortType
 import com.example.timecontrol.database.Student
 import com.example.timecontrol.validation.use_case.ValidateArrivalDate
 import com.example.timecontrol.validation.use_case.ValidateBirthDate

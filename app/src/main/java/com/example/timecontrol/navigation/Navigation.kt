@@ -14,6 +14,7 @@ import com.example.timecontrol.screens.RootLayout
 import com.example.timecontrol.screens.ScheduleScreen
 import com.example.timecontrol.screens.StudentsScreen
 import com.example.timecontrol.preferences.dto.Quote
+import com.example.timecontrol.screens.InstructorsScreen
 import com.example.timecontrol.screens.StudentDetailsScreen
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
@@ -41,7 +42,26 @@ fun Navigation(
                 StudentsScreen(viewModel = viewModel, navController = navController)
             })
         }
-
+        //Add Student Screen
+        composable(route = Screen.AddStudentScreen.route) {
+            RootLayout(navController = navController, localization = 0, content = {
+                AddStudent(
+                    databaseViewModel = viewModel,
+                    navController = navController,
+                    owner = owner
+                )
+            })
+        }
+        //Instructors Screen
+        composable(route = Screen.InstructorsScreen.route) {
+            RootLayout(navController = navController, localization = 3, content = {
+                InstructorsScreen(
+                    databaseViewModel = viewModel,
+                    navController = navController,
+                    owner = owner
+                )
+            })
+        }
         //Schedule Screen
         composable(route = Screen.ScheduleScreen.route) {
             RootLayout(navController = navController, localization = 2, content = {
@@ -49,12 +69,7 @@ fun Navigation(
             })
         }
 
-        //Add Student Screen
-        composable(route = Screen.AddStudentScreen.route) {
-            RootLayout(navController = navController, localization = 0, content = {
-                AddStudent(databaseViewModel = viewModel, navController = navController, owner)
-            })
-        }
+
         composable(
             route = Screen.StudentDetailsScreen.route + "/{index}",
             arguments = listOf(navArgument("index") {
