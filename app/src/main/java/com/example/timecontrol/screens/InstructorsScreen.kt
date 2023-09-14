@@ -1,5 +1,6 @@
 package com.example.timecontrol.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -40,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -58,8 +61,11 @@ import com.example.timecontrol.instructordetails.InstructorDetails
 import com.example.timecontrol.pretty
 import com.example.timecontrol.toLocalDate
 import com.example.timecontrol.toMillis
+import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.Blue20
+import com.example.timecontrol.ui.theme.Blue40
 import com.example.timecontrol.ui.theme.BlueLogo
+import com.example.timecontrol.ui.theme.White80
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.InstructorViewModel
 import com.example.timecontrol.viewModel.InstructorViewModelFactory
@@ -82,7 +88,11 @@ fun InstructorsScreen(
         val instructors by databaseViewModel.instructors.collectAsStateWithLifecycle(initialValue = emptyList())
         if (state.isAddingInstructor) {
             AddInstructorDialog(
-                state = state, onEvent = onEvent, modifier = Modifier.fillMaxHeight(0.8f)
+                state = state,
+                onEvent = onEvent,
+                modifier = Modifier
+                    .shadow(2.dp)
+                    .fillMaxHeight(0.8f)
             )
         }
         LazyVerticalGrid(
@@ -142,7 +152,9 @@ fun AddInstructorDialog(
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(15.dp)) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(15.dp),
+            ) {
                 Row {
                     Column(modifier = Modifier.weight(1f)) {
                         OutlinedTextField(label = { Text(text = "Name", fontSize = 14.sp) },
@@ -322,73 +334,30 @@ fun AddInstructorDialog(
             }
         },
         buttons = {
-            //TODO center that button
-            Button(
-                onClick = { onEvent(AddInstructorEvent.SaveInstructor) },
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = BlueLogo
-                ),
-            ) {
-                Text(text = "Save", fontWeight = FontWeight.Bold)
-            }
-//            Box(
-//                modifier = Modifier
-//                    .padding(top = 16.dp, bottom = 16.dp)
+            Row(
+                modifier = Modifier
+                    .padding(16.dp)
 //                    .height(40.dp)
-//                    .fillMaxWidth(),
-////                    .background(BlueLogo),
-//                contentAlignment = Alignment.BottomCenter,
-//            ) {
-//
-//            }
+                    .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Button(
+                    onClick = {
+                        onEvent(AddInstructorEvent.HideDialog)
+                    }, colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onError)
+//                    colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colors.onError)
+                ) {
+                    Text(text = "Cancel", fontWeight = FontWeight.Bold)
+                }
+                Button(
+                    onClick = {
+                        onEvent(AddInstructorEvent.SaveInstructor)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = BlueLogo
+                    ),
+                ) {
+                    Text(text = "Save", fontWeight = FontWeight.Bold)
+                }
+            }
         })
 }
-
-//
-//fun insert(viewModel: DatabaseViewModel) {
-//    CoroutineScope(Dispatchers.IO).launch {
-//        async {
-//            viewModel.insertInstructor(
-//                Instructor(
-//                    0, "Piotrek", "Rzadk", "Piter", "123456789", true, InstructorQualification.LVL1,
-//                    LocalDate.now(),
-//                    LocalDate.now().plusMonths(1)
-//                )
-//            )
-//        }
-//        async {
-//            viewModel.insertInstructor(
-//                Instructor(
-//                    0,
-//                    "Tomek",
-//                    "Tomek",
-//                    "Tomek",
-//                    "123456789",
-//                    true,
-//                    InstructorQualification.ASSISTANT,
-//                    LocalDate.now(),
-//                    LocalDate.now().plusMonths(2)
-//                )
-//            )
-//        }
-//        async {
-//            viewModel.insertInstructor(
-//                Instructor(
-//                    0, "Ala", "Ala", "Ala", "123456789", true, InstructorQualification.EXAMINER,
-//                    LocalDate.now().minusDays(3),
-//                    LocalDate.now().plusMonths(1)
-//                )
-//            )
-//        }
-//        async {
-//            viewModel.insertInstructor(
-//                Instructor(
-//                    0, "Kuba", "Kuba", "Kuba", "123456789", false, InstructorQualification.LVL3,
-//                    LocalDate.now().minusWeeks(2),
-//                    LocalDate.now().plusMonths(3)
-//                )
-//            )
-//        }
-//
-//    }
-//}

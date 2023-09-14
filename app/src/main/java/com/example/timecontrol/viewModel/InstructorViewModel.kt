@@ -83,7 +83,7 @@ class InstructorViewModel(
 
             is AddInstructorEvent.SortInstructors -> _sortType.value = event.sortType
             is AddInstructorEvent.FilterInstructors -> _filterType.value = event.filterType
-            AddInstructorEvent.HideDialog -> _state.update { it.copy(isAddingInstructor = false) }
+            AddInstructorEvent.HideDialog -> resetState()
             AddInstructorEvent.ShowDialog -> _state.update { it.copy(isAddingInstructor = true) }
         }
     }
