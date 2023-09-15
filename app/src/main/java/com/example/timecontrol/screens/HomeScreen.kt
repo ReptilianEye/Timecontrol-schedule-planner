@@ -1,7 +1,6 @@
 package com.example.timecontrol.screens
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,12 +25,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.timecontrol.R
 import com.example.timecontrol.calendaritem.CalendarItem
 import com.example.timecontrol.navigation.Screen
-import com.example.timecontrol.navigation.TabbedNav
+import com.example.timecontrol.navigation.TabbedNavTitles
 import com.example.timecontrol.navigation.getTabbedNavIndex
 import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.quote.Quote
@@ -65,14 +63,14 @@ fun HomeScreen(
                 content = students.size.toString(), title = "Students Currently", onClick = {
                     //TODO - do it better with optional arguments
                     navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${getTabbedNavIndex(TabbedNav.Students)}"
+                        "${Screen.CommunityScreen.route}?index=${getTabbedNavIndex(TabbedNavTitles.Students)}"
                     )
                 }, modifier = Modifier.size(180.dp)
             )
             StatsTile(
                 content = instructors.size.toString(), title = "Instructors Currently", onClick = {
                     navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${getTabbedNavIndex(TabbedNav.Instructors)}"
+                        "${Screen.CommunityScreen.route}?index=${getTabbedNavIndex(TabbedNavTitles.Instructors)}"
                     )
                 }, modifier = Modifier.size(180.dp)
             )
