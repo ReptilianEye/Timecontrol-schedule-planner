@@ -29,8 +29,7 @@ import androidx.navigation.NavController
 import com.example.timecontrol.R
 import com.example.timecontrol.calendaritem.CalendarItem
 import com.example.timecontrol.navigation.Screen
-import com.example.timecontrol.navigation.TabbedNavTitles
-import com.example.timecontrol.navigation.getTabbedNavIndex
+import com.example.timecontrol.navigation.TabbedNavItems
 import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.quote.Quote
 import com.example.timecontrol.statstile.StatsTile
@@ -63,14 +62,14 @@ fun HomeScreen(
                 content = students.size.toString(), title = "Students Currently", onClick = {
                     //TODO - do it better with optional arguments
                     navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${getTabbedNavIndex(TabbedNavTitles.Students)}"
+                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Students.index}"
                     )
                 }, modifier = Modifier.size(180.dp)
             )
             StatsTile(
                 content = instructors.size.toString(), title = "Instructors Currently", onClick = {
                     navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${getTabbedNavIndex(TabbedNavTitles.Instructors)}"
+                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Instructors.index}"
                     )
                 }, modifier = Modifier.size(180.dp)
             )

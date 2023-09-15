@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
-import com.example.timecontrol.navigation.TabbedNavTitles
+import com.example.timecontrol.navigation.TabbedNavItems
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
@@ -26,11 +26,11 @@ fun CommunityScreen(
     var tabbedNavIndex by remember { mutableStateOf(navIndex) }
     Column {
         TabRow(selectedTabIndex = tabbedNavIndex) {
-            TabbedNavTitles.values().forEachIndexed { index, title ->
-                Tab(selected = tabbedNavIndex == index, onClick = {
-                    tabbedNavIndex = index
+            TabbedNavItems.values().forEach { item ->
+                Tab(selected = tabbedNavIndex == item.index, onClick = {
+                    tabbedNavIndex = item.index
                 }, text = {
-                    Text(text = title.name, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                    Text(text = item.name, maxLines = 2, overflow = TextOverflow.Ellipsis)
                 })
             }
         }

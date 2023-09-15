@@ -45,7 +45,7 @@ class InstructorViewModel(
             InstructorsSortType.NICKNAME -> databaseViewModel.instructors
             InstructorsSortType.DEPARTURE_DATE -> databaseViewModel.instructors
             InstructorsSortType.DEPARTURE_DATE_DESC -> databaseViewModel.instructors
-            InstructorsSortType.HOURS_TOUGHT -> databaseViewModel.instructors
+            InstructorsSortType.HOURS_TAUGHT -> databaseViewModel.instructors
         }
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), emptyList()

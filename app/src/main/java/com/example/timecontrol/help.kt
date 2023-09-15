@@ -27,23 +27,7 @@ fun LocalDate.pretty(pattern: String = "dd.MM"): String =
 //        InstructorQualification.EXAMINER -> "Examiner"
 //    }
 //}
-object QualificationHelper {
-    private val QualificationPairs = listOf(
-        Pair(InstructorQualification.ASSISTANT, "Assistant"),
-        Pair(InstructorQualification.LVL1, "Instructor Level 1"),
-        Pair(InstructorQualification.LVL2, "Instructor Level 2"),
-        Pair(InstructorQualification.LVL3, "Instructor Level 3"),
-        Pair(InstructorQualification.EXAMINER, "Examiner")
-    )
 
-    fun getEnum(qualification: String): InstructorQualification {
-        return QualificationPairs.first { it.second == qualification }.first
-    }
-
-    fun getString(qualification: InstructorQualification): String {
-        return QualificationPairs.first { it.first == qualification }.second
-    }
-}
 
 fun LocalDate.toMillis() = this.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
 fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()

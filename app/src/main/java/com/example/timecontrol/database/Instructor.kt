@@ -29,10 +29,17 @@ data class Instructor(
 fun Instructor.getFullName(): String {
     return "$firstName $lastName"
 }
-enum class InstructorQualification {
-    ASSISTANT,
-    LVL1,
-    LVL2,
-    LVL3,
-    EXAMINER
+
+enum class InstructorQualification(val fullName: String) {
+    ASSISTANT("Assistant"),
+    LVL1("Instructor Level 1"),
+    LVL2("Instructor Level 2"),
+    LVL3("Instructor Level 3"),
+    EXAMINER("Examiner");
+
+    companion object {
+        fun fromString(qualification: String): InstructorQualification {
+            return valueOf(qualification)
+        }
+    }
 }
