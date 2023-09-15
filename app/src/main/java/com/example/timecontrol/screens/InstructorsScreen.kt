@@ -109,8 +109,10 @@ fun InstructorsScreen(
                     phoneNumber = instructor.phoneNumber,
                     arrivalDate = instructor.arrivalDate.pretty(),
                     departureDate = instructor.departureDate.pretty(),
-                    students = "10", //TODO - implement that
-                    hours = "30",
+                    students = instructorViewModel.getInstructorStudentCount(
+                        instructor
+                    ).toString(),
+                    hours = instructorViewModel.getInstructorHoursTaught(instructor).toString(),
                     background = Blue20
                 )
             }
@@ -337,14 +339,12 @@ fun AddInstructorDialog(
             Row(
                 modifier = Modifier
                     .padding(16.dp)
-//                    .height(40.dp)
                     .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     onClick = {
                         onEvent(AddInstructorEvent.HideDialog)
                     }, colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onError)
-//                    colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colors.onError)
                 ) {
                     Text(text = "Cancel", fontWeight = FontWeight.Bold)
                 }

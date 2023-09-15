@@ -1,6 +1,7 @@
 package com.example.timecontrol.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -19,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Checkbox
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Switch
@@ -26,6 +30,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -69,13 +74,10 @@ import java.time.format.DateTimeFormatter
 // TODO - add email as an input
 @Composable
 fun AddStudent(
-    databaseViewModel: DatabaseViewModel,
-    navController: NavController,
-    owner: ViewModelStoreOwner
+    databaseViewModel: DatabaseViewModel, navController: NavController, owner: ViewModelStoreOwner
 ) {
     val addStudentViewModel = ViewModelProvider(
-        owner,
-        AddStudentViewModelFactory(databaseViewModel)
+        owner, AddStudentViewModelFactory(databaseViewModel)
     )[AddStudentViewModel::class.java]
     val state by addStudentViewModel.state.collectAsState()
     val context = LocalContext.current
@@ -157,8 +159,7 @@ fun AddStudent(
                         }
                     }
 
-                    Column(modifier = Modifier.weight(1f))
-                    {
+                    Column(modifier = Modifier.weight(1f)) {
                         OutlinedTextField(
                             value = state.lastName,
                             onValueChange = {
@@ -196,8 +197,7 @@ fun AddStudent(
                         )
                         if (state.phoneNumberError != null) {
                             Text(
-                                text = state.phoneNumberError!!,
-                                color = MaterialTheme.colors.error
+                                text = state.phoneNumberError!!, color = MaterialTheme.colors.error
                             )
                         }
                     }
@@ -242,20 +242,17 @@ fun AddStudent(
                         else Icons.Filled.KeyboardArrowDown
 
                         Column {
-                            OutlinedTextField(value = state.placeOfStay,
-                                onValueChange = {
-                                    addStudentViewModel.onEvent(
-                                        AddStudentEvent.PlaceOfStayChanged(
-                                            it
-                                        )
+                            OutlinedTextField(value = state.placeOfStay, onValueChange = {
+                                addStudentViewModel.onEvent(
+                                    AddStudentEvent.PlaceOfStayChanged(
+                                        it
                                     )
-                                },
-                                label = { Text(text = "Place of stay") },
-                                trailingIcon = {
-                                    Icon(icon,
-                                        "contentDescription",
-                                        Modifier.clickable { expanded = !expanded })
-                                })
+                                )
+                            }, label = { Text(text = "Place of stay") }, trailingIcon = {
+                                Icon(icon,
+                                    "contentDescription",
+                                    Modifier.clickable { expanded = !expanded })
+                            })
                             DropdownMenu(
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false },
@@ -276,8 +273,7 @@ fun AddStudent(
                         }
                         if (state.placeOfStayError != null) {
                             Text(
-                                text = state.placeOfStayError!!,
-                                color = MaterialTheme.colors.error
+                                text = state.placeOfStayError!!, color = MaterialTheme.colors.error
                             )
                         }
                     }
@@ -328,7 +324,8 @@ fun AddStudent(
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
-                                    Checkbox(checked = levelsCheckState[i].value,
+                                    Checkbox(
+                                        checked = levelsCheckState[i].value,
                                         onCheckedChange = {
                                             if (it) for (j in 0..i) levelsCheckState[j].value =
                                                 true //mark all lower levels and itself
@@ -351,13 +348,28 @@ fun AddStudent(
 
             }
 
+
         }
         FloatingActionButton(
             modifier = Modifier
                 .padding(top = 16.dp, bottom = 16.dp)
                 .height(40.dp)
                 .width(80.dp)
-                .align(Alignment.BottomCenter), onClick = {
+                .align(Alignment.BottomStart), onClick = {
+                addStudentViewModel.onEvent(AddStudentEvent.Cancel)
+                navController.navigate(
+                    Screen.CommunityScreen.route
+                )
+            }, containerColor = MaterialTheme.colors.onError
+        ) {
+            Text(text = "Cancel", fontWeight = FontWeight.Bold)
+        }
+        FloatingActionButton(
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 16.dp)
+                .height(40.dp)
+                .width(80.dp)
+                .align(Alignment.BottomEnd), onClick = {
 
                 addStudentViewModel.onEvent(
                     AddStudentEvent.LevelChanged(

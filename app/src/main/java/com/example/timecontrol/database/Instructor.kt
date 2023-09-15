@@ -29,8 +29,6 @@ data class Instructor(
 fun Instructor.getFullName(): String {
     return "$firstName $lastName"
 }
-
-
 enum class InstructorQualification {
     ASSISTANT,
     LVL1,

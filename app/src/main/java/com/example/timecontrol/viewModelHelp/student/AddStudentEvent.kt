@@ -13,6 +13,7 @@ sealed class AddStudentEvent {
     data class DepartureDateChanged(val departureDate: LocalDate) : AddStudentEvent()
     data class LevelChanged(val level: String) : AddStudentEvent()
     object SaveStudent : AddStudentEvent()
+    object Cancel : AddStudentEvent()
     data class SortStudents(val sortType: StudentsSortType) : AddStudentEvent()
     data class FilterStudents(val filterType: StudentsFilterType) : AddStudentEvent()
 }

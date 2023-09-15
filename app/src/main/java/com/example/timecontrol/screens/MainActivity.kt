@@ -68,10 +68,10 @@ class MainActivity : ComponentActivity() {
     companion object {
         val navItems = listOf(
             BottomNavigationItem(
-                title = "Students",
-                icon = R.drawable.students_icon,
+                title = "Community",
+                icon = R.drawable.community_icon,
                 hasNews = false,
-                route = Screen.StudentsScreen.route
+                route = Screen.CommunityScreen.route
             ),
             BottomNavigationItem(
                 title = "Home",

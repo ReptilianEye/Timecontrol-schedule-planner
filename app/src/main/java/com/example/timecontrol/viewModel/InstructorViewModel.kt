@@ -3,8 +3,6 @@ package com.example.timecontrol.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timecontrol.database.Instructor
-import com.example.timecontrol.viewModelHelp.student.AddStudentState
-import com.example.timecontrol.database.Student
 import com.example.timecontrol.validation.use_case.ValidateArrivalDate
 import com.example.timecontrol.validation.use_case.ValidateDepartureDate
 import com.example.timecontrol.validation.use_case.ValidateFirstName
@@ -143,6 +141,16 @@ class InstructorViewModel(
     private fun resetState() {
         _state.update { AddInstructorState() }
     }
+
+
+    fun getInstructorHoursTaught(instructor: Instructor): Float {
+        return databaseViewModel.getInstructorHoursTaught(instructor.id)
+    }
+
+    fun getInstructorStudentCount(instructor: Instructor): Int {
+        return databaseViewModel.getInstructorStudentCount(instructor.id)
+    }
+
 
     sealed class ValidationEvent {
         object Success : ValidationEvent()

@@ -24,6 +24,16 @@ interface InstructorDao {
     @Query("SELECT * FROM Instructors")
     fun getAllInstructors(): Flow<List<InstructorWithLessons>>
 
+    @Query("SELECT * FROM Instructors WHERE arrival_date <= DATE() <= departure_date")
+    fun getAllCurrentInstructors(): Flow<List<InstructorWithLessons>>
+
+    @Query(
+        "SELECT * FROM Instructors WHERE id NOT IN (SELECT id FROM Instructors WHERE arrival_date <= DATE() <= departure_date)"
+    )
+    fun getAllPastInstructors(): Flow<List<InstructorWithLessons>>
+
+
     @Query("SELECT * FROM Instructors WHERE id = :id")
     suspend fun getInstructorById(id: Int): InstructorWithLessons
+
 }
