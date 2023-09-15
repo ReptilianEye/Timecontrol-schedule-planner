@@ -17,28 +17,6 @@ fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>): String {
 fun LocalDate.pretty(pattern: String = "dd.MM"): String =
     this.format(DateTimeFormatter.ofPattern(pattern))
 
-
-//fun qualificationToString(qualification: InstructorQualification): String {
-//    return when (qualification) {
-//        InstructorQualification.ASSISTANT -> "Assistant"
-//        InstructorQualification.LVL1 -> "Instructor Level 1"
-//        InstructorQualification.LVL2 -> "Instructor Level 2"
-//        InstructorQualification.LVL3 -> "Instructor Level 3"
-//        InstructorQualification.EXAMINER -> "Examiner"
-//    }
-//}
-
-
 fun LocalDate.toMillis() = this.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
 fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()
-
-//fun getListOfQualificationPairs(): List<Pair<InstructorQualification, String>> {
-//    return listOf(
-//        Pair(InstructorQualification.ASSISTANT, "Assistant"),
-//        Pair(InstructorQualification.LVL1, "Instructor Level 1"),
-//        Pair(InstructorQualification.LVL2, "Instructor Level 2"),
-//        Pair(InstructorQualification.LVL3, "Instructor Level 3"),
-//        Pair(InstructorQualification.EXAMINER, "Examiner")
-//    )
-//}
 
