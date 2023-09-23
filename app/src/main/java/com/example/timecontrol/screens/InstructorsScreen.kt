@@ -1,6 +1,5 @@
 package com.example.timecontrol.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,7 +52,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.timecontrol.QualificationHelper
 import com.example.timecontrol.R
 import com.example.timecontrol.database.InstructorQualification
 import com.example.timecontrol.database.getFullName
@@ -61,11 +59,8 @@ import com.example.timecontrol.instructordetails.InstructorDetails
 import com.example.timecontrol.pretty
 import com.example.timecontrol.toLocalDate
 import com.example.timecontrol.toMillis
-import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.Blue20
-import com.example.timecontrol.ui.theme.Blue40
 import com.example.timecontrol.ui.theme.BlueLogo
-import com.example.timecontrol.ui.theme.White80
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.InstructorViewModel
 import com.example.timecontrol.viewModel.InstructorViewModelFactory
@@ -105,12 +100,14 @@ fun InstructorsScreen(
                 InstructorDetails(
                     nickname = instructor.nickname,
                     fullName = instructor.getFullName(),
-                    qualification = QualificationHelper.getString(instructor.qualification),
+                    qualification = instructor.qualification.fullName,
                     phoneNumber = instructor.phoneNumber,
                     arrivalDate = instructor.arrivalDate.pretty(),
                     departureDate = instructor.departureDate.pretty(),
-                    students = "10", //TODO - implement that
-                    hours = "30",
+                    students = instructorViewModel.getInstructorStudentCount(
+                        instructor
+                    ).toString(),
+                    hours = instructorViewModel.getInstructorHoursTaught(instructor).toString(),
                     background = Blue20
                 )
             }
@@ -218,7 +215,7 @@ fun AddInstructorDialog(
                         })
                     }
                     Column(modifier = Modifier.weight(1f)) {
-                        //Place of stay
+                        //Qualification
                         var expanded by remember { mutableStateOf(false) }
 
                         // Up Icon when expanded and down icon when collapsed
@@ -230,22 +227,18 @@ fun AddInstructorDialog(
                                 Text(
                                     text = "Qualification", fontSize = 14.sp
                                 )
-                            },
-                                value = QualificationHelper.getString(state.qualification),
-                                onValueChange = {
+                            }, value = state.qualification.fullName, onValueChange = {
 
-                                    onEvent(
-                                        AddInstructorEvent.QualificationChanged(
-                                            QualificationHelper.getEnum(it)
-                                        )
+                                onEvent(
+                                    AddInstructorEvent.QualificationChanged(
+                                        InstructorQualification.fromString(it)
                                     )
-                                },
-                                readOnly = true,
-                                trailingIcon = {
-                                    Icon(icon,
-                                        "contentDescription",
-                                        Modifier.clickable { expanded = !expanded })
-                                })
+                                )
+                            }, readOnly = true, trailingIcon = {
+                                Icon(icon,
+                                    "contentDescription",
+                                    Modifier.clickable { expanded = !expanded })
+                            })
                             DropdownMenu(
                                 expanded = expanded,
                                 onDismissRequest = { expanded = false },
@@ -260,11 +253,7 @@ fun AddInstructorDialog(
                                             )
                                             expanded = false
                                         }) {
-                                            Text(
-                                                text = QualificationHelper.getString(
-                                                    qualification
-                                                )
-                                            )
+                                            Text(text = qualification.fullName)
                                         }
                                     }
                             }
@@ -337,14 +326,13 @@ fun AddInstructorDialog(
             Row(
                 modifier = Modifier
                     .padding(16.dp)
-//                    .height(40.dp)
-                    .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Button(
                     onClick = {
                         onEvent(AddInstructorEvent.HideDialog)
                     }, colors = ButtonDefaults.buttonColors(MaterialTheme.colors.onError)
-//                    colors = ButtonDefaults.outlinedButtonColors(MaterialTheme.colors.onError)
                 ) {
                     Text(text = "Cancel", fontWeight = FontWeight.Bold)
                 }

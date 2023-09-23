@@ -14,6 +14,7 @@ import com.example.timecontrol.screens.RootLayout
 import com.example.timecontrol.screens.ScheduleScreen
 import com.example.timecontrol.screens.StudentsScreen
 import com.example.timecontrol.preferences.dto.Quote
+import com.example.timecontrol.screens.CommunityScreen
 import com.example.timecontrol.screens.InstructorsScreen
 import com.example.timecontrol.screens.StudentDetailsScreen
 import com.example.timecontrol.viewModel.DatabaseViewModel
@@ -22,6 +23,7 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 fun Navigation(
     viewModel: DatabaseViewModel, context: Context, quote: Quote, owner: ViewModelStoreOwner
 ) {
+    //TODO - add selected index to navigation?
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         //Home Screen
@@ -35,7 +37,24 @@ fun Navigation(
                 )
             })
         }
-
+        //Community Screen
+        composable(
+            route = Screen.CommunityScreen.route + "?index={index}",
+            arguments = listOf(navArgument("index") {
+                type = NavType.StringType
+                defaultValue = null
+                nullable = true
+            })
+        ) { entry ->
+            RootLayout(navController = navController, localization = 1) {
+                CommunityScreen(
+                    databaseViewModel = viewModel,
+                    navController = navController,
+                    owner = owner,
+                    navIndex = entry.arguments?.getString("index")?.toInt() ?: 0
+                )
+            }
+        }
         //Students Screen
         composable(route = Screen.StudentsScreen.route) {
             RootLayout(navController = navController, localization = 0, content = {
@@ -65,7 +84,11 @@ fun Navigation(
         //Schedule Screen
         composable(route = Screen.ScheduleScreen.route) {
             RootLayout(navController = navController, localization = 2, content = {
-                ScheduleScreen()
+                ScheduleScreen(
+                    databaseViewModel = viewModel,
+                    navController = navController,
+                    owner = owner
+                )
             })
         }
 

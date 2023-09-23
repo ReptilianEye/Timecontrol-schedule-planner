@@ -91,9 +91,9 @@ class AddStudentViewModel(
 
             is AddStudentEvent.LevelChanged -> _state.update { it.copy(level = event.level) }
 
-            is AddStudentEvent.SaveStudent -> {
-                submitData()
-            }
+            is AddStudentEvent.SaveStudent -> submitData()
+
+            is AddStudentEvent.Cancel -> resetState()
 
             is AddStudentEvent.SortStudents -> _sortType.value = event.sortType
             is AddStudentEvent.FilterStudents -> _filterType.value = event.filterType
@@ -156,7 +156,6 @@ class AddStudentViewModel(
             async { validationEventChannel.send(ValidationEvent.Success) }
         }
         resetState()
-//        reset(state)  - https://www.youtube.com/watch?v=bOd3wO0uFr8 29:00
     }
 
     private fun resetState() {

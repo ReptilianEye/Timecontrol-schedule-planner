@@ -15,15 +15,16 @@ open class ValidateName {
 
 class ValidateFirstName : ValidateName() {
     override val fieldName = "First name"
-//    override fun execute(firstName: String): ValidationResult = super.execute(firstName)
 }
 
 class ValidateLastName : ValidateName() {
     override val fieldName = "Last name"
-//    override fun execute(lastName: String): ValidationResult = super.execute(lastName)
 }
 
 class ValidateNickname : ValidateName() {
     override val fieldName = "Nickname"
+    override fun execute(field: String): ValidationResult {
+        return ValidationResult(successful = true)
+    }
 }
 

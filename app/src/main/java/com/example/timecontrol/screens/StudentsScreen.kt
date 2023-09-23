@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.timecontrol.R
@@ -31,18 +32,17 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
+fun StudentsScreen(
+    viewModel: DatabaseViewModel, navController: NavController
+) {
 
     val students by viewModel.students.collectAsStateWithLifecycle(initialValue = emptyList())
 
-    Box(modifier = Modifier.fillMaxSize())
-    {
-        if (students.isEmpty())
-            Text(text = "No students have been added yet...")
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (students.isEmpty()) Text(text = "No students have been added yet...")
 
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(3.dp)
+            modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             itemsIndexed(students) { index, student ->
                 StudentsListItem(
@@ -70,7 +70,8 @@ fun StudentsScreen(viewModel: DatabaseViewModel, navController: NavController) {
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add),
-                contentDescription = "Add Student", modifier = Modifier.fillMaxSize(0.5f)
+                contentDescription = "Add Student",
+                modifier = Modifier.fillMaxSize(0.5f)
             )
         }
     }

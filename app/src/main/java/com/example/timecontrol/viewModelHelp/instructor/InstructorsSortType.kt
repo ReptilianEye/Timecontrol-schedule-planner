@@ -1,9 +1,9 @@
 package com.example.timecontrol.viewModelHelp.instructor
 
-enum class InstructorsSortType {
-    TIME_ADDED,
-    NICKNAME,
-    DEPARTURE_DATE,
-    DEPARTURE_DATE_DESC,
-    HOURS_TOUGHT
+enum class InstructorsSortType(val parameterName: String, val desc: Boolean = false) {
+    TIME_ADDED(""),
+    NICKNAME("nickname"),
+    DEPARTURE_DATE("departure_date"),
+    DEPARTURE_DATE_DESC("departure_date", true),
+    HOURS_TAUGHT("HOURS_TAUGHT")
 }
