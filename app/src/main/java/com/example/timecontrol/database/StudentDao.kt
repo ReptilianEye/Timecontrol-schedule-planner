@@ -27,6 +27,9 @@ interface StudentDao {
     @Query("SELECT * FROM Students")
     fun getAllStudents(): Flow<List<Student>>
 
+    @Query("SELECT * FROM Students WHERE arrival_date <= DATE() <= departure_date")
+    fun getAllCurrentStudents(): Flow<List<StudentWithLessons>>
+
     @Query("SELECT * FROM Students WHERE id = :id")
     fun getStudentById(id: Int): StudentWithLessons
 }

@@ -28,6 +28,7 @@ data class Student(
 
     @ColumnInfo(name = "level") val level: String,
 )
+
 fun Student.getFullName(): String {
     return "$firstName $lastName"
 }

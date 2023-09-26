@@ -22,6 +22,7 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
 
     val studentsWithLessons = repository.studentsWithLessons
     val students = repository.students
+    val currentStudents = repository.currentStudents
 
     //Instructor operations
     fun getInstructorById(id: Int): InstructorWithLessons {
