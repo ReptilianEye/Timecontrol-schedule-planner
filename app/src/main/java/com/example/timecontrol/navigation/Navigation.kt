@@ -8,16 +8,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.screens.AddStudent
+import com.example.timecontrol.screens.CommunityScreen
 import com.example.timecontrol.screens.HomeScreen
 import com.example.timecontrol.screens.RootLayout
 import com.example.timecontrol.screens.ScheduleScreen
-import com.example.timecontrol.screens.StudentsScreen
-import com.example.timecontrol.preferences.dto.Quote
-import com.example.timecontrol.screens.CommunityScreen
-import com.example.timecontrol.screens.InstructorsScreen
 import com.example.timecontrol.screens.StudentDetailsScreen
 import com.example.timecontrol.viewModel.DatabaseViewModel
+
 
 @Composable
 fun Navigation(
@@ -25,17 +24,20 @@ fun Navigation(
 ) {
     //TODO - add selected index to navigation?
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.ScheduleScreen.route) {
         //Home Screen
         composable(route = Screen.HomeScreen.route) {
-            RootLayout(navController = navController, localization = 1, content = {
-                HomeScreen(
-                    quote = quote,
-                    navController = navController,
-                    viewModel = viewModel,
-                    context = context
-                )
-            })
+            RootLayout(
+                navController = navController,
+                localization = NavigationDestinations.Home.index,
+                content = {
+                    HomeScreen(
+                        quote = quote,
+                        navController = navController,
+                        viewModel = viewModel,
+                        context = context
+                    )
+                })
         }
         //Community Screen
         composable(
@@ -46,7 +48,10 @@ fun Navigation(
                 nullable = true
             })
         ) { entry ->
-            RootLayout(navController = navController, localization = 1) {
+            RootLayout(
+                navController = navController,
+                localization = NavigationDestinations.Community.index
+            ) {
                 CommunityScreen(
                     databaseViewModel = viewModel,
                     navController = navController,
@@ -55,44 +60,48 @@ fun Navigation(
                 )
             }
         }
-        //Students Screen
-        composable(route = Screen.StudentsScreen.route) {
-            RootLayout(navController = navController, localization = 0, content = {
-                StudentsScreen(viewModel = viewModel, navController = navController)
-            })
-        }
+//        Students Screen
+//        composable(route = Screen.StudentsScreen.route) {
+//            RootLayout(navController = navController, localization = 0, content = {
+//                StudentsScreen(viewModel = viewModel, navController = navController)
+//            })
+//        }
         //Add Student Screen
         composable(route = Screen.AddStudentScreen.route) {
-            RootLayout(navController = navController, localization = 0, content = {
-                AddStudent(
-                    databaseViewModel = viewModel,
-                    navController = navController,
-                    owner = owner
-                )
-            })
+            RootLayout(
+                navController = navController,
+                localization = NavigationDestinations.Community.index,
+                content = {
+                    AddStudent(
+                        databaseViewModel = viewModel,
+                        navController = navController,
+                        owner = owner
+                    )
+                })
         }
         //Instructors Screen
-        composable(route = Screen.InstructorsScreen.route) {
-            RootLayout(navController = navController, localization = 3, content = {
-                InstructorsScreen(
-                    databaseViewModel = viewModel,
-                    navController = navController,
-                    owner = owner
-                )
-            })
-        }
+//        composable(route = Screen.InstructorsScreen.route) {
+//            RootLayout(navController = navController, localization = 3, content = {
+//                InstructorsScreen(
+//                    databaseViewModel = viewModel,
+//                    navController = navController,
+//                    owner = owner
+//                )
+//            })
+//        }
         //Schedule Screen
         composable(route = Screen.ScheduleScreen.route) {
-            RootLayout(navController = navController, localization = 2, content = {
-                ScheduleScreen(
-                    databaseViewModel = viewModel,
-                    navController = navController,
-                    owner = owner
-                )
-            })
+            RootLayout(
+                navController = navController,
+                localization = NavigationDestinations.Schedule.index,
+                content = {
+                    ScheduleScreen(
+                        databaseViewModel = viewModel,
+                        navController = navController,
+                        owner = owner
+                    )
+                })
         }
-
-
         composable(
             route = Screen.StudentDetailsScreen.route + "/{index}",
             arguments = listOf(navArgument("index") {
@@ -101,7 +110,10 @@ fun Navigation(
                 nullable = false
             })
         ) { entry ->
-            RootLayout(navController = navController, localization = 0) {
+            RootLayout(
+                navController = navController,
+                localization = NavigationDestinations.Community.index
+            ) {
                 StudentDetailsScreen(
                     viewModel = viewModel,
                     navController = navController,
@@ -111,5 +123,10 @@ fun Navigation(
 
         }
     }
+}
 
+enum class NavigationDestinations(val index: Int) { //index of bottom navbar
+    Community(0),
+    Home(1),
+    Schedule(2)
 }

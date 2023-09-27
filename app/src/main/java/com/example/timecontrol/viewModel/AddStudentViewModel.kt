@@ -97,6 +97,23 @@ class AddStudentViewModel(
 
             is AddStudentEvent.SortStudents -> _sortType.value = event.sortType
             is AddStudentEvent.FilterStudents -> _filterType.value = event.filterType
+            else ->{
+                print("not implemented yet")
+            }
+
+//            is AddStudentEvent.ArrivalDateChanged -> TODO()
+//            is AddStudentEvent.BirthDateChanged -> TODO()
+//            AddStudentEvent.Cancel -> TODO()
+//            is AddStudentEvent.DepartureDateChanged -> TODO()
+//            is AddStudentEvent.EmailChanged -> TODO()
+//            is AddStudentEvent.FilterStudents -> TODO()
+//            is AddStudentEvent.FirstNameChanged -> TODO()
+//            is AddStudentEvent.LastNameChanged -> TODO()
+//            is AddStudentEvent.LevelChanged -> TODO()
+//            is AddStudentEvent.PhoneNumberChanged -> TODO()
+//            is AddStudentEvent.PlaceOfStayChanged -> TODO()
+//            AddStudentEvent.SaveStudent -> TODO()
+//            is AddStudentEvent.SortStudents -> TODO()
         }
     }
 

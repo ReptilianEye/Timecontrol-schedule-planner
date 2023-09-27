@@ -6,11 +6,14 @@ class AppRepository(private val appDatabase: AppDatabase) {
     private val studentDao = appDatabase.studentDao()
 
     val instructors = instructorDao.getAllInstructors()
+    val currentInstructors = instructorDao.getAllCurrentInstructors()
+
     val lessons = lessonDao.getAllLessons()
 
     val studentsWithLessons = studentDao.getAllStudentsWithLessons()
     val students = studentDao.getAllStudents()
     val currentStudents = studentDao.getAllCurrentStudents()
+
 
     //Instructor operations
     suspend fun getInstructorById(id: Int): InstructorWithLessons {

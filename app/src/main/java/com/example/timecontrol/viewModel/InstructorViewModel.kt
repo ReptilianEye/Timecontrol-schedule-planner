@@ -50,7 +50,6 @@ class InstructorViewModel(
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), emptyList()
     )
-
     private val _state = MutableStateFlow(AddInstructorState())
     val state = combine(
         _state, _sortType, _filterType, _instructors

@@ -59,6 +59,7 @@ import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
 import com.example.timecontrol.getMaxLevel
 import com.example.timecontrol.navigation.Screen
+import com.example.timecontrol.navigation.TabbedNavItems
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.AddStudentViewModel
 import com.example.timecontrol.viewModel.AddStudentViewModelFactory
@@ -89,7 +90,9 @@ fun AddStudent(
                     Toast.makeText(
                         context, "Student has been added successfully!", Toast.LENGTH_LONG
                     ).show()
-                    navController.navigate(Screen.StudentsScreen.route)
+                    navController.navigate(
+                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Students.index}"
+                    )
                 }
             }
         }

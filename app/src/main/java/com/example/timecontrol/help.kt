@@ -20,3 +20,4 @@ fun LocalDate.pretty(pattern: String = "dd.MM"): String =
 fun LocalDate.toMillis() = this.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
 fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()
 
+fun lessonRangePretty(range: Pair<String, String>) = "${range.first} - ${range.second}"

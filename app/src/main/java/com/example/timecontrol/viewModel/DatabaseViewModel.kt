@@ -18,6 +18,8 @@ import kotlin.math.round
 
 class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     val instructors = repository.instructors
+    val currentInstructors = repository.currentInstructors
+
     val lessons = repository.lessons
 
     val studentsWithLessons = repository.studentsWithLessons
