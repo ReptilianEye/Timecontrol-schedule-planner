@@ -1,8 +1,10 @@
 package com.example.timecontrol.screens
 
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,11 +21,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +58,7 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
+import com.example.timecontrol.viewModelHelp.schedule.ScheduleState
 
 
 @Composable
@@ -65,14 +73,7 @@ fun ScheduleScreen(
     val instructors = state.value.instructors
     val lessonRanges = state.value.lessonTimes
     val onEvent = viewModel::onEvent
-//    val lessonRanges = listOf(
-//        Pair("9:00", "11:00"),
-//        Pair("11:15", "13:15"),
-//        Pair("13:30", "15:30"),
-//        Pair("15:45", "17:45"),
-//        Pair("18:00", "20:00"),
-//    )
-
+    val getStudentOnIthSlot = viewModel::getStudentOnIthSlot
     DraggableScreen(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -139,7 +140,7 @@ fun ScheduleScreen(
 
                         titleBox(it.instructor.nickname)//instructor name
                         repeat(lessonRanges.size) {
-                            dropBox(i, onEvent)
+                            dropBox(i, onEvent, getStudentOnIthSlot)
                             i += 1
                         }
                     }
@@ -168,10 +169,18 @@ fun titleBox(mess: String = "lesson") {
 }
 
 @Composable
-fun dropBox(i: Int = -1, onEvent: (ScheduleEvent) -> Unit) {
+fun dropBox(
+    i: Int = -1,
+    onEvent: (ScheduleEvent) -> Unit,
+    getStudentOnIthSlot: (Int) -> StudentWithLessons?,
+) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     DropItem<StudentWithLessons>(
-        Modifier.size((screenWidth / 6f).dp)
+        Modifier
+            .size((screenWidth / 6f).dp)
+            .clickable {
+                onEvent(ScheduleEvent.ResetSlot(i))
+            }
     ) { isInBound, student ->
         if (student != null) {
             Toast.makeText(
@@ -181,6 +190,10 @@ fun dropBox(i: Int = -1, onEvent: (ScheduleEvent) -> Unit) {
                 onEvent(ScheduleEvent.AssignLesson(student, i))
             }
         }
+        val cellDescription = getStudentOnIthSlot(i)?.student?.getFullName() ?: "Free Slot"
+//        val cellDescription = if (toggler && i % 2 == 0) "red" else "blue"
+
+
         if (isInBound) {
             Box(
                 modifier = Modifier
@@ -192,7 +205,7 @@ fun dropBox(i: Int = -1, onEvent: (ScheduleEvent) -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Add Person $i",
+                    text = cellDescription,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Black
                 )
@@ -209,7 +222,7 @@ fun dropBox(i: Int = -1, onEvent: (ScheduleEvent) -> Unit) {
                     ), contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Add Person $i",
+                    text = cellDescription,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White
                 )

@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 import kotlin.math.round
 
 class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
@@ -70,6 +71,7 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     //Lesson operations
+    fun getLessonsOfTheDay(lessonDay: LocalDate) = repository.getAllLessonsOfTheDay(lessonDay)
     fun getLessonById(id: Int): LessonWithStudentAndInstructor {
         val result: Deferred<LessonWithStudentAndInstructor> =
             viewModelScope.async(Dispatchers.IO) {

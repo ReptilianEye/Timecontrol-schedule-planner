@@ -1,5 +1,7 @@
 package com.example.timecontrol.database
 
+import java.time.LocalDate
+
 class AppRepository(private val appDatabase: AppDatabase) {
     private val instructorDao = appDatabase.instructorDao()
     private val lessonDao = appDatabase.lessonDao()
@@ -40,6 +42,8 @@ class AppRepository(private val appDatabase: AppDatabase) {
     fun getLessonById(id: Int): LessonWithStudentAndInstructor {
         return lessonDao.getLessonById(id)
     }
+
+    fun getAllLessonsOfTheDay(lessonDay: LocalDate) = lessonDao.getLessonsOnDay(lessonDay)
 
     suspend fun deleteAllLessons() {
         return lessonDao.deleteAll()

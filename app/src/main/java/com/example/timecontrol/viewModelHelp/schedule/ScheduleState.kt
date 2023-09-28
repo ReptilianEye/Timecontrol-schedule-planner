@@ -10,7 +10,7 @@ data class ScheduleState
     val instructors: List<InstructorWithLessons> = emptyList(),
     val students: List<StudentWithLessons> = emptyList(),
     val assignedLessons: List<Lesson> = emptyList(),
-    val date: LocalDate = LocalDate.now(),
+    val lessonsDay: LocalDate = LocalDate.now(),
     val lessonTimes: List<Pair<String, String>> = listOf(
         Pair("9:00", "11:00"),
         Pair("11:15", "13:15"),
