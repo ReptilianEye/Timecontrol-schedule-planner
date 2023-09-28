@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,56 +32,57 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.timecontrol.DragTarget
 import com.example.timecontrol.DraggableScreen
 import com.example.timecontrol.DropItem
+import com.example.timecontrol.database.Lesson
 import com.example.timecontrol.database.StudentWithLessons
 import com.example.timecontrol.database.getFullName
-import com.example.timecontrol.lessonRangePretty
+import com.example.timecontrol.prettyRange
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.ui.theme.Blue40
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
-import com.google.relay.compose.RowScopeInstanceImpl.weight
+import com.example.timecontrol.viewModel.ScheduleViewModelFactory
+import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 
 
 @Composable
 fun ScheduleScreen(
-    databaseViewModel: DatabaseViewModel,
-    navController: NavController,
-    owner: ViewModelStoreOwner
+    databaseViewModel: DatabaseViewModel, navController: NavController, owner: ViewModelStoreOwner
 ) {
-    val viewModel = remember {
-        ScheduleViewModel(
-            databaseViewModel
-        )
-    }
-    val students = databaseViewModel.currentStudents.collectAsState(initial = emptyList())
-    val instructors = databaseViewModel.currentInstructors.collectAsState(initial = emptyList())
-    val lessonRanges = listOf(
-        Pair("9:00", "11:00"),
-        Pair("11:15", "13:15"),
-        Pair("13:30", "15:30"),
-        Pair("15:45", "17:45"),
-        Pair("18:00", "20:00"),
-    )
+    val viewModel = ViewModelProvider(
+        owner, ScheduleViewModelFactory(databaseViewModel)
+    )[ScheduleViewModel::class.java]
+    val state = viewModel.state.collectAsStateWithLifecycle()
+    val students = state.value.students
+    val instructors = state.value.instructors
+    val lessonRanges = state.value.lessonTimes
+    val onEvent = viewModel::onEvent
+//    val lessonRanges = listOf(
+//        Pair("9:00", "11:00"),
+//        Pair("11:15", "13:15"),
+//        Pair("13:30", "15:30"),
+//        Pair("15:45", "17:45"),
+//        Pair("18:00", "20:00"),
+//    )
 
     DraggableScreen(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         val screenWidth = LocalConfiguration.current.screenWidthDp
-
+        val state = viewModel.state.collectAsState()
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(50.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LazyRow(
@@ -92,7 +93,7 @@ fun ScheduleScreen(
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                items(students.value) { student ->
+                items(students) { student ->
                     DragTarget(
                         dataToDrop = student, viewModel = viewModel
                     ) {
@@ -119,7 +120,7 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .horizontalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = Arrangement.spacedBy(3.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -127,10 +128,10 @@ fun ScheduleScreen(
                 ) {
                     titleBox()//fill
                     lessonRanges.forEach {
-                        titleBox(lessonRangePretty(it))//lesson ranges
+                        titleBox(it.prettyRange())//lesson ranges
                     }
                 }
-                instructors.value.forEach {
+                instructors.forEach {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -138,14 +139,18 @@ fun ScheduleScreen(
 
                         titleBox(it.instructor.nickname)//instructor name
                         repeat(lessonRanges.size) {
-                            dropBox(i, viewModel)
+                            dropBox(i, onEvent)
                             i += 1
                         }
                     }
                 }
 
             }
+            state.value.assignedLessons.forEach {
+                LessonListItem(lesson = it, viewModel = viewModel)
+            }
         }
+
     }
 }
 
@@ -163,19 +168,17 @@ fun titleBox(mess: String = "lesson") {
 }
 
 @Composable
-fun dropBox(i: Int = -1, viewModel: ScheduleViewModel) {
+fun dropBox(i: Int = -1, onEvent: (ScheduleEvent) -> Unit) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     DropItem<StudentWithLessons>(
-        Modifier
-            .size((screenWidth / 6f).dp)
-    )
-    { isInBound, student ->
+        Modifier.size((screenWidth / 6f).dp)
+    ) { isInBound, student ->
         if (student != null) {
             Toast.makeText(
                 LocalContext.current, student.student.firstName + i.toString(), Toast.LENGTH_LONG
             ).show()
             LaunchedEffect(key1 = student) {
-                viewModel.addStudentToLesson(student, i)
+                onEvent(ScheduleEvent.AssignLesson(student, i))
             }
         }
         if (isInBound) {
@@ -183,15 +186,13 @@ fun dropBox(i: Int = -1, viewModel: ScheduleViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .border(
-                        1.dp,
-                        color = Color.Red,
-                        shape = RoundedCornerShape(15.dp)
+                        1.dp, color = Color.Red, shape = RoundedCornerShape(15.dp)
                     )
                     .background(Color.Gray.copy(0.5f), RoundedCornerShape(15.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Add Person",
+                    text = "Add Person $i",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Black
                 )
@@ -201,22 +202,36 @@ fun dropBox(i: Int = -1, viewModel: ScheduleViewModel) {
                 modifier = Modifier
                     .fillMaxSize()
                     .border(
-                        1.dp,
-                        color = Color.White,
-                        shape = RoundedCornerShape(15.dp)
+                        1.dp, color = Color.White, shape = RoundedCornerShape(15.dp)
                     )
                     .background(
-                        Color.Black.copy(0.5f),
-                        RoundedCornerShape(15.dp)
-                    ),
-                contentAlignment = Alignment.Center
+                        Color.Black.copy(0.5f), RoundedCornerShape(15.dp)
+                    ), contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Add Person",
+                    text = "Add Person $i",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White
                 )
             }
         }
+    }
+}
+
+@Composable
+fun LessonListItem(lesson: Lesson, viewModel: ScheduleViewModel) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+            .background(Blue10)
+    ) {
+        val student = viewModel.databaseViewModel.getStudentById(lesson.studentId)
+        val instructor = viewModel.databaseViewModel.getInstructorById(lesson.instructorId)
+        Text(
+            text = "${lesson.lessonTime.prettyRange()},student: ${student.student.firstName},instructor ${instructor.instructor.nickname}",
+            color = Color.Black
+        )
+
     }
 }

@@ -38,7 +38,7 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     fun getInstructorHoursTaught(id: Int): Float {
-        return getInstructorById(id).lessons.sumOf { it.duration }.toFloat() / 60
+        return getInstructorById(id).lessons.sumOf { it.duration ?: 0 }.toFloat() / 60
     }
 
     fun getInstructorStudentCount(id: Int): Int {

@@ -64,7 +64,7 @@ fun StudentDetailsScreen(
         itemsIndexed(student.lessons) { i, lesson ->
             Row(Modifier.background(if (i % 2 == 0) White80 else Blue10)) {
                 MyTableCell(text = lesson.date.pretty())
-                MyTableCell(text = lesson.levelAfter)
+                MyTableCell(text = lesson.levelAfter ?: "?")
                 MyTableCell(text = lesson.duration.toString() + "min.")
                 MyTableCell(
                     text = viewModel.getInstructorById(lesson.instructorId).instructor.nickname,

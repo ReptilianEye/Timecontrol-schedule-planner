@@ -181,7 +181,7 @@ fun AddInstructorDialog(
                     ) {
                         OutlinedTextField(label = {
                             Text(
-                                text = "Nickname (optional)", fontSize = 14.sp
+                                text = "Nickname (${state.firstName})", fontSize = 14.sp
                             )
                         },
                             value = state.nickname,
