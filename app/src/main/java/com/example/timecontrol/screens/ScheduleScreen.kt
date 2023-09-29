@@ -58,50 +58,8 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
+import com.example.timecontrol.viewModelHelp.schedule.Slot
 
-@Composable
-fun MyBoxScreen() {
-    var selectedBox by remember { mutableStateOf(-1) }
-    val desc = remember { mutableStateListOf<String>() }
-
-    // Initialize colors with default colors
-    if (desc.isEmpty()) {
-        repeat(10) {
-            desc.add("Free slot")
-        }
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text("Click on a box to change its color to red:")
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Create a column of MyBoxes
-        for (i in desc.indices) {
-//        var i = -1
-//        repeat(desc.size) {
-//            i += 1
-            MyBox(text = desc[i], onClick = {
-                // Update the color of the clicked box to red
-                desc[i] = "Occupied"
-
-                // Revert the color of the previously clicked box (if any) to default
-                if (selectedBox != -1 && selectedBox != i) {
-                    desc[selectedBox] = "Free slot"
-                }
-
-                selectedBox = i
-            })
-        }
-    }
-}
-
-data class Slot(val i: Int, val j: Int, val description: String = "Free Slot")
 
 @Composable
 fun ScheduleScreen(
@@ -113,26 +71,18 @@ fun ScheduleScreen(
     val state = viewModel.state.collectAsStateWithLifecycle()
     val students = state.value.students
     val instructors = state.value.instructors
-    val lessonRanges = state.value.lessonTimes
+    val lessonTimes = state.value.lessonTimes
     val onEvent = viewModel::onEvent
-    val getStudentOnIthSlot = viewModel::getStudentOnIthSlot
-
-    val slotDescriptions = remember {
-        mutableStateListOf<Slot>()
-    }
-    if (instructors.size * lessonRanges.size > 0) {
-        for (i in instructors.indices)
-            for (j in lessonRanges.indices)
-                slotDescriptions.add(Slot(i, j, "Free Slot"))
+    val getSlotDescription = viewModel::getSlotDescription
+    if (instructors.size * lessonTimes.size > 0) {
+        onEvent(ScheduleEvent.InitSlotDescriptions)
     }
 
 
-//    MyBoxScreen()
 
     DraggableScreen(
         modifier = Modifier.fillMaxSize()
     ) {
-        val screenWidth = LocalConfiguration.current.screenWidthDp
         val state = viewModel.state.collectAsState()
         Column(
             modifier = Modifier
@@ -171,7 +121,6 @@ fun ScheduleScreen(
                     }
                 }
             }
-            var i = 0
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -183,38 +132,25 @@ fun ScheduleScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     titleBox()//fill
-                    lessonRanges.forEach {
+                    lessonTimes.forEach {
                         titleBox(it.prettyRange())//lesson ranges
                     }
                 }
                 for (i in instructors.indices) {
-//                instructors.forEach {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        val it = instructors[i]
-                        titleBox(it.instructor.nickname)//instructor name
-                        for (j in lessonRanges.indices) {
-//                        repeat(lessonRanges.size) {
+                        titleBox(instructors[i].instructor.nickname)//instructor name
+                        for (j in lessonTimes.indices) {
                             dropBox(
                                 onEvent = onEvent,
-                                slotInfo = slotDescriptions[i * lessonRanges.size + j],
+                                slotInfo = getSlotDescription(i, j),
                                 onDrop = { student ->
-                                    val prev = slotDescriptions.indexOfFirst {
-                                        it.description == student.student.getFullName()
-                                    }
-                                    if (prev != -1)
-                                        slotDescriptions[prev] =
-                                            slotDescriptions[prev].copy(description = "Free slot")
-                                    slotDescriptions[i * lessonRanges.size + j] =
-                                        slotDescriptions[i * lessonRanges.size + j].copy(
-                                            description = student.student.getFullName()
-                                        )
-
-                                }
+                                    onEvent(ScheduleEvent.OnDrop(i, j, student))
+                                },
+                                onClick = { onEvent(ScheduleEvent.ResetSlot(i, j)) }
                             )
-//                            i += 1
                         }
                     }
                 }
@@ -252,83 +188,31 @@ fun titleBox(mess: String = "lesson") {
 }
 
 @Composable
-fun dropBox1(
-    i: Int = -1,
-    onEvent: (ScheduleEvent) -> Unit,
-    getStudentOnIthSlot: (Int) -> StudentWithLessons?,
-) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
-    DropItem<StudentWithLessons>(
-        Modifier
-            .size((screenWidth / 6f).dp)
-            .clickable {
-                onEvent(ScheduleEvent.ResetSlot(i))
-            }) { isInBound, student ->
-        if (student != null) {
-            Toast.makeText(
-                LocalContext.current, "${student.student.firstName} added!", Toast.LENGTH_LONG
-            ).show()
-            LaunchedEffect(key1 = student) {
-                onEvent(ScheduleEvent.AssignLesson(student, i))
-            }
-        }
-        val slotDescription = getStudentOnIthSlot(i)?.student?.getFullName() ?: "Free slot"
-        if (isInBound) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(
-                        1.dp, color = Color.Red, shape = RoundedCornerShape(15.dp)
-                    )
-                    .background(Color.Gray.copy(0.5f), RoundedCornerShape(15.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = slotDescription,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black
-                )
-            }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(
-                        1.dp, color = Color.White, shape = RoundedCornerShape(15.dp)
-                    )
-                    .background(
-                        Color.Black.copy(0.5f), RoundedCornerShape(15.dp)
-                    ), contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = slotDescription,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun dropBox(
     onEvent: (ScheduleEvent) -> Unit,
     slotInfo: Slot,
-    onDrop: (StudentWithLessons) -> Unit
+    onDrop: (StudentWithLessons) -> Unit,
+    onClick: () -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     DropItem<StudentWithLessons>(
         Modifier
             .size((screenWidth / 6f).dp)
             .clickable {
-//                onEvent(ScheduleEvent.ResetSlot(i))
+                onClick()
             }) { isInBound, student ->
         if (student != null) {
             Toast.makeText(
                 LocalContext.current, "${student.student.firstName} added!", Toast.LENGTH_LONG
             ).show()
             LaunchedEffect(key1 = student) {
-//                onEvent(ScheduleEvent.AssignLesson(student, i))
+                onEvent(
+                    ScheduleEvent.AssignLesson(
+                        student,
+                        slotInfo.instructorIndex,
+                        slotInfo.lessonTimeIndex
+                    )
+                )
                 onDrop(student)
             }
         }
@@ -391,16 +275,4 @@ fun LessonListItem(lesson: Lesson, viewModel: ScheduleViewModel) {
 
     }
 }
-
-@Composable
-fun MyBox(
-    text: String, onClick: () -> Unit
-) {
-    Box(modifier = Modifier
-        .size(100.dp)
-        .clickable { onClick() }) {
-        Text(text = text)
-    }
-}
-
 

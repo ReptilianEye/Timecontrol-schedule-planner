@@ -5,6 +5,8 @@ import com.example.timecontrol.database.Lesson
 import com.example.timecontrol.database.StudentWithLessons
 import java.time.LocalDate
 
+data class Slot(val instructorIndex: Int, val lessonTimeIndex: Int, val description: String = "Free Slot")
+
 data class ScheduleState
     (
     val instructors: List<InstructorWithLessons> = emptyList(),
@@ -18,4 +20,5 @@ data class ScheduleState
         Pair("15:45", "17:45"),
         Pair("18:00", "20:00"),
     ),
-)
+
+    )
