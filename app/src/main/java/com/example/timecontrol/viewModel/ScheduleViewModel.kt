@@ -19,13 +19,16 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.util.Collections
 
 class ScheduleViewModel(
-    val databaseViewModel: DatabaseViewModel  // nie jestem przekonany
+    val databaseViewModel: DatabaseViewModel,  // nie jestem przekonany
+    var scheduleDate: LocalDate = LocalDate.now().plusDays(1)
 ) : ViewModel() {
 
-    private val _instructors = databaseViewModel.currentInstructors
+
+    private val _instructors = databaseViewModel.getAllCurrentInstructors()
     private val _students = databaseViewModel.currentStudents
     private val _assignedLessons: MutableStateFlow<List<Lesson>> = MutableStateFlow(listOf())
 
@@ -41,7 +44,6 @@ class ScheduleViewModel(
         viewModelScope, SharingStarted.WhileSubscribed(), ScheduleState()
     )
     private val occupied = mutableMapOf<Int, StudentWithLessons>()
-    val vis = MutableList<StudentWithLessons?>(15) { null }
     fun onEvent(event: ScheduleEvent) {
         when (event) {
             is ScheduleEvent.AssignLesson -> {
@@ -49,6 +51,8 @@ class ScheduleViewModel(
                     assignNewLesson(event.student, event.i)
                 }
             }
+
+            is ScheduleEvent.RemoveLesson -> removeLesson(event.lesson)
 
             is ScheduleEvent.ResetSlot -> {
                 viewModelScope.launch(Dispatchers.IO) {
@@ -88,7 +92,6 @@ class ScheduleViewModel(
         if (isStudentAssigned(student)) resetStudentFromSchedule(student)
 
         occupied[i] = student
-        vis[i] = student
         val (instructor, lessonTime) = mapFromIndex(i)
         val new = Lesson(
             id = 0,
@@ -135,7 +138,10 @@ class ScheduleViewModel(
 
     private suspend fun freeIthSlot(i: Int) {
         _assignedLessons.value = _assignedLessons.value.filter { it.mapToIndex() != i }
-        vis[i] = null
+    }
+
+    private fun removeLesson(lesson: Lesson) {
+        _assignedLessons.value = _assignedLessons.value.filter { it != lesson }
     }
 
     private fun resetStudentFromSchedule(student: StudentWithLessons) {

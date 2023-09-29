@@ -19,11 +19,9 @@ import kotlin.math.round
 
 class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     val instructors = repository.instructors
-    val currentInstructors = repository.currentInstructors
 
     val lessons = repository.lessons
 
-    val studentsWithLessons = repository.studentsWithLessons
     val students = repository.students
     val currentStudents = repository.currentStudents
 
@@ -37,6 +35,9 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
         }
         return final
     }
+
+    fun getAllCurrentInstructors(date: LocalDate = LocalDate.now()) =
+        repository.getAllCurrentInstructors(date)
 
     fun getInstructorHoursTaught(id: Int): Float {
         return getInstructorById(id).lessons.sumOf { it.duration ?: 0 }.toFloat() / 60
@@ -117,6 +118,9 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
         }
         return final
     }
+
+    fun getAllCurrentStudents(date: LocalDate = LocalDate.now()) =
+        repository.getAllCurrentStudents(date)
 
     fun deleteAllStudents() {
         viewModelScope.launch(Dispatchers.IO) {
