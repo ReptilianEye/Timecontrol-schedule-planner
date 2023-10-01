@@ -78,7 +78,6 @@ fun <T> DragTarget(
         }
         .pointerInput(Unit) {
             detectDragGesturesAfterLongPress(onDragStart = {
-                viewModel.startDragging()
                 currentState.dataToDrop = dataToDrop
                 currentState.isDragging = true
                 currentState.dragPosition = currentPosition + it
@@ -87,11 +86,9 @@ fun <T> DragTarget(
                 change.consume()
                 currentState.dragOffset += Offset(dragAmount.x, dragAmount.y)
             }, onDragEnd = {
-                viewModel.stopDragging()
                 currentState.isDragging = false
                 currentState.dragOffset = Offset.Zero
             }, onDragCancel = {
-                viewModel.stopDragging()
                 currentState.dragOffset = Offset.Zero
                 currentState.isDragging = false
             })
@@ -100,7 +97,7 @@ fun <T> DragTarget(
     }
 }
 
-//TODO need to find way to move it exactly 85.dp
+//TODO need to find way to move it exactly 85.dp (not by hiding title)
 @Composable
 fun <T> DropItem(
     modifier: Modifier, content: @Composable() (BoxScope.(isInBound: Boolean, data: T?) -> Unit)

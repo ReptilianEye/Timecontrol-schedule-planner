@@ -5,7 +5,12 @@ import com.example.timecontrol.database.Lesson
 import com.example.timecontrol.database.StudentWithLessons
 import java.time.LocalDate
 
-data class Slot(val instructorIndex: Int, val lessonTimeIndex: Int, val description: String = "Free Slot")
+data class SlotDetails(
+    val studentId: Int?,
+    val instructorIndex: Int,
+    val lessonTimeIndex: Int,
+    val description: String = "Free Slot"
+)
 
 data class ScheduleState
     (

@@ -1,7 +1,6 @@
 package com.example.timecontrol
 
 import androidx.compose.runtime.MutableState
-import com.example.timecontrol.database.InstructorQualification
 import com.example.timecontrol.database.Levels
 import java.time.Instant
 import java.time.LocalDate
@@ -20,4 +19,4 @@ fun LocalDate.pretty(pattern: String = "dd.MM"): String =
 fun LocalDate.toMillis() = this.atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
 fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()
 
-fun Pair<String, String>.prettyRange() = "$first - $second"
+fun Pair<String, String>.prettyTime() = "$first - $second"

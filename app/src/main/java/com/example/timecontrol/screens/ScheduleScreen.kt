@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,11 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,13 +46,18 @@ import com.example.timecontrol.DropItem
 import com.example.timecontrol.database.Lesson
 import com.example.timecontrol.database.StudentWithLessons
 import com.example.timecontrol.database.getFullName
-import com.example.timecontrol.prettyRange
+import com.example.timecontrol.database.getShortcutName
+import com.example.timecontrol.instructorcell.InstructorCell
+import com.example.timecontrol.lessontimecell.LessonTimeCell
+import com.example.timecontrol.prettyTime
+import com.example.timecontrol.slot.Slot
+import com.example.timecontrol.slot.Variant
 import com.example.timecontrol.ui.theme.*
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
-import com.example.timecontrol.viewModelHelp.schedule.Slot
+import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
 
 
 @Composable
@@ -68,12 +67,14 @@ fun ScheduleScreen(
     val viewModel = ViewModelProvider(
         owner, ScheduleViewModelFactory(databaseViewModel)
     )[ScheduleViewModel::class.java]
+    val screenWidth = LocalConfiguration.current.screenWidthDp
     val state = viewModel.state.collectAsStateWithLifecycle()
     val students = state.value.students
     val instructors = state.value.instructors
     val lessonTimes = state.value.lessonTimes
     val onEvent = viewModel::onEvent
-    val getSlotDescription = viewModel::getSlotDescription
+    val getSlotDescription = viewModel::getSlotDetails
+    val isStudentAssigned = viewModel::isStudentAssigned
     if (instructors.size * lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
@@ -88,14 +89,13 @@ fun ScheduleScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(5.dp),
+//            verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 20.dp)
-                    .background(Blue10),
+                    .padding(top = 20.dp, bottom = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -103,21 +103,31 @@ fun ScheduleScreen(
                     DragTarget(
                         dataToDrop = student, viewModel = viewModel
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(50.dp)
-                                .clip(RoundedCornerShape(15.dp))
-                                .shadow(5.dp, RoundedCornerShape(15.dp))
-                                .background(Blue20, RoundedCornerShape(15.dp)),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = student.student.getFullName(),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.White,
-                                fontWeight = FontWeight.SemiBold
+                        if (isStudentAssigned(student))
+                            Slot(
+                                variant = Variant.Confirmed,
+                                studentName = student.student.getShortcutName()
                             )
-                        }
+                        else
+                            Slot(
+                                variant = Variant.Default,
+                                studentName = student.student.getShortcutName()
+                            )
+//                        Box(
+//                            modifier = Modifier
+//                                .size(50.dp)
+//                                .clip(RoundedCornerShape(15.dp))
+//                                .shadow(5.dp, RoundedCornerShape(15.dp))
+//                                .background(Blue20, RoundedCornerShape(15.dp)),
+//                            contentAlignment = Alignment.Center,
+//                        ) {
+//                            Text(
+//                                text = student.student.getFullName(),
+//                                style = MaterialTheme.typography.bodyMedium,
+//                                color = Color.White,
+//                                fontWeight = FontWeight.SemiBold
+//                            )
+//                        }
                     }
                 }
             }
@@ -131,26 +141,35 @@ fun ScheduleScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    titleBox()//fill
+                    titleBox("")//fill
                     lessonTimes.forEach {
-                        titleBox(it.prettyRange())//lesson ranges
+//                        titleBox(it.prettyRange())//lesson ranges
+                        LessonTimeCell(
+                            lessonTime = it.prettyTime(),
+                            modifier = Modifier
+                                .width((screenWidth / 6f).dp)
+                                .padding(3.dp)
+                        )
                     }
+
                 }
                 for (i in instructors.indices) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        titleBox(instructors[i].instructor.nickname)//instructor name
+                        InstructorCell(
+                            name = instructors[i].instructor.nickname,
+                            modifier = Modifier.width((screenWidth / 6f).dp)
+                        )
+//                        titleBox(instructors[i].instructor.nickname)//instructor name
                         for (j in lessonTimes.indices) {
-                            dropBox(
-                                onEvent = onEvent,
+                            dropBox(onEvent = onEvent,
                                 slotInfo = getSlotDescription(i, j),
                                 onDrop = { student ->
                                     onEvent(ScheduleEvent.OnDrop(i, j, student))
                                 },
-                                onClick = { onEvent(ScheduleEvent.ResetSlot(i, j)) }
-                            )
+                                onClick = { onEvent(ScheduleEvent.FreeSlot(i, j)) })
                         }
                     }
                 }
@@ -159,6 +178,10 @@ fun ScheduleScreen(
             state.value.assignedLessons.forEach {
                 LessonListItem(lesson = it, viewModel = viewModel)
             }
+//            Slot(studentName = "student 1")
+//            Slot(studentName = "student 2", property1 = Property1.Confirmed)
+//            Slot(studentName = "student 1", property1 = Property1.Unassigned)
+
         }
         FloatingActionButton(
             modifier = Modifier
@@ -178,11 +201,8 @@ fun ScheduleScreen(
 fun titleBox(mess: String = "lesson") {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     Box(
-        modifier = Modifier
-            .width((screenWidth / 6f).dp)
-            .background(Blue40)
+        modifier = Modifier.width((screenWidth / 6f).dp)
     ) {
-
         Text(text = mess)
     }
 }
@@ -190,14 +210,14 @@ fun titleBox(mess: String = "lesson") {
 @Composable
 fun dropBox(
     onEvent: (ScheduleEvent) -> Unit,
-    slotInfo: Slot,
+    slotInfo: SlotDetails,
     onDrop: (StudentWithLessons) -> Unit,
     onClick: () -> Unit
 ) {
     val screenWidth = LocalConfiguration.current.screenWidthDp
     DropItem<StudentWithLessons>(
         Modifier
-            .size((screenWidth / 6f).dp)
+            .width((screenWidth / 6f).dp)
             .clickable {
                 onClick()
             }) { isInBound, student ->
@@ -208,9 +228,7 @@ fun dropBox(
             LaunchedEffect(key1 = student) {
                 onEvent(
                     ScheduleEvent.AssignLesson(
-                        student,
-                        slotInfo.instructorIndex,
-                        slotInfo.lessonTimeIndex
+                        student, slotInfo.instructorIndex, slotInfo.lessonTimeIndex
                     )
                 )
                 onDrop(student)
@@ -234,22 +252,30 @@ fun dropBox(
                 )
             }
         } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .border(
-                        1.dp, color = Color.White, shape = RoundedCornerShape(15.dp)
-                    )
-                    .background(
-                        Color.Black.copy(0.5f), RoundedCornerShape(15.dp)
-                    ), contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = slotInfo.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White
-                )
-            }
+//            Slot(property1 = Property1.Default, studentName = slotInfo.description)
+
+
+            if (slotInfo.studentId == null) Slot(variant = Variant.Unassigned)
+            else Slot(
+                variant = Variant.Default, studentName = slotInfo.description
+            )
+
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .border(
+//                        1.dp, color = Color.White, shape = RoundedCornerShape(15.dp)
+//                    )
+//                    .background(
+//                        Color.Black.copy(0.5f), RoundedCornerShape(15.dp)
+//                    ), contentAlignment = Alignment.Center
+//            ) {
+//                Text(
+//                    text = slotInfo.description,
+//                    style = MaterialTheme.typography.bodyMedium,
+//                    color = Color.White
+//                )
+//            }
         }
     }
 }
@@ -266,7 +292,7 @@ fun LessonListItem(lesson: Lesson, viewModel: ScheduleViewModel) {
         val student = viewModel.databaseViewModel.getStudentById(lesson.studentId)
         val instructor = viewModel.databaseViewModel.getInstructorById(lesson.instructorId)
         Text(
-            text = "${lesson.lessonTime.prettyRange()},student: ${student.student.firstName},instructor ${instructor.instructor.nickname}",
+            text = "${lesson.lessonTime.prettyTime()},student: ${student.student.firstName},instructor ${instructor.instructor.nickname}",
             color = Color.Black
         )
         Button(onClick = { viewModel.onEvent(ScheduleEvent.RemoveLesson(lesson)) }) {

@@ -1,0 +1,223 @@
+{
+  "name": "slot",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "p48u97ZvCHr4B9GxuEsXNn",
+    "node": "183:231",
+    "version": "4255019907",
+    "component-id": "c5597531633f63987cb028383a580bde49595825"
+  },
+  "default": "variant=Default",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "text",
+        "id": "student"
+      },
+      {
+        "type": "text",
+        "id": "free slot"
+      }
+    ],
+    "modes": {
+      "variant=Default": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "11.0",
+              "top": "5.0",
+              "right": "11.0",
+              "bottom": "5.0"
+            },
+            "border-radius": "10.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "student"
+            ],
+            "item-spacing": "10.0",
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "189.94285714285715",
+              "saturation": "0.9308510638297872",
+              "value": "0.7372549019607844"
+            }
+          },
+          {
+            "id": "student",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$studentName",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          }
+        ]
+      },
+      "variant=Confirmed": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "11.0",
+              "top": "5.0",
+              "right": "11.0",
+              "bottom": "5.0"
+            },
+            "border-radius": "10.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "student"
+            ],
+            "item-spacing": "10.0",
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "133.0285714285714",
+              "saturation": "0.9308510638297872",
+              "value": "0.7372549019607844"
+            }
+          },
+          {
+            "id": "student",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$studentName",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          }
+        ]
+      },
+      "variant=unassigned": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "11.0",
+              "top": "5.0",
+              "right": "11.0",
+              "bottom": "5.0"
+            },
+            "border-radius": "10.0",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "children": [
+              "free slot"
+            ],
+            "item-spacing": "10.0",
+            "background-color": {
+              "alpha": "1.0",
+              "hue": "200.2409638554217",
+              "saturation": "0.3640350877192983",
+              "value": "0.8941176470588236"
+            }
+          },
+          {
+            "id": "free slot",
+            "font-weight": "300.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "free slot",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "studentName": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "variant=Default",
+      "size": {
+        "width": 80.0,
+        "height": 25.0
+      },
+      "parameters": {
+        "studentName": "student"
+      }
+    },
+    {
+      "design": "variant=Confirmed",
+      "size": {
+        "width": 80.0,
+        "height": 25.0
+      },
+      "parameters": {
+        "studentName": "student"
+      }
+    },
+    {
+      "design": "variant=unassigned",
+      "size": {
+        "width": 80.0,
+        "height": 25.0
+      },
+      "parameters": {
+        "studentName": "student"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}
