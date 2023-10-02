@@ -13,15 +13,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,13 +29,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,11 +44,11 @@ import androidx.navigation.NavController
 import com.example.timecontrol.DragTarget
 import com.example.timecontrol.DraggableScreen
 import com.example.timecontrol.DropItem
-import com.example.timecontrol.database.Lesson
+import com.example.timecontrol.R
 import com.example.timecontrol.database.StudentWithLessons
-import com.example.timecontrol.database.getFullName
 import com.example.timecontrol.database.getShortcutName
 import com.example.timecontrol.instructorcell.InstructorCell
+import com.example.timecontrol.lessonslistitem.LessonsListItem
 import com.example.timecontrol.lessontimecell.LessonTimeCell
 import com.example.timecontrol.prettyTime
 import com.example.timecontrol.slot.Slot
@@ -75,6 +76,7 @@ fun ScheduleScreen(
     val onEvent = viewModel::onEvent
     val getSlotDescription = viewModel::getSlotDetails
     val isStudentAssigned = viewModel::isStudentAssigned
+    val isLessonConfirmed = viewModel::isLessonConfirmed
     if (instructors.size * lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
@@ -89,45 +91,32 @@ fun ScheduleScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
-//            verticalArrangement = Arrangement.spacedBy(5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+//            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            Text(text = "Students available:", fontSize = 14.sp, color = Color.Black)
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 20.dp),
+                    .padding(
+                        top = 20.dp, bottom = 20.dp
+                    ),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 items(students) { student ->
                     DragTarget(
-                        dataToDrop = student, viewModel = viewModel
+                        dataToDrop = student, viewModel = viewModel,
                     ) {
-                        if (isStudentAssigned(student))
-                            Slot(
+                        Box(modifier = Modifier.width((screenWidth / 6f).dp)) {
+                            if (isStudentAssigned(student)) Slot(
                                 variant = Variant.Confirmed,
-                                studentName = student.student.getShortcutName()
+                                studentName = student.student.getShortcutName(),
                             )
-                        else
-                            Slot(
+                            else Slot(
                                 variant = Variant.Default,
-                                studentName = student.student.getShortcutName()
+                                studentName = student.student.getShortcutName(),
                             )
-//                        Box(
-//                            modifier = Modifier
-//                                .size(50.dp)
-//                                .clip(RoundedCornerShape(15.dp))
-//                                .shadow(5.dp, RoundedCornerShape(15.dp))
-//                                .background(Blue20, RoundedCornerShape(15.dp)),
-//                            contentAlignment = Alignment.Center,
-//                        ) {
-//                            Text(
-//                                text = student.student.getFullName(),
-//                                style = MaterialTheme.typography.bodyMedium,
-//                                color = Color.White,
-//                                fontWeight = FontWeight.SemiBold
-//                            )
-//                        }
+                        }
                     }
                 }
             }
@@ -141,9 +130,8 @@ fun ScheduleScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    titleBox("")//fill
+                    BlankCell()//top left cell
                     lessonTimes.forEach {
-//                        titleBox(it.prettyRange())//lesson ranges
                         LessonTimeCell(
                             lessonTime = it.prettyTime(),
                             modifier = Modifier
@@ -162,7 +150,6 @@ fun ScheduleScreen(
                             name = instructors[i].instructor.nickname,
                             modifier = Modifier.width((screenWidth / 6f).dp)
                         )
-//                        titleBox(instructors[i].instructor.nickname)//instructor name
                         for (j in lessonTimes.indices) {
                             dropBox(onEvent = onEvent,
                                 slotInfo = getSlotDescription(i, j),
@@ -176,11 +163,26 @@ fun ScheduleScreen(
 
             }
             state.value.assignedLessons.forEach {
-                LessonListItem(lesson = it, viewModel = viewModel)
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    LessonsListItem(
+                        student = viewModel.databaseViewModel.getStudentById(it.studentId).student.getShortcutName(),
+                        lessonTime = it.lessonTime.prettyTime(),
+                        instructor = viewModel.databaseViewModel.getInstructorById(it.instructorId).instructor.nickname,
+                        backgroundColor = Blue20,
+                        modifier = Modifier.weight(4f)
+                    )
+                    if (isLessonConfirmed(it)) LessonControlsLocked(
+                        onClick = { onEvent(ScheduleEvent.UnconfirmLesson(it)) },
+                        modifier = Modifier.weight(1f)
+                    )
+                    else LessonControls(
+                        onConfirm = { onEvent(ScheduleEvent.ConfirmLesson(it)) },
+                        onCancel = { onEvent(ScheduleEvent.RemoveLesson(it)) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
             }
-//            Slot(studentName = "student 1")
-//            Slot(studentName = "student 2", property1 = Property1.Confirmed)
-//            Slot(studentName = "student 1", property1 = Property1.Unassigned)
 
         }
         FloatingActionButton(
@@ -198,12 +200,11 @@ fun ScheduleScreen(
 }
 
 @Composable
-fun titleBox(mess: String = "lesson") {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
+fun BlankCell(width: Dp = (LocalConfiguration.current.screenWidthDp / 6f).dp) {
     Box(
-        modifier = Modifier.width((screenWidth / 6f).dp)
+        modifier = Modifier.width(width)
     ) {
-        Text(text = mess)
+        Text(text = "")
     }
 }
 
@@ -252,53 +253,45 @@ fun dropBox(
                 )
             }
         } else {
-//            Slot(property1 = Property1.Default, studentName = slotInfo.description)
-
-
             if (slotInfo.studentId == null) Slot(variant = Variant.Unassigned)
+            else if (slotInfo.confirmed) Slot(
+                variant = Variant.Confirmed, studentName = slotInfo.description
+            )
             else Slot(
                 variant = Variant.Default, studentName = slotInfo.description
             )
 
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .border(
-//                        1.dp, color = Color.White, shape = RoundedCornerShape(15.dp)
-//                    )
-//                    .background(
-//                        Color.Black.copy(0.5f), RoundedCornerShape(15.dp)
-//                    ), contentAlignment = Alignment.Center
-//            ) {
-//                Text(
-//                    text = slotInfo.description,
-//                    style = MaterialTheme.typography.bodyMedium,
-//                    color = Color.White
-//                )
-//            }
         }
     }
 }
 
 @Composable
-fun LessonListItem(lesson: Lesson, viewModel: ScheduleViewModel) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .background(Blue10),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        val student = viewModel.databaseViewModel.getStudentById(lesson.studentId)
-        val instructor = viewModel.databaseViewModel.getInstructorById(lesson.instructorId)
-        Text(
-            text = "${lesson.lessonTime.prettyTime()},student: ${student.student.firstName},instructor ${instructor.instructor.nickname}",
-            color = Color.Black
-        )
-        Button(onClick = { viewModel.onEvent(ScheduleEvent.RemoveLesson(lesson)) }) {
-            Text(text = "X")
+fun LessonControls(onConfirm: () -> Unit = {}, onCancel: () -> Unit = {}, modifier: Modifier) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.Center) {
+        IconButton(onClick = { onConfirm() }) {
+            Icon(
+                painter = painterResource(id = R.drawable.approveicon), //? why icons are black
+                contentDescription = "Confirm"
+            )
         }
+        IconButton(onClick = { onCancel() }) {
 
+            Icon(
+                painter = painterResource(id = R.drawable.cancelicon), contentDescription = "Cancel"
+            )
+
+        }
     }
 }
 
+@Composable
+fun LessonControlsLocked(onClick: () -> Unit = {}, modifier: Modifier) {
+    Row(modifier = modifier, horizontalArrangement = Arrangement.Center) {
+        IconButton(onClick = { onClick() }) {
+            Icon(
+                painter = painterResource(id = R.drawable.approvelockedicon),
+                contentDescription = "Confirm Locked"
+            )
+        }
+    }
+}

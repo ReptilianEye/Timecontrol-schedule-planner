@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 data class SlotDetails(
     val studentId: Int?,
+    val confirmed: Boolean = false,
     val instructorIndex: Int,
     val lessonTimeIndex: Int,
     val description: String = "Free Slot"

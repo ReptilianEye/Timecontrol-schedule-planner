@@ -27,6 +27,7 @@ class ScheduleViewModel(
     private sealed class SlotProperties {
         data class Description(val description: String) : SlotProperties()
         data class StudentId(val studentId: Int?) : SlotProperties()
+        data class Confirmed(val confirmed: Boolean) : SlotProperties()
     }
 
     private val _instructors = databaseViewModel.getAllCurrentInstructors()
@@ -60,7 +61,12 @@ class ScheduleViewModel(
                 freeSlot(event.i, event.j)
             }
 
-            ScheduleEvent.SaveSchedule -> {
+            is ScheduleEvent.ConfirmLesson -> updateIfLessonConfirmed(event.lesson, true)
+            is ScheduleEvent.UnconfirmLesson -> updateIfLessonConfirmed(event.lesson, false)
+
+            ScheduleEvent.SaveSchedule
+
+            -> {
                 submitData()
             }
 
@@ -68,7 +74,6 @@ class ScheduleViewModel(
 
             //should be called only once - on schedule initiation
             ScheduleEvent.InitSlotDescriptions -> initSlotDescriptions()
-
         }
     }
 
@@ -103,6 +108,33 @@ class ScheduleViewModel(
         freeSlotWithStudent(databaseViewModel.getStudentById(lesson.studentId))
     }
 
+    private fun updateIfLessonConfirmed(lesson: Lesson, confirmed: Boolean) {
+        val slot = lesson.getLessonSlot()
+        if (slot != null)
+            updateSlotDetails(
+                slot.instructorIndex,
+                slot.lessonTimeIndex,
+                SlotProperties.Confirmed(confirmed)
+            )
+    }
+
+    fun isLessonConfirmed(lesson: Lesson): Boolean {
+        return lesson.getLessonSlot()?.confirmed ?: false
+    }
+
+    private fun Lesson.getLessonSlot(): SlotDetails? {
+        val instructorIndex = getInstructorIndex(this.instructorId)
+        val lessonTimeIndex = getLessonTimeIndex(this.lessonTime)
+        if (instructorIndex == -1 || lessonTimeIndex == -1) return null
+        return getSlotDetails(instructorIndex, lessonTimeIndex)
+    }
+
+    private fun getInstructorIndex(instructorId: Int) =
+        state.value.instructors.indexOfFirst { it.instructor.id == instructorId }
+
+    private fun getLessonTimeIndex(lessonTime: Pair<String, String>) =
+        state.value.lessonTimes.indexOfFirst { it == lessonTime }
+
     //slot functions
     private fun freeSlot(instructorIndex: Int, lessonTimeIndex: Int) {
         _assignedLessons.value =
@@ -133,7 +165,9 @@ class ScheduleViewModel(
 
     }
 
-    fun getSlotDetails(i: Int, j: Int) = slotDetails[(i to j).mapToIndex()]
+    fun getSlotDetails(instructorIndex: Int, lessonTimeIndex: Int) =
+        slotDetails[(instructorIndex to lessonTimeIndex).mapToIndex()]
+
     private fun updateSlotDetails(i: Int, j: Int, property: SlotProperties) {
         val p = (i to j).mapToIndex()
         when (property) {
@@ -142,6 +176,10 @@ class ScheduleViewModel(
 
             is SlotProperties.StudentId -> slotDetails[p] =
                 slotDetails[p].copy(studentId = property.studentId)
+
+            is SlotProperties.Confirmed -> slotDetails[p] =
+                slotDetails[p].copy(confirmed = property.confirmed)
+
             //rest not needed
         }
 

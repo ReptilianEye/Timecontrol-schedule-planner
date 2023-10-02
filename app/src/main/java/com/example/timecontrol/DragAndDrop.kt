@@ -60,6 +60,8 @@ fun DraggableScreen(
     }
 }
 
+val delta = Offset(0f, 150f)
+
 @Composable
 fun <T> DragTarget(
     modifier: Modifier = Modifier,
@@ -80,7 +82,7 @@ fun <T> DragTarget(
             detectDragGesturesAfterLongPress(onDragStart = {
                 currentState.dataToDrop = dataToDrop
                 currentState.isDragging = true
-                currentState.dragPosition = currentPosition + it
+                currentState.dragPosition = currentPosition + it - delta
                 currentState.draggableComposable = content
             }, onDrag = { change, dragAmount ->
                 change.consume()
@@ -112,7 +114,7 @@ fun <T> DropItem(
 
     Box(modifier = modifier.onGloballyPositioned {
         it.boundsInWindow().let { rect ->
-            isCurrentDropTarget = rect.contains(dragPosition + dragOffset)
+            isCurrentDropTarget = rect.contains(dragPosition + dragOffset + delta)
         }
     }) {
         val data =

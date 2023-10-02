@@ -11,6 +11,8 @@ sealed class ScheduleEvent {
     ) : ScheduleEvent()
 
     data class FreeSlot(val i: Int, val j: Int) : ScheduleEvent()
+    data class ConfirmLesson(val lesson: Lesson) : ScheduleEvent()
+    data class UnconfirmLesson(val lesson: Lesson) : ScheduleEvent()
     data class RemoveLesson(val lesson: Lesson) : ScheduleEvent()
     data class OnDrop(val i: Int, val j: Int, val student: StudentWithLessons) : ScheduleEvent()
     object InitSlotDescriptions : ScheduleEvent()
