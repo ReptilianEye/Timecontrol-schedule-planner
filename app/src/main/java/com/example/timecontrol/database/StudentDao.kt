@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface StudentDao {
@@ -26,6 +27,9 @@ interface StudentDao {
 
     @Query("SELECT * FROM Students")
     fun getAllStudents(): Flow<List<Student>>
+
+    @Query("SELECT * FROM Students WHERE arrival_date <= :date <= departure_date")
+    fun getAllCurrentStudents(date: LocalDate = LocalDate.now()): Flow<List<StudentWithLessons>>
 
     @Query("SELECT * FROM Students WHERE id = :id")
     fun getStudentById(id: Int): StudentWithLessons

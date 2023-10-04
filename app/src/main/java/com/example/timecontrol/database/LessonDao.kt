@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface LessonDao {
@@ -25,6 +26,10 @@ interface LessonDao {
     @Transaction
     @Query("SELECT * FROM Lessons")
     fun getAllLessons(): Flow<List<LessonWithStudentAndInstructor>>
+
+    @Transaction
+    @Query("SELECT * FROM Lessons WHERE date == :lessonDay")
+    fun getLessonsOnDay(lessonDay: LocalDate): Flow<List<LessonWithStudentAndInstructor>>
 
     @Query("SELECT * FROM Lessons WHERE id = :id")
     fun getLessonById(id: Int): LessonWithStudentAndInstructor

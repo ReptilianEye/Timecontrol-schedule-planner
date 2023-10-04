@@ -93,11 +93,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RootLayout(navController: NavController, localization: Int, content: @Composable () -> Unit) {
     Column {
-        UpperNavbar(
-            modifier = Modifier
-                .height(85.dp)
-                .fillMaxWidth()
-        )
+        if (localization != 2) {
+            UpperNavbar(
+                modifier = Modifier
+                    .height(85.dp)
+                    .fillMaxWidth()
+            )
+        }
         Box(modifier = Modifier.fillMaxHeight(0.88f)) {
             content()
         }

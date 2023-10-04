@@ -53,20 +53,20 @@ fun StudentDetailsScreen(
         }
         item {
             Row(Modifier.background(Blue10)) {
-                TableCell(text = "Date", header = true)
-                TableCell(text = "Level", header = true)
-                TableCell(text = "Duration", header = true)
-                TableCell(
+                MyTableCell(text = "Date", header = true)
+                MyTableCell(text = "Level", header = true)
+                MyTableCell(text = "Duration", header = true)
+                MyTableCell(
                     text = "Instructor", header = true
                 )
             }
         }
         itemsIndexed(student.lessons) { i, lesson ->
             Row(Modifier.background(if (i % 2 == 0) White80 else Blue10)) {
-                TableCell(text = lesson.date.pretty())
-                TableCell(text = lesson.levelAfter)
-                TableCell(text = lesson.duration.toString() + "min.")
-                TableCell(
+                MyTableCell(text = lesson.date.pretty())
+                MyTableCell(text = lesson.levelAfter ?: "?")
+                MyTableCell(text = lesson.duration.toString() + "min.")
+                MyTableCell(
                     text = viewModel.getInstructorById(lesson.instructorId).instructor.nickname,
                 )
             }
@@ -77,7 +77,7 @@ fun StudentDetailsScreen(
 }
 
 @Composable
-fun RowScope.TableCell(
+fun RowScope.MyTableCell(
     text: String, header: Boolean = false
 ) {
     Text(

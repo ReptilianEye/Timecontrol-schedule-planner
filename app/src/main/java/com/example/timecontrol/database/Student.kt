@@ -28,6 +28,11 @@ data class Student(
 
     @ColumnInfo(name = "level") val level: String,
 )
+
 fun Student.getFullName(): String {
     return "$firstName $lastName"
+}
+
+fun Student.getShortcutName(): String {
+    return "$firstName ${lastName.first()}."
 }

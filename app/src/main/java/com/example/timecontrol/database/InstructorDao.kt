@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDate
 
 @Dao
 interface InstructorDao {
@@ -24,11 +25,11 @@ interface InstructorDao {
     @Query("SELECT * FROM Instructors")
     fun getAllInstructors(): Flow<List<InstructorWithLessons>>
 
-    @Query("SELECT * FROM Instructors WHERE arrival_date <= DATE() <= departure_date")
-    fun getAllCurrentInstructors(): Flow<List<InstructorWithLessons>>
+    @Query("SELECT * FROM Instructors WHERE arrival_date <= :date <= departure_date")
+    fun getAllCurrentInstructors(date: LocalDate = LocalDate.now()): Flow<List<InstructorWithLessons>>
 
     @Query(
-        "SELECT * FROM Instructors WHERE id NOT IN (SELECT id FROM Instructors WHERE arrival_date <= DATE() <= departure_date)"
+        "SELECT * FROM Instructors WHERE departure_date < DATE()"
     )
     fun getAllPastInstructors(): Flow<List<InstructorWithLessons>>
 

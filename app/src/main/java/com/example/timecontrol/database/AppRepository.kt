@@ -1,20 +1,30 @@
 package com.example.timecontrol.database
 
+import java.time.LocalDate
+import java.util.concurrent.Flow
+
 class AppRepository(private val appDatabase: AppDatabase) {
     private val instructorDao = appDatabase.instructorDao()
     private val lessonDao = appDatabase.lessonDao()
     private val studentDao = appDatabase.studentDao()
 
     val instructors = instructorDao.getAllInstructors()
+    val currentInstructors = instructorDao.getAllCurrentInstructors()
+
     val lessons = lessonDao.getAllLessons()
 
     val studentsWithLessons = studentDao.getAllStudentsWithLessons()
     val students = studentDao.getAllStudents()
+    val currentStudents = studentDao.getAllCurrentStudents()
+
 
     //Instructor operations
     suspend fun getInstructorById(id: Int): InstructorWithLessons {
         return instructorDao.getInstructorById(id)
     }
+
+    fun getAllCurrentInstructors(date: LocalDate = LocalDate.now()) =
+        instructorDao.getAllCurrentInstructors(date)
 
     suspend fun deleteAllInstructors() {
         return instructorDao.deleteAll()
@@ -37,6 +47,8 @@ class AppRepository(private val appDatabase: AppDatabase) {
         return lessonDao.getLessonById(id)
     }
 
+    fun getAllLessonsOfTheDay(lessonDay: LocalDate) = lessonDao.getLessonsOnDay(lessonDay)
+
     suspend fun deleteAllLessons() {
         return lessonDao.deleteAll()
     }
@@ -57,6 +69,9 @@ class AppRepository(private val appDatabase: AppDatabase) {
     fun getStudentById(id: Int): StudentWithLessons {
         return studentDao.getStudentById(id)
     }
+
+    fun getAllCurrentStudents(date: LocalDate = LocalDate.now()) =
+        studentDao.getAllCurrentStudents(date)
 
     suspend fun deleteAllStudents() {
         return studentDao.deleteAll()

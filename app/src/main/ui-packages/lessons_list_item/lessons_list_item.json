@@ -1,0 +1,318 @@
+{
+  "name": "lessons_list_item",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "p48u97ZvCHr4B9GxuEsXNn",
+    "node": "193:231",
+    "version": "4257320974",
+    "component-id": "d8e9f093e9fe21b55f3f8ce10cc97e915fec6391"
+  },
+  "default": "LessonsListItem",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "group",
+        "id": "StudentAndTimeFrame"
+      },
+      {
+        "type": "group",
+        "id": "InstructorFrame"
+      },
+      {
+        "type": "group",
+        "id": "StudentFrame"
+      },
+      {
+        "type": "group",
+        "id": "LessonTimeFrame"
+      },
+      {
+        "type": "vector",
+        "id": "PersonIcon"
+      },
+      {
+        "type": "text",
+        "id": "Tomas"
+      },
+      {
+        "type": "vector",
+        "id": "TimeIcon"
+      },
+      {
+        "type": "text",
+        "id": "10:00-12:00"
+      },
+      {
+        "type": "text",
+        "id": "with:"
+      },
+      {
+        "type": "text",
+        "id": "Instructor"
+      }
+    ],
+    "modes": {
+      "LessonsListItem": {
+        "rules": [
+          {
+            "id": "top_level",
+            "padding": {
+              "left": "12.0",
+              "top": "9.0",
+              "right": "12.0",
+              "bottom": "9.0"
+            },
+            "border-radius": "10.0",
+            "drop-shadow": {
+              "color": {
+                "alpha": "0.24705882352941178",
+                "hue": "0.0",
+                "saturation": "0.0",
+                "value": "0.0"
+              },
+              "blur": "4.0",
+              "offset-x": "0.0",
+              "offset-y": "4.0",
+              "spread": "0.0",
+              "blend-mode": "normal"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "space-between",
+            "children": [
+              "StudentAndTimeFrame",
+              "InstructorFrame"
+            ],
+            "background-color": "$backgroundColor"
+          },
+          {
+            "id": "StudentAndTimeFrame",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "StudentFrame",
+              "LessonTimeFrame"
+            ],
+            "item-spacing": "19.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "InstructorFrame",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "with:",
+              "Instructor"
+            ],
+            "item-spacing": "3.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "StudentFrame",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "PersonIcon",
+              "Tomas"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "LessonTimeFrame",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "shrink"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "arrangement": "row",
+            "main-axis-align": "start",
+            "children": [
+              "TimeIcon",
+              "10:00-12:00"
+            ],
+            "item-spacing": "3.0",
+            "clip-content": "false"
+          },
+          {
+            "id": "PersonIcon",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "16.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "16.0"
+              }
+            },
+            "vector-content": "person_icon.svg"
+          },
+          {
+            "id": "Tomas",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$student",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "TimeIcon",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "20.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "20.0"
+              }
+            },
+            "vector-content": "time_icon.svg"
+          },
+          {
+            "id": "10:00-12:00",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$lessonTime",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "with:",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "with:",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter"
+          },
+          {
+            "id": "Instructor",
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$instructor",
+            "overflow": "visible",
+            "text-align": "left",
+            "text-size": "12.0",
+            "line-height": "1.2102272510528564",
+            "typeface": "Inter",
+            "case": "upper"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "backgroundColor": {
+      "data-type": "color",
+      "required": false,
+      "description": ""
+    },
+    "student": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "lessonTime": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "instructor": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "LessonsListItem",
+      "size": {
+        "width": 360.0,
+        "height": 38.0
+      },
+      "parameters": {
+        "backgroundColor": {
+          "alpha": "1.0",
+          "hue": "0.0",
+          "saturation": "0.0",
+          "value": "0.8509803921568627"
+        },
+        "student": "Tomas",
+        "lessonTime": "10:00-12:00",
+        "instructor": "Instructor"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

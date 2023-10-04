@@ -14,14 +14,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 import kotlin.math.round
 
 class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     val instructors = repository.instructors
+
     val lessons = repository.lessons
 
-    val studentsWithLessons = repository.studentsWithLessons
     val students = repository.students
+    val currentStudents = repository.currentStudents
 
     //Instructor operations
     fun getInstructorById(id: Int): InstructorWithLessons {
@@ -34,8 +36,11 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
         return final
     }
 
+    fun getAllCurrentInstructors(date: LocalDate = LocalDate.now()) =
+        repository.getAllCurrentInstructors(date)
+
     fun getInstructorHoursTaught(id: Int): Float {
-        return getInstructorById(id).lessons.sumOf { it.duration }.toFloat() / 60
+        return getInstructorById(id).lessons.sumOf { it.duration ?: 0 }.toFloat() / 60
     }
 
     fun getInstructorStudentCount(id: Int): Int {
@@ -67,6 +72,7 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     }
 
     //Lesson operations
+    fun getLessonsOfTheDay(lessonDay: LocalDate) = repository.getAllLessonsOfTheDay(lessonDay)
     fun getLessonById(id: Int): LessonWithStudentAndInstructor {
         val result: Deferred<LessonWithStudentAndInstructor> =
             viewModelScope.async(Dispatchers.IO) {
@@ -112,6 +118,9 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
         }
         return final
     }
+
+    fun getAllCurrentStudents(date: LocalDate = LocalDate.now()) =
+        repository.getAllCurrentStudents(date)
 
     fun deleteAllStudents() {
         viewModelScope.launch(Dispatchers.IO) {
