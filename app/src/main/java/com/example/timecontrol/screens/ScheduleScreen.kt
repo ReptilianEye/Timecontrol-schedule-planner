@@ -57,8 +57,10 @@ import com.example.timecontrol.ui.theme.*
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
+import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
+import com.example.timecontrol.viewModelHelp.schedule.SlotStatus
 
 
 @Composable
@@ -76,7 +78,10 @@ fun ScheduleScreen(
     val onEvent = viewModel::onEvent
     val getSlotDescription = viewModel::getSlotDetails
     val isStudentAssigned = viewModel::isStudentAssigned
-    val isLessonConfirmed = viewModel::isLessonConfirmed
+    val isLessonConfirmed: (AssignedLesson) -> Boolean = viewModel::isLessonConfirmed
+    val getInstructorFromIndex = viewModel::getInstructorFromIndex
+    val getStudent = viewModel::getStudent
+    val getLessonTimeFromIndex = viewModel::getLessonTimeFromIndex
     if (instructors.size * lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
@@ -93,108 +98,125 @@ fun ScheduleScreen(
                 .verticalScroll(rememberScrollState()),
 //            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Students available:", fontSize = 14.sp, color = Color.Black)
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        top = 20.dp, bottom = 20.dp
-                    ),
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                items(students) { student ->
-                    DragTarget(
-                        dataToDrop = student, viewModel = viewModel,
-                    ) {
-                        Box(modifier = Modifier.width((screenWidth / 6f).dp)) {
-                            if (isStudentAssigned(student)) Slot(
-                                variant = Variant.Confirmed,
-                                studentName = student.student.getShortcutName(),
-                            )
-                            else Slot(
-                                variant = Variant.Default,
-                                studentName = student.student.getShortcutName(),
-                            )
+            if (students.isEmpty()) {
+                Text(
+                    text = "No students available...",
+                    fontSize = 24.sp,
+                    color = Color.Black,
+                    modifier = Modifier.padding(10.dp)
+                )
+            } else if (instructors.isEmpty()) {
+                Text(
+                    text = "No instructors available...",
+                    fontSize = 24.sp,
+                    color = Color.Black,
+                    modifier = Modifier.padding(10.dp)
+                )
+            } else {
+                Text(text = "Students available:", fontSize = 14.sp, color = Color.Black)
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            top = 20.dp, bottom = 20.dp
+                        ),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    items(students) { student ->
+                        DragTarget(
+                            dataToDrop = student, viewModel = viewModel,
+                        ) {
+                            Box(modifier = Modifier.width((screenWidth / 6f).dp)) {
+                                if (isStudentAssigned(student)) Slot(
+                                    variant = Variant.Confirmed,
+                                    studentName = student.student.getShortcutName(),
+                                )
+                                else Slot(
+                                    variant = Variant.Default,
+                                    studentName = student.student.getShortcutName(),
+                                )
+                            }
                         }
                     }
                 }
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .horizontalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(3.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .horizontalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(3.dp)
                 ) {
-                    BlankCell()//top left cell
-                    lessonTimes.forEach {
-                        LessonTimeCell(
-                            lessonTime = it.prettyTime(),
-                            modifier = Modifier
-                                .width((screenWidth / 6f).dp)
-                                .padding(3.dp)
-                        )
-                    }
-
-                }
-                for (i in instructors.indices) {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        InstructorCell(
-                            name = instructors[i].instructor.nickname,
-                            modifier = Modifier.width((screenWidth / 6f).dp)
-                        )
-                        for (j in lessonTimes.indices) {
-                            dropBox(onEvent = onEvent,
-                                slotInfo = getSlotDescription(i, j),
-                                onDrop = { student ->
-                                    onEvent(ScheduleEvent.OnDrop(i, j, student))
-                                },
-                                onClick = { onEvent(ScheduleEvent.FreeSlot(i, j)) })
+                        BlankCell()//top left cell
+                        lessonTimes.forEach {
+                            LessonTimeCell(
+                                lessonTime = it.prettyTime(),
+                                modifier = Modifier
+                                    .width((screenWidth / 6f).dp)
+                                    .padding(3.dp)
+                            )
+                        }
+
+                    }
+                    for (i in instructors.indices) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            InstructorCell(
+                                name = instructors[i].instructor.nickname,
+                                modifier = Modifier.width((screenWidth / 6f).dp)
+                            )
+                            for (j in lessonTimes.indices) {
+                                dropBox(onEvent = onEvent,
+                                    slotDetails = getSlotDescription(i, j),
+                                    onDrop = { student ->
+                                        onEvent(ScheduleEvent.OnDrop(i, j, student))
+                                    },
+                                    onClick = { onEvent(ScheduleEvent.HandleClick(i, j)) })
+                            }
                         }
                     }
+
                 }
+                state.value.assignedLessons.forEach {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        LessonsListItem(
+                            student = getStudent(it.studentId).student.getShortcutName(),
+                            lessonTime = getLessonTimeFromIndex(it.slot.lessonTimeIndex).prettyTime(),
+                            instructor = (getInstructorFromIndex(it.slot.instructorIndex)).instructor.nickname,
+                            backgroundColor = Blue20,
+                            modifier = Modifier.weight(4f)
+                        )
+                        if (isLessonConfirmed(it)) LessonControlsLocked(
+                            onClick = { onEvent(ScheduleEvent.UnconfirmLesson(it)) },
+                            modifier = Modifier.weight(1f)
+                        )
+                        else LessonControls(
+                            onConfirm = { onEvent(ScheduleEvent.ConfirmLesson(it)) },
+                            onCancel = { onEvent(ScheduleEvent.RemoveLesson(it)) },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
 
-            }
-            state.value.assignedLessons.forEach {
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    LessonsListItem(
-                        student = viewModel.databaseViewModel.getStudentById(it.studentId).student.getShortcutName(),
-                        lessonTime = it.lessonTime.prettyTime(),
-                        instructor = viewModel.databaseViewModel.getInstructorById(it.instructorId).instructor.nickname,
-                        backgroundColor = Blue20,
-                        modifier = Modifier.weight(4f)
-                    )
-                    if (isLessonConfirmed(it)) LessonControlsLocked(
-                        onClick = { onEvent(ScheduleEvent.UnconfirmLesson(it)) },
-                        modifier = Modifier.weight(1f)
-                    )
-                    else LessonControls(
-                        onConfirm = { onEvent(ScheduleEvent.ConfirmLesson(it)) },
-                        onCancel = { onEvent(ScheduleEvent.RemoveLesson(it)) },
-                        modifier = Modifier.weight(1f)
-                    )
                 }
-
             }
-
         }
-        FloatingActionButton(
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = 16.dp)
-                .height(40.dp)
-                .width(80.dp)
-                .align(Alignment.BottomCenter),
-            onClick = { onEvent(ScheduleEvent.SaveSchedule) },
-            containerColor = BlueLogo
-        ) {
-            androidx.compose.material.Text(text = "Save", fontWeight = FontWeight.Bold)
+        if (students.isNotEmpty() && instructors.isNotEmpty()) {
+            FloatingActionButton(
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 16.dp)
+                    .height(40.dp)
+                    .width(80.dp)
+                    .align(Alignment.BottomCenter),
+                onClick = { onEvent(ScheduleEvent.SaveSchedule) },
+                containerColor = BlueLogo
+            ) {
+                androidx.compose.material.Text(text = "Save", fontWeight = FontWeight.Bold)
+            }
         }
     }
 }
@@ -211,7 +233,7 @@ fun BlankCell(width: Dp = (LocalConfiguration.current.screenWidthDp / 6f).dp) {
 @Composable
 fun dropBox(
     onEvent: (ScheduleEvent) -> Unit,
-    slotInfo: SlotDetails,
+    slotDetails: SlotDetails,
     onDrop: (StudentWithLessons) -> Unit,
     onClick: () -> Unit
 ) {
@@ -227,12 +249,12 @@ fun dropBox(
                 LocalContext.current, "${student.student.firstName} added!", Toast.LENGTH_LONG
             ).show()
             LaunchedEffect(key1 = student) {
+                onDrop(student)
                 onEvent(
                     ScheduleEvent.AssignLesson(
-                        student, slotInfo.instructorIndex, slotInfo.lessonTimeIndex
+                        student, slotDetails.instructorIndex, slotDetails.lessonTimeIndex
                     )
                 )
-                onDrop(student)
             }
         }
 //        val slotDescription = getStudentOnIthSlot(i)?.student?.getFullName() ?: "Free slot"
@@ -247,20 +269,13 @@ fun dropBox(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = slotInfo.description,
+                    text = slotDetails.description,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Black
                 )
             }
         } else {
-            if (slotInfo.studentId == null) Slot(variant = Variant.Unassigned)
-            else if (slotInfo.confirmed) Slot(
-                variant = Variant.Confirmed, studentName = slotInfo.description
-            )
-            else Slot(
-                variant = Variant.Default, studentName = slotInfo.description
-            )
-
+            StudentSlot(slotDetails=slotDetails)
         }
     }
 }
@@ -293,5 +308,19 @@ fun LessonControlsLocked(onClick: () -> Unit = {}, modifier: Modifier) {
                 contentDescription = "Confirm Locked"
             )
         }
+    }
+}
+
+@Composable
+fun StudentSlot(slotDetails: SlotDetails) {
+    when (slotDetails.status) {
+        SlotStatus.Unassigned -> Slot(variant = Variant.Unassigned)
+        SlotStatus.Assigned -> Slot(
+            variant = Variant.Default, studentName = slotDetails.description
+        )
+
+        SlotStatus.Confirmed -> Slot(
+            variant = Variant.Confirmed, studentName = slotDetails.description
+        )
     }
 }

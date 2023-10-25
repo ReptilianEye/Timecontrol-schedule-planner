@@ -1,23 +1,16 @@
 package com.example.timecontrol.viewModelHelp.schedule
 
 import com.example.timecontrol.database.InstructorWithLessons
-import com.example.timecontrol.database.Lesson
 import com.example.timecontrol.database.StudentWithLessons
 import java.time.LocalDate
 
-data class SlotDetails(
-    val studentId: Int?,
-    val confirmed: Boolean = false,
-    val instructorIndex: Int,
-    val lessonTimeIndex: Int,
-    val description: String = "Free Slot"
-)
+
 
 data class ScheduleState
     (
     val instructors: List<InstructorWithLessons> = emptyList(),
     val students: List<StudentWithLessons> = emptyList(),
-    val assignedLessons: List<Lesson> = emptyList(),
+    val assignedLessons: List<AssignedLesson> = emptyList(),
     val lessonsDay: LocalDate = LocalDate.now(),
     val lessonTimes: List<Pair<String, String>> = listOf(
         Pair("9:00", "11:00"),
