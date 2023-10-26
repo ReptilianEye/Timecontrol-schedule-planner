@@ -76,12 +76,13 @@ fun ScheduleScreen(
     val instructors = state.value.instructors
     val lessonTimes = state.value.lessonTimes
     val onEvent = viewModel::onEvent
-    val getSlotDescription = viewModel::getSlotDetails
     val isStudentAssigned = viewModel::isStudentAssigned
     val isLessonConfirmed: (AssignedLesson) -> Boolean = viewModel::isLessonConfirmed
     val getInstructorFromIndex = viewModel::getInstructorFromIndex
     val getStudent = viewModel::getStudent
     val getLessonTimeFromIndex = viewModel::getLessonTimeFromIndex
+    val getSlot: (Int,Int) -> SlotDetails = viewModel::getSlot
+    val getSlotFromLesson: (AssignedLesson) -> SlotDetails = viewModel::getSlot
     if (instructors.size * lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
@@ -171,8 +172,8 @@ fun ScheduleScreen(
                                 modifier = Modifier.width((screenWidth / 6f).dp)
                             )
                             for (j in lessonTimes.indices) {
-                                dropBox(onEvent = onEvent,
-                                    slotDetails = getSlotDescription(i, j),
+                                DropBox(onEvent = onEvent,
+                                    slotDetails = getSlot(i, j),
                                     onDrop = { student ->
                                         onEvent(ScheduleEvent.OnDrop(i, j, student))
                                     },
@@ -186,20 +187,24 @@ fun ScheduleScreen(
                     Row(modifier = Modifier.fillMaxWidth()) {
                         LessonsListItem(
                             student = getStudent(it.studentId).student.getShortcutName(),
-                            lessonTime = getLessonTimeFromIndex(it.slot.lessonTimeIndex).prettyTime(),
-                            instructor = (getInstructorFromIndex(it.slot.instructorIndex)).instructor.nickname,
+                            lessonTime = getLessonTimeFromIndex(getSlotFromLesson(it).lessonTimeIndex).prettyTime(),
+                            instructor = (getInstructorFromIndex(getSlotFromLesson(it).instructorIndex)).instructor.nickname,
                             backgroundColor = Blue20,
                             modifier = Modifier.weight(4f)
                         )
-                        if (isLessonConfirmed(it)) LessonControlsLocked(
-                            onClick = { onEvent(ScheduleEvent.UnconfirmLesson(it)) },
-                            modifier = Modifier.weight(1f)
-                        )
-                        else LessonControls(
-                            onConfirm = { onEvent(ScheduleEvent.ConfirmLesson(it)) },
-                            onCancel = { onEvent(ScheduleEvent.RemoveLesson(it)) },
-                            modifier = Modifier.weight(1f)
-                        )
+                        if (!isLessonConfirmed(it)) {
+                            LessonControls(
+                                onConfirm = { onEvent(ScheduleEvent.ConfirmLesson(it)) },
+                                onCancel = { onEvent(ScheduleEvent.RemoveLesson(it)) },
+                                modifier = Modifier.weight(1f)
+                            )
+                        } else {
+                            LessonControlsLocked(
+                                onClick = { onEvent(ScheduleEvent.UnconfirmLesson(it)) },
+                                modifier = Modifier.weight(1f)
+                            )
+
+                        }
                     }
 
                 }
@@ -231,7 +236,7 @@ fun BlankCell(width: Dp = (LocalConfiguration.current.screenWidthDp / 6f).dp) {
 }
 
 @Composable
-fun dropBox(
+fun DropBox(
     onEvent: (ScheduleEvent) -> Unit,
     slotDetails: SlotDetails,
     onDrop: (StudentWithLessons) -> Unit,
@@ -275,7 +280,7 @@ fun dropBox(
                 )
             }
         } else {
-            StudentSlot(slotDetails=slotDetails)
+            StudentSlot(slotDetails = slotDetails)
         }
     }
 }

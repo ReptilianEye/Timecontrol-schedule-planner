@@ -15,6 +15,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -27,11 +28,6 @@ class ScheduleViewModel(
 ) : ViewModel() {
 
     private val freeSlotDescription = "Free Slot"
-
-    private sealed class SlotProperties {
-        data class Description(val description: String) : SlotProperties()
-        data class Status(val status: SlotStatus) : SlotProperties()
-    }
 
     private val _instructors = databaseViewModel.getAllCurrentInstructors()
     private val _students = databaseViewModel.currentStudents
@@ -55,19 +51,16 @@ class ScheduleViewModel(
     fun onEvent(event: ScheduleEvent) {
         when (event) {
             is ScheduleEvent.AssignLesson -> assignNewLesson(
-                event.student,
-                event.instructorIndex,
-                event.lessonTimeIndex
+                event.student, event.instructorIndex, event.lessonTimeIndex
             )
 
-
             is ScheduleEvent.RemoveLesson -> {
-                removeLesson(event.assignedLesson)
+                removeLessonAndFreeSlot(event.assignedLesson)
             }
 
-            is ScheduleEvent.FreeSlot -> {
-                freeSlot(event.i, event.j)
-            }
+//            is ScheduleEvent.FreeSlot -> {
+//                setSlotDetails(event.i, event.j, SlotStatus.Unassigned)
+//            }
 
             is ScheduleEvent.ConfirmLesson -> updateLessonStatus(
                 event.assignedLesson, SlotStatus.Confirmed
@@ -84,62 +77,99 @@ class ScheduleViewModel(
             //should be called only once - on schedule initiation
             ScheduleEvent.InitSlotDescriptions -> initSlotDescriptions()
             is ScheduleEvent.HandleClick -> {
-//                if TODO
+                handleOnSlotClick(event.i, event.j)
             }
         }
     }
 
     private fun onDrop(i: Int, j: Int, student: StudentWithLessons) {
-        freeSlotWithStudent(student) // free last position of a student
-        assignStudentToSlot(i, j, student)
+        val assignedLesson = getLessonFromIndices(i, j)
+        if (assignedLesson != null) removeLessonAndFreeSlot(assignedLesson)
+        setSlotDetails(i, j, SlotStatus.Assigned, student)
+//        assignStudentToSlot(i, j, student)
+    }
+
+    private fun handleOnSlotClick(i: Int, j: Int) {
+        val slot = getSlot(i, j)
+        when (slot.status) {
+            SlotStatus.Assigned -> removeLessonAndFreeSlot(i, j)
+            SlotStatus.Confirmed -> setSlotDetails(slot, SlotStatus.Assigned)
+
+            //probably some alert
+            SlotStatus.Unassigned -> TODO()
+        }
     }
 
     //lesson functions
     private fun assignNewLesson(
         student: StudentWithLessons, instructorIndex: Int, lessonTimeIndex: Int
     ) {
-//        val instructor = state.value.instructors[instructorIndex]
-//        val lessonTime = state.value.lessonTimes[lessonTimeIndex]
-
-        //remove student from schedule
-//        removeStudentFromSchedule(student)
         val new = AssignedLesson(
-            slot = (instructorIndex to lessonTimeIndex).getSlot(), studentId = student.student.id
+            slotId = (instructorIndex to lessonTimeIndex).mapToSlotIndex(),
+            studentId = student.student.id
         )
 
         _assignedLessons.value = _assignedLessons.value + new
     }
 
-    private fun removeLesson(assignedLesson: AssignedLesson) {
+    //removes lesson and fre
+    private fun removeLessonAndFreeSlot(assignedLesson: AssignedLesson) {
+        freeSlotWithStudent(getStudent(assignedLesson.studentId)) // free last position of a student
+        removeLessonFromAssignedLessons(assignedLesson)
+    }
+
+    private fun removeLessonAndFreeSlot(i: Int, j: Int) {
+        val assignedLesson = getLessonFromIndices(i, j)
+        if (assignedLesson != null) {
+            freeSlotWithStudent(getStudent(assignedLesson.studentId)) // free last position of a student
+            removeLessonFromAssignedLessons(assignedLesson)
+        }
+    }
+
+
+    private fun removeLessonFromAssignedLessons(assignedLesson: AssignedLesson) {
         _assignedLessons.value = _assignedLessons.value.filter { it != assignedLesson }
     }
 
-    private fun removeLesson(i: Int, j: Int) {
-        removeLesson(getLessonFromIndices(i, j))
+    @Deprecated("No no longer needed")
+    private fun removeLessonFromAssignedLessons(i: Int, j: Int) {
+        val lesson = getLessonFromIndices(i, j)
+        if (lesson != null) removeLessonFromAssignedLessons(lesson) else false
     }
 
     private fun updateLessonStatus(assignedLesson: AssignedLesson, status: SlotStatus) {
         setSlotDetails(
             assignedLesson.getSlot().instructorIndex,
             assignedLesson.getSlot().lessonTimeIndex,
-            SlotProperties.Status(status)
+            status
         )
     }
 
     fun isLessonConfirmed(assignedLesson: AssignedLesson): Boolean {
-        return assignedLesson.getSlot().status != SlotStatus.Unassigned
+        return assignedLesson.getSlot().status == SlotStatus.Confirmed
     }
 
+    @Deprecated("No no longer needed")
     fun isLessonConfirmed(i: Int, j: Int): Boolean {
-        return isLessonConfirmed(getLessonFromIndices(i, j))
+        val lesson = getLessonFromIndices(i, j)
+        return if (lesson != null) isLessonConfirmed(lesson) else false
     }
 
     private fun getLessonFromIndices(i: Int, j: Int) =
-        _assignedLessons.value.first { it.slot.instructorIndex == i && it.slot.lessonTimeIndex == j }
+        _assignedLessons.value.firstOrNull { it.getSlot().instructorIndex == i && it.getSlot().lessonTimeIndex == j }
 
+    @JvmName("GetAssignedLessonInner")
     private fun AssignedLesson.getSlot(): SlotDetails {
-        return slot
+        return slotDetailsList[slotId]
     }
+
+    @JvmName("GetAssignedLessonApi")
+    fun getSlot(assignedLesson: AssignedLesson) = assignedLesson.getSlot()
+
+    fun getSlot(instructorIndex: Int, lessonTimeIndex: Int) =
+        slotDetailsList[(instructorIndex to lessonTimeIndex).mapToSlotIndex()]
+
+    private fun Pair<Int, Int>.getSlot() = slotDetailsList[mapToSlotIndex()]
 
     fun getInstructorFromIndex(instructorIndex: Int) = state.value.instructors[instructorIndex]
 
@@ -147,49 +177,42 @@ class ScheduleViewModel(
     fun getStudent(studentId: Int) = databaseViewModel.getStudentById(studentId)
 
     //slot functions
-    private fun freeSlot(instructorIndex: Int, lessonTimeIndex: Int) {
-        removeLesson(instructorIndex, lessonTimeIndex)
-        setSlotDetails(
-            instructorIndex, lessonTimeIndex, SlotProperties.Description(freeSlotDescription)
-        )
-//        updateSlotDetails(
-//            instructorIndex, lessonTimeIndex, SlotProperties.StudentId(null)
-//        )
-    }
-
-    private fun freeSlot(slot: SlotDetails) {
-        freeSlot(slot.instructorIndex, slot.lessonTimeIndex)
-    }
-
-    private fun assignStudentToSlot(i: Int, j: Int, student: StudentWithLessons) {
-        setSlotDetails(i, j, SlotProperties.Description(student.student.getShortcutName()))
-        setSlotDetails(i, j, SlotProperties.Status(SlotStatus.Assigned))
-    }
 
     //removes 'student' from slotDetails array
     private fun freeSlotWithStudent(student: StudentWithLessons) {
-        val slot = findSlotOfStudent(student)
+        val slot = findSlotWithStudent(student)
         //if student was found
-        if (slot != null) {
-            freeSlot(slot)
-        }
-
+        if (slot != null) setSlotDetails(slot, SlotStatus.Unassigned)
     }
 
-    fun getSlotDetails(instructorIndex: Int, lessonTimeIndex: Int) =
-        slotDetailsList[(instructorIndex to lessonTimeIndex).mapToSlotIndex()]
 
-
-    private fun setSlotDetails(i: Int, j: Int, property: SlotProperties) {
+    private fun setSlotDetails(
+        i: Int, j: Int, status: SlotStatus, student: StudentWithLessons? = null
+    ) {
         val p = (i to j).mapToSlotIndex()
-        when (property) {
-            is SlotProperties.Description -> slotDetailsList[p] =
-                slotDetailsList[p].copy(description = property.description)
-
-            is SlotProperties.Status -> slotDetailsList[p] =
-                slotDetailsList[p].copy(status = property.status)
-
+        if (status == SlotStatus.Unassigned) {
+            slotDetailsList[p] =
+                slotDetailsList[p].copy(status = status, description = freeSlotDescription)
+        } else {
+            slotDetailsList[p] = slotDetailsList[p].copy(
+                status = status,
+                description = student?.student?.getShortcutName() ?: getSlotDescription(
+                    i, j
+                )
+            )
         }
+    }
+
+    private fun setSlotDetails(
+        slotDetails: SlotDetails, status: SlotStatus, student: StudentWithLessons? = null
+    ) = setSlotDetails(
+        slotDetails.instructorIndex, slotDetails.lessonTimeIndex, status, student
+    )
+
+
+    private fun getSlotDescription(i: Int, j: Int): String {
+        val lesson = getLessonFromIndices(i, j)
+        return if (lesson != null) getStudent(lesson.studentId).student.getShortcutName() else freeSlotDescription
     }
 
     private fun initSlotDescriptions() {
@@ -205,8 +228,8 @@ class ScheduleViewModel(
     //student functions
 
     //returns index of student in slotDetails array (-1 if student not found)
-    private fun findSlotOfStudent(student: StudentWithLessons): SlotDetails? =
-        _assignedLessons.value.firstOrNull { it.studentId == student.student.id }?.slot
+    private fun findSlotWithStudent(student: StudentWithLessons): SlotDetails? =
+        _assignedLessons.value.firstOrNull { it.studentId == student.student.id }?.getSlot()
 
     private fun removeStudentFromSchedule(student: StudentWithLessons) {
         _assignedLessons.value =
@@ -221,17 +244,16 @@ class ScheduleViewModel(
     private fun submitData() {
         viewModelScope.launch {
             async {
-                _assignedLessons.collect { lessons: List<AssignedLesson> ->
-                    lessons.forEach { assignedLesson ->
-                        databaseViewModel.insertLesson(
-                            assignedLesson.toLesson()
-                        )
-                    }
+
+                _assignedLessons.value.forEach { assignedLesson: AssignedLesson ->
+                    databaseViewModel.insertLesson(
+                        assignedLesson.toLesson()
+                    )
                 }
             }
             async { validationEventChannel.send(ValidationEvent.Success) }
+            resetState()
         }
-        resetState()
     }
 
 
@@ -243,10 +265,10 @@ class ScheduleViewModel(
     //additional
     private fun AssignedLesson.toLesson() = Lesson(
         id = 0,
-        date = _state.value.lessonsDay,
-        lessonTime = _state.value.lessonTimes[slot.lessonTimeIndex],
+        date = state.value.lessonsDay,
+        lessonTime = state.value.lessonTimes[getSlot().lessonTimeIndex],
         studentId = studentId,
-        instructorId = _state.value.instructors[slot.instructorIndex].instructor.id
+        instructorId = state.value.instructors[getSlot().instructorIndex].instructor.id
     )
 
     // from linear to 2d
@@ -255,7 +277,7 @@ class ScheduleViewModel(
 
     // from 2d to linear
     private fun Pair<Int, Int>.mapToSlotIndex() = first * state.value.lessonTimes.size + second
-    private fun Pair<Int, Int>.getSlot() = slotDetailsList[mapToSlotIndex()]
+
 
     sealed class ValidationEvent {
         object Success : ValidationEvent()
