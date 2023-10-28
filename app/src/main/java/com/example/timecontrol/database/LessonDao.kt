@@ -28,8 +28,10 @@ interface LessonDao {
     fun getAllLessons(): Flow<List<LessonWithStudentAndInstructor>>
 
     @Transaction
-    @Query("SELECT * FROM Lessons WHERE date = :lessonDay")
-    fun getLessonsOnDay(lessonDay: LocalDate): Flow<List<LessonWithStudentAndInstructor>>
+    @Query("SELECT * FROM Lessons WHERE date = :lessonDate")
+    fun getAllLessonsFromDate(lessonDate: LocalDate): Flow<List<LessonWithStudentAndInstructor>>
+    @Query("DELETE FROM Lessons WHERE date = :lessonDate")
+    fun deleteAllLessonsFromDate(lessonDate: LocalDate)
 
     @Query("SELECT * FROM Lessons WHERE id = :id")
     fun getLessonById(id: Int): LessonWithStudentAndInstructor

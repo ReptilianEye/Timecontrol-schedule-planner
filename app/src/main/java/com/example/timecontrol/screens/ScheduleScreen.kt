@@ -20,14 +20,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -58,11 +65,12 @@ import com.example.timecontrol.ui.theme.*
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
-import com.example.timecontrol.viewModelHelp.instructor.AddInstructorEvent
 import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
 import com.example.timecontrol.viewModelHelp.schedule.SlotStatus
+import kotlinx.coroutines.flow.receiveAsFlow
+import java.time.LocalDate
 
 
 @Composable
@@ -76,6 +84,7 @@ fun ScheduleScreen(
     val state = viewModel.state.collectAsStateWithLifecycle()
     val students = state.value.students
     val instructors = state.value.instructors
+    val arePreviousLessonAvailable = state.value.previouslyAdded.isNotEmpty()
     val lessonTimes = state.value.lessonTimes
     val onEvent = viewModel::onEvent
     val isStudentAssigned = viewModel::isStudentAssigned
@@ -85,18 +94,74 @@ fun ScheduleScreen(
     val getLessonTimeFromIndex = viewModel::getLessonTimeFromIndex
     val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
     val getSlotFromLesson: (AssignedLesson) -> SlotDetails = viewModel::getSlot
+
+    val currentlyEditing = rememberSaveable {
+        mutableStateOf(false)
+    }
+    val openDialog = remember {
+        mutableStateOf(
+            false
+        )
+    }
+    val showedDialog = rememberSaveable {
+        mutableStateOf(false)
+    }
     if (instructors.size * lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
-
-
+    if (!showedDialog.value && currentlyEditing.value && arePreviousLessonAvailable) {
+        openDialog.value = true
+        showedDialog.value = true
+    }
+    val context = LocalContext.current
+    LaunchedEffect(key1 = context) {
+        viewModel.validationEvents.collect { event ->
+            when (event) {
+                ScheduleViewModel.Event.LoadPrevious -> TODO()
+                ScheduleViewModel.Event.Success -> {
+                    currentlyEditing.value = false
+                    Toast.makeText(
+                        context, "Student has been added successfully!", Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
 
     DraggableScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         val state = viewModel.state.collectAsState()
+        if (openDialog.value) {
+            AlertDialog(
+                onDismissRequest = { openDialog.value = false },
+                title = { Text(text = "Previous schedule found") },
+                text = {
+                    Column {
+                        Text(text = "Found previously saved schedule. Would you like to load it?")
+                    }
 
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        openDialog.value = false
+                        onEvent(ScheduleEvent.LoadPreviousLessons)
+                    }) {
+                        Text("Yes, load them!")
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            openDialog.value = false
+                        },
+                    ) {
+                        Text("No, start from scratch (THEY WOULD BE DELETED!)")
+                    }
+                },
 
+                )
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -222,7 +287,7 @@ fun ScheduleScreen(
                 .size(55.dp)
                 .align(Alignment.TopEnd),
             onClick = {
-                onEvent(ScheduleEvent.ChangeScheduleDate)
+                onEvent(ScheduleEvent.ChangeScheduleDate(LocalDate.of(2023, 10, 25)))
             },
         ) {
             Icon(
@@ -232,7 +297,7 @@ fun ScheduleScreen(
             )
         }
 //        if (students.isNotEmpty() && instructors.isNotEmpty()) {
-        if (state.value.currentlyEditing) {
+        if (currentlyEditing.value) {
             FloatingActionButton(
                 modifier = Modifier
                     .padding(top = 16.dp, bottom = 16.dp)
@@ -251,7 +316,7 @@ fun ScheduleScreen(
                     .size(45.dp)
                     .align(Alignment.BottomEnd),
                 onClick = {
-//                    onEvent(ScheduleEvent.)
+                    currentlyEditing.value = true
                 },
                 containerColor = BlueLogo
             ) {

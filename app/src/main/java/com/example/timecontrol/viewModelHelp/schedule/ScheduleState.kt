@@ -1,6 +1,7 @@
 package com.example.timecontrol.viewModelHelp.schedule
 
 import com.example.timecontrol.database.InstructorWithLessons
+import com.example.timecontrol.database.LessonWithStudentAndInstructor
 import com.example.timecontrol.database.StudentWithLessons
 import java.time.LocalDate
 
@@ -10,6 +11,7 @@ data class ScheduleState
     val instructors: List<InstructorWithLessons> = emptyList(),
     val students: List<StudentWithLessons> = emptyList(),
     val assignedLessons: List<AssignedLesson> = emptyList(),
+    val previouslyAdded: List<LessonWithStudentAndInstructor> = emptyList(),
     val lessonsDay: LocalDate = LocalDate.now(),
     val lessonTimes: List<Pair<String, String>> = listOf(
         Pair("9:00", "11:00"),
@@ -18,7 +20,6 @@ data class ScheduleState
         Pair("15:45", "17:45"),
         Pair("18:00", "20:00"),
     ),
-    var currentlyEditing: Boolean = false,
     var isDatePickerOpen: Boolean = false,
     val scheduleDate: LocalDate = LocalDate.now()
 )

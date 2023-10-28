@@ -1,7 +1,6 @@
 package com.example.timecontrol.database
 
 import java.time.LocalDate
-import java.util.concurrent.Flow
 
 class AppRepository(private val appDatabase: AppDatabase) {
     private val instructorDao = appDatabase.instructorDao()
@@ -47,8 +46,11 @@ class AppRepository(private val appDatabase: AppDatabase) {
         return lessonDao.getLessonById(id)
     }
 
-    fun getAllLessonsOfTheDay(lessonDay: LocalDate) = lessonDao.getLessonsOnDay(lessonDay)
+    fun getAllLessonsFromDate(lessonDay: LocalDate) = lessonDao.getAllLessonsFromDate(lessonDay)
 
+    fun deleteALLessonsFromDate(lessonDay: LocalDate) {
+        lessonDao.deleteAllLessonsFromDate(lessonDay)
+    }
     suspend fun deleteAllLessons() {
         return lessonDao.deleteAll()
     }

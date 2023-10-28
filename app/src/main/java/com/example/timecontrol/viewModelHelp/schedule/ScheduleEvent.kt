@@ -1,6 +1,7 @@
 package com.example.timecontrol.viewModelHelp.schedule
 
 import com.example.timecontrol.database.StudentWithLessons
+import java.time.LocalDate
 
 sealed class ScheduleEvent {
     data class AssignLesson(
@@ -18,7 +19,7 @@ sealed class ScheduleEvent {
     data class OnDrop(val i: Int, val j: Int, val student: StudentWithLessons) : ScheduleEvent()
     object InitSlotDescriptions : ScheduleEvent()
     object ToggleDatePickerDialog : ScheduleEvent()
-    object ChangeScheduleDate : ScheduleEvent()
-    object EnableEditing : ScheduleEvent()
+    data class ChangeScheduleDate(val scheduleDate: LocalDate) : ScheduleEvent()
+    object LoadPreviousLessons : ScheduleEvent()
     object SaveSchedule : ScheduleEvent()
 }
