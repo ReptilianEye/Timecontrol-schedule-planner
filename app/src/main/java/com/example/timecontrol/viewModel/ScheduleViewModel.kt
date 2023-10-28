@@ -1,9 +1,15 @@
 package com.example.timecontrol.viewModel
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.timecontrol.database.InstructorWithLessons
 import com.example.timecontrol.database.Lesson
+import com.example.timecontrol.database.LessonWithStudentAndInstructor
 import com.example.timecontrol.database.StudentWithLessons
 import com.example.timecontrol.database.getShortcutName
 import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
@@ -15,30 +21,59 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class ScheduleViewModel(
-    private val databaseViewModel: DatabaseViewModel,  // nie jestem przekonany
-    var scheduleDate: LocalDate = LocalDate.now().plusDays(1)
+    private val databaseViewModel: DatabaseViewModel,
+//    var scheduleDate: LocalDate = LocalDate.now()
 ) : ViewModel() {
 
     private val freeSlotDescription = "Free Slot"
 
-    private val _instructors = databaseViewModel.getAllCurrentInstructors()
-    private val _students = databaseViewModel.currentStudents
+    private val scheduleDateFlow = MutableStateFlow(LocalDate.now())
+
+    //    private var _instructors = databaseViewModel.getAllCurrentInstructors()
+    private var _instructors = scheduleDateFlow.flatMapLatest {
+        databaseViewModel.getAllCurrentInstructors(it)
+    }
+    private val _students = scheduleDateFlow.flatMapLatest {
+        databaseViewModel.getAllCurrentStudents(it)
+    }
+
+    //    private val _assignedLessons =
+//        databaseViewModel.getLessonsOfTheDay(LocalDate.now()).map { toAssigned(it) }
     private val _assignedLessons: MutableStateFlow<List<AssignedLesson>> =
         MutableStateFlow(listOf())
+//    private val _assignedLessons: MutableStateFlow<List<AssignedLesson>> =
+//        MutableStateFlow(databaseViewModel.getLessonsOfTheDay(LocalDate.now()).collect(). )
+//    private var _assignedLessons: MutableStateFlow<List<AssignedLesson>> = mutableFlow<AssignedLesson> {
+//        databaseViewModel.getLessonsOfTheDay(scheduleDateFlow.value).map {
+//            toAssigned(it)
+//        }
+//    }
+
+
+//                    .stateIn(viewModelScope) as MutableStateFlow<List<AssignedLesson>>
+
+    private fun toAssigned(lessonWithStudentAndInstructor: List<LessonWithStudentAndInstructor>): List<AssignedLesson> {
+        return listOf(AssignedLesson(1, 1))
+    }
 
     private val _state = MutableStateFlow(ScheduleState())
     private val validationEventChannel = Channel<ValidationEvent>()
-
     val state = combine(
-        _state, _students, _instructors, _assignedLessons
+        _state, _students, _instructors, _assignedLessons,
     ) { state, students, instructors, assignedLessons ->
         state.copy(
             instructors = instructors, students = students, assignedLessons = assignedLessons
@@ -46,6 +81,17 @@ class ScheduleViewModel(
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), ScheduleState()
     )
+
+    //    val state = combine(
+//        _state, _students, _instructors, _assignedLessons, flowOf(_scheduleDate)
+//    ) { state, students, instructors, assignedLessons, scheduleDate ->
+//        val newInstuctors = databaseViewModel.getAllCurrentInstructors(scheduleDate)
+//        state.copy(
+//            instructors = newInstuctors, students = students, assignedLessons = assignedLessons
+//        )
+//    }.stateIn(
+//        viewModelScope, SharingStarted.WhileSubscribed(), ScheduleState()
+//    )
     private val slotDetailsList = mutableStateListOf<SlotDetails>()
 
     fun onEvent(event: ScheduleEvent) {
@@ -57,10 +103,6 @@ class ScheduleViewModel(
             is ScheduleEvent.RemoveLesson -> {
                 removeLessonAndFreeSlot(event.assignedLesson)
             }
-
-//            is ScheduleEvent.FreeSlot -> {
-//                setSlotDetails(event.i, event.j, SlotStatus.Unassigned)
-//            }
 
             is ScheduleEvent.ConfirmLesson -> updateLessonStatus(
                 event.assignedLesson, SlotStatus.Confirmed
@@ -78,6 +120,22 @@ class ScheduleViewModel(
             ScheduleEvent.InitSlotDescriptions -> initSlotDescriptions()
             is ScheduleEvent.HandleClick -> {
                 handleOnSlotClick(event.i, event.j)
+            }
+
+            ScheduleEvent.EnableEditing -> enableEditing()
+            ScheduleEvent.ToggleDatePickerDialog -> toggleDatePickerDialog()
+            ScheduleEvent.ChangeScheduleDate -> {
+                val _scheduleDate = LocalDate.now().plusYears(100)
+                scheduleDateFlow.value = _scheduleDate
+//                _instructors = databaseViewModel.getAllCurrentInstructors(_scheduleDate)
+//                _instructors = databaseViewModel.getAllCurrentInstructors(_scheduleDate)
+//                _instructors.viewModelScope.run {
+//                    async {
+//                        println(_instructors.toList())
+//                    }
+                println(state.value.instructors)
+//                }
+
             }
         }
     }
@@ -169,6 +227,17 @@ class ScheduleViewModel(
     fun getSlot(instructorIndex: Int, lessonTimeIndex: Int) =
         slotDetailsList[(instructorIndex to lessonTimeIndex).mapToSlotIndex()]
 
+    private fun changeScheduleDate(date: LocalDate) {
+    }
+
+    private fun enableEditing() {
+        _state.value.currentlyEditing = true
+    }
+
+    private fun toggleDatePickerDialog() {
+        _state.value.isDatePickerOpen = !_state.value.isDatePickerOpen
+    }
+
     private fun Pair<Int, Int>.getSlot() = slotDetailsList[mapToSlotIndex()]
 
     fun getInstructorFromIndex(instructorIndex: Int) = state.value.instructors[instructorIndex]
@@ -258,7 +327,7 @@ class ScheduleViewModel(
 
 
     private fun resetState() {
-        _state.update { ScheduleState() }
+        _state.update { ScheduleState(scheduleDate = state.value.scheduleDate) }
     }
 
 

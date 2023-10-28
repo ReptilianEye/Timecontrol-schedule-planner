@@ -28,7 +28,7 @@ interface StudentDao {
     @Query("SELECT * FROM Students")
     fun getAllStudents(): Flow<List<Student>>
 
-    @Query("SELECT * FROM Students WHERE arrival_date <= :date <= departure_date")
+    @Query("SELECT * FROM Students WHERE :date BETWEEN arrival_date AND departure_date")
     fun getAllCurrentStudents(date: LocalDate = LocalDate.now()): Flow<List<StudentWithLessons>>
 
     @Query("SELECT * FROM Students WHERE id = :id")

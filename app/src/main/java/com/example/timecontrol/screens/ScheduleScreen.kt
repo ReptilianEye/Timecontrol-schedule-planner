@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -57,6 +58,7 @@ import com.example.timecontrol.ui.theme.*
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
+import com.example.timecontrol.viewModelHelp.instructor.AddInstructorEvent
 import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
@@ -81,7 +83,7 @@ fun ScheduleScreen(
     val getInstructorFromIndex = viewModel::getInstructorFromIndex
     val getStudent = viewModel::getStudent
     val getLessonTimeFromIndex = viewModel::getLessonTimeFromIndex
-    val getSlot: (Int,Int) -> SlotDetails = viewModel::getSlot
+    val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
     val getSlotFromLesson: (AssignedLesson) -> SlotDetails = viewModel::getSlot
     if (instructors.size * lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
@@ -93,10 +95,14 @@ fun ScheduleScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         val state = viewModel.state.collectAsState()
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(top = 50.dp),
+
 //            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (students.isEmpty()) {
@@ -210,7 +216,23 @@ fun ScheduleScreen(
                 }
             }
         }
-        if (students.isNotEmpty() && instructors.isNotEmpty()) {
+        FloatingActionButton(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(55.dp)
+                .align(Alignment.TopEnd),
+            onClick = {
+                onEvent(ScheduleEvent.ChangeScheduleDate)
+            },
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.calendar_icon),
+                contentDescription = "Switch Schedule",
+                modifier = Modifier.fillMaxSize(0.5f)
+            )
+        }
+//        if (students.isNotEmpty() && instructors.isNotEmpty()) {
+        if (state.value.currentlyEditing) {
             FloatingActionButton(
                 modifier = Modifier
                     .padding(top = 16.dp, bottom = 16.dp)
@@ -222,7 +244,25 @@ fun ScheduleScreen(
             ) {
                 androidx.compose.material.Text(text = "Save", fontWeight = FontWeight.Bold)
             }
+        } else {
+            FloatingActionButton(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(45.dp)
+                    .align(Alignment.BottomEnd),
+                onClick = {
+//                    onEvent(ScheduleEvent.)
+                },
+                containerColor = BlueLogo
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.students_info_edit_icon),
+                    contentDescription = "Edit Schedule",
+                    modifier = Modifier.fillMaxSize(0.5f)
+                )
+            }
         }
+
     }
 }
 

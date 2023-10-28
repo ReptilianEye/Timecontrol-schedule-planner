@@ -128,7 +128,7 @@ fun InstructorsScreen(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add),
-                contentDescription = "Add Student",
+                contentDescription = "Add Instructor",
                 modifier = Modifier.fillMaxSize(0.5f)
             )
         }

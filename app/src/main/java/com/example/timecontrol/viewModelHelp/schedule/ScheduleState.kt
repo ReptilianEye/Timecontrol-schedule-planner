@@ -5,7 +5,6 @@ import com.example.timecontrol.database.StudentWithLessons
 import java.time.LocalDate
 
 
-
 data class ScheduleState
     (
     val instructors: List<InstructorWithLessons> = emptyList(),
@@ -19,5 +18,7 @@ data class ScheduleState
         Pair("15:45", "17:45"),
         Pair("18:00", "20:00"),
     ),
-
-    )
+    var currentlyEditing: Boolean = false,
+    var isDatePickerOpen: Boolean = false,
+    val scheduleDate: LocalDate = LocalDate.now()
+)
