@@ -103,6 +103,23 @@ class ScheduleViewModel(
         }
 
         ScheduleEvent.LoadPreviousLessons -> loadPreviousLesson()
+        ScheduleEvent.OpenPreviousLessonsDialog -> {
+            _state.value =
+                _state.value.copy(lessonsDialogShowed = true, isPreviousLessonsDialogOpen = true)
+        }
+
+        ScheduleEvent.ClosePreviousLessonsDialog -> {
+            _state.value =
+                _state.value.copy(isPreviousLessonsDialogOpen = false)
+        }
+
+
+        ScheduleEvent.ToogleEditing -> {
+            _state.value =
+                _state.value.copy(isEditingEnabled = !state.value.isEditingEnabled)
+
+        }
+
     }
 
 
@@ -351,6 +368,5 @@ class ScheduleViewModel(
 
     sealed class Event {
         object Success : Event()
-        object LoadPrevious : Event()
     }
 }

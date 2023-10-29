@@ -20,6 +20,10 @@ data class ScheduleState
         Pair("15:45", "17:45"),
         Pair("18:00", "20:00"),
     ),
+    val scheduleDate: LocalDate = LocalDate.now(),
+
     var isDatePickerOpen: Boolean = false,
-    val scheduleDate: LocalDate = LocalDate.now()
+    var lessonsDialogShowed: Boolean = false,
+    var isPreviousLessonsDialogOpen: Boolean = false,
+    var isEditingEnabled: Boolean = false
 )
