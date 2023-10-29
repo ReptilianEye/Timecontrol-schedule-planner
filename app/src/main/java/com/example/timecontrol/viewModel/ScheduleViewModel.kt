@@ -369,6 +369,7 @@ class ScheduleViewModel(
         _state.value = ScheduleState(
             scheduleDate = scheduleDateFlow.value, assignedLessons = emptyList()
         )
+//        TODO better reseting for slots
     }
 
     private fun removeAssignedLessons() {
