@@ -53,7 +53,7 @@ class ScheduleViewModel(
     private val _state = MutableStateFlow(ScheduleState())
 
     val state = combine(
-        _state, _students, _instructors, _assignedLessons, _previouslyAdded,
+        _state, _students, _instructors, _assignedLessons, _previouslyAdded
     ) { state, students, instructors, assignedLessons, previouslyAdded ->
         state.copy(
             instructors = instructors,
@@ -67,8 +67,8 @@ class ScheduleViewModel(
 
     private val slotDetailsList = mutableStateListOf<SlotDetails>()
 
-    private val validationEventChannel = Channel<Event>()
-    val validationEvents = validationEventChannel.receiveAsFlow()
+    private val eventChannel = Channel<Event>()
+    val validationEvents = eventChannel.receiveAsFlow()
     fun onEvent(event: ScheduleEvent) = when (event) {
         is ScheduleEvent.AssignLesson -> assignNewLesson(
             event.student, event.instructorIndex, event.lessonTimeIndex
@@ -97,29 +97,24 @@ class ScheduleViewModel(
             handleOnSlotClick(event.i, event.j)
         }
 
-        ScheduleEvent.ToggleDatePickerDialog -> toggleDatePickerDialog()
-        is ScheduleEvent.ChangeScheduleDate -> {
-            scheduleDateFlow.value = event.scheduleDate
+        is ScheduleEvent.ChangeScheduleDate -> changeScheduleDate(event.scheduleDate)
+
+        ScheduleEvent.LoadPreviousLessons -> loadPreviousLessons()
+
+        ScheduleEvent.OpenSaveBeforeSwitchingDialog -> {
+            toggleSaveBeforeSwitchingDialog(true)
         }
 
-        ScheduleEvent.LoadPreviousLessons -> loadPreviousLesson()
-        ScheduleEvent.OpenPreviousLessonsDialog -> {
-            _state.value =
-                _state.value.copy(lessonsDialogShowed = true, isPreviousLessonsDialogOpen = true)
-        }
-
-        ScheduleEvent.ClosePreviousLessonsDialog -> {
-            _state.value =
-                _state.value.copy(isPreviousLessonsDialogOpen = false)
-        }
+        ScheduleEvent.CloseSaveBeforeSwitchingDialog -> closeSaveBeforeSwitchingDialog()
 
 
-        ScheduleEvent.ToogleEditing -> {
+        ScheduleEvent.ToggleEditing -> {
             _state.value =
                 _state.value.copy(isEditingEnabled = !state.value.isEditingEnabled)
 
         }
 
+        ScheduleEvent.PreventLosingScheduleChanges -> preventLosingScheduleChanges()
     }
 
 
@@ -137,13 +132,14 @@ class ScheduleViewModel(
             SlotStatus.Confirmed -> setSlotDetails(slot, SlotStatus.Assigned)
 
             //probably some alert
-            SlotStatus.Unassigned -> TODO()
+            SlotStatus.Unassigned -> "Nothing to do"
+
         }
     }
 
     //lesson functions
     private fun assignNewLesson(
-        student: StudentWithLessons, instructorIndex: Int, lessonTimeIndex: Int
+        student: StudentWithLessons, instructorIndex: Int, lessonTimeIndex: Int,
     ) {
         val new = AssignedLesson(
             slotIndex = (instructorIndex to lessonTimeIndex).mapToSlotIndex(),
@@ -213,12 +209,29 @@ class ScheduleViewModel(
     private fun getSlot(slotIndex: Int) =
         slotDetailsList[slotIndex]
 
-
-    private fun changeScheduleDate(date: LocalDate) {
+    private fun preventLosingScheduleChanges() {
+        if (state.value.isEditingEnabled)
+            viewModelScope.launch {
+                eventChannel.send(Event.SaveBeforeSwitching)
+            }
+        else
+            viewModelScope.launch {
+                eventChannel.send(Event.OpenDatePicker)
+            }
     }
 
-    private fun toggleDatePickerDialog() {
-        _state.value.isDatePickerOpen = !_state.value.isDatePickerOpen
+    private fun toggleSaveBeforeSwitchingDialog(open: Boolean) {
+        _state.value =
+            _state.value.copy(
+                isSaveBeforeSwitchingDialogOpen = open
+            )
+    }
+
+    private fun changeScheduleDate(date: LocalDate) {
+        scheduleDateFlow.value = date
+        resetState()
+//        _state.value = _state.value.copy(scheduleDate = scheduleDateFlow.value)
+//        removeAssignedLessons()
     }
 
     private fun Pair<Int, Int>.getSlot() = slotDetailsList[mapToSlotIndex()]
@@ -244,7 +257,7 @@ class ScheduleViewModel(
         ) else null
     }
 
-    private fun loadPreviousLesson() {
+    private fun loadPreviousLessons() {
         _assignedLessons.value =
             _assignedLessons.value + state.value.previouslyAdded.mapNotNull { it.toAssignedLesson() }
         _assignedLessons.value.forEach {
@@ -254,6 +267,7 @@ class ScheduleViewModel(
                 databaseViewModel.getStudentById(it.studentId)
             )
         }
+        _state.value = _state.value.copy(loadedPreviousLessons = true);
     }
 
     //slot functions
@@ -267,7 +281,7 @@ class ScheduleViewModel(
 
 
     private fun setSlotDetails(
-        i: Int, j: Int, status: SlotStatus, student: StudentWithLessons? = null
+        i: Int, j: Int, status: SlotStatus, student: StudentWithLessons? = null,
     ) {
         val p = (i to j).mapToSlotIndex()
         if (status == SlotStatus.Unassigned) {
@@ -284,13 +298,13 @@ class ScheduleViewModel(
     }
 
     private fun setSlotDetails(
-        slotDetails: SlotDetails, status: SlotStatus, student: StudentWithLessons? = null
+        slotDetails: SlotDetails, status: SlotStatus, student: StudentWithLessons? = null,
     ) = setSlotDetails(
         slotDetails.instructorIndex, slotDetails.lessonTimeIndex, status, student
     )
 
     private fun setSlotDetails(
-        slotIndex: Int, status: SlotStatus, student: StudentWithLessons? = null
+        slotIndex: Int, status: SlotStatus, student: StudentWithLessons? = null,
     ) = setSlotDetails(
         getSlot(slotIndex), status, student
     )
@@ -338,14 +352,27 @@ class ScheduleViewModel(
                     )
                 }
             }
-            async { validationEventChannel.send(Event.Success) }
+            async { eventChannel.send(Event.Success) }
             resetState()
         }
     }
 
+    private fun closeSaveBeforeSwitchingDialog() {
+        toggleSaveBeforeSwitchingDialog(false)
+        viewModelScope.launch(Dispatchers.IO) {
+            eventChannel.send(Event.OpenDatePicker)
+        }
+    }
 
     private fun resetState() {
-        _state.update { ScheduleState(scheduleDate = state.value.scheduleDate) }
+        removeAssignedLessons()
+        _state.value = ScheduleState(
+            scheduleDate = scheduleDateFlow.value, assignedLessons = emptyList()
+        )
+    }
+
+    private fun removeAssignedLessons() {
+        _assignedLessons.value = emptyList()
     }
 
 
@@ -368,5 +395,7 @@ class ScheduleViewModel(
 
     sealed class Event {
         object Success : Event()
+        object SaveBeforeSwitching : Event()
+        object OpenDatePicker : Event()
     }
 }

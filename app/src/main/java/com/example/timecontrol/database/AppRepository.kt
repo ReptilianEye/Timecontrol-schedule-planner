@@ -47,10 +47,13 @@ class AppRepository(private val appDatabase: AppDatabase) {
     }
 
     fun getAllLessonsFromDate(lessonDay: LocalDate) = lessonDao.getAllLessonsFromDate(lessonDay)
+    fun areAnyLessonsFromDate(lessonDay: LocalDate) = lessonDao.areAnyLessonsFromDate(lessonDay)
 
     fun deleteALLessonsFromDate(lessonDay: LocalDate) {
         lessonDao.deleteAllLessonsFromDate(lessonDay)
     }
+
+
     suspend fun deleteAllLessons() {
         return lessonDao.deleteAll()
     }

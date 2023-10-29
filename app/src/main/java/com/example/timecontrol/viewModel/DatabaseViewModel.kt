@@ -72,6 +72,7 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
 
     //Lesson operations
     fun getAllLessonsFromDate(lessonDate: LocalDate) = repository.getAllLessonsFromDate(lessonDate)
+    fun areAnyLessonsFromDate(lessonDate: LocalDate) = repository.areAnyLessonsFromDate(lessonDate)
     fun deleteAllLessonsFromDate(lessonDate: LocalDate) {
         repository.deleteALLessonsFromDate(lessonDate)
     }

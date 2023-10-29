@@ -17,11 +17,13 @@ sealed class ScheduleEvent {
     data class UnconfirmLesson(val assignedLesson: AssignedLesson) : ScheduleEvent()
     data class RemoveLesson(val assignedLesson: AssignedLesson) : ScheduleEvent()
     data class OnDrop(val i: Int, val j: Int, val student: StudentWithLessons) : ScheduleEvent()
-    object ToogleEditing : ScheduleEvent()
+    object ToggleEditing : ScheduleEvent()
     object InitSlotDescriptions : ScheduleEvent()
-    object ToggleDatePickerDialog : ScheduleEvent()
-    object OpenPreviousLessonsDialog : ScheduleEvent()
-    object ClosePreviousLessonsDialog : ScheduleEvent()
+
+    object PreventLosingScheduleChanges : ScheduleEvent()
+
+    object OpenSaveBeforeSwitchingDialog : ScheduleEvent()
+    object CloseSaveBeforeSwitchingDialog : ScheduleEvent()
     data class ChangeScheduleDate(val scheduleDate: LocalDate) : ScheduleEvent()
     object LoadPreviousLessons : ScheduleEvent()
     object SaveSchedule : ScheduleEvent()

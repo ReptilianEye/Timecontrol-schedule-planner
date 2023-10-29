@@ -22,8 +22,7 @@ data class ScheduleState
     ),
     val scheduleDate: LocalDate = LocalDate.now(),
 
-    var isDatePickerOpen: Boolean = false,
-    var lessonsDialogShowed: Boolean = false,
-    var isPreviousLessonsDialogOpen: Boolean = false,
-    var isEditingEnabled: Boolean = false
+    val isSaveBeforeSwitchingDialogOpen: Boolean = false,
+    val isEditingEnabled: Boolean = false,
+    val loadedPreviousLessons: Boolean = false,
 )
