@@ -91,7 +91,7 @@ fun ScheduleScreen(
 
     if (state.value.instructors.size * state.value.lessonTimes.size > 0) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
-        if (!state.value.loadedPreviousLessons && state.value.previouslyAdded.isNotEmpty())
+        if (!state.value.loadedPreviousLessons && state.value.previouslyAdded.isNotEmpty() && state.value.previouslyAdded[0].lesson.date == state.value.scheduleDate)
             onEvent(ScheduleEvent.LoadPreviousLessons)
     }
     LaunchedEffect(key1 = context) {
@@ -103,6 +103,7 @@ fun ScheduleScreen(
                         context, "Schedule saved successfully!", Toast.LENGTH_LONG
                     ).show()
                 }
+
                 ScheduleViewModel.Event.SaveBeforeSwitching -> {
                     onEvent(ScheduleEvent.OpenSaveBeforeSwitchingDialog)
                 }

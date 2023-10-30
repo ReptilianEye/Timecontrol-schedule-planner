@@ -209,8 +209,11 @@ class ScheduleViewModel(
     private fun getSlot(slotIndex: Int) =
         slotDetailsList[slotIndex]
 
+    private fun allAssigned() =
+        slotDetailsList.firstOrNull { it.status != SlotStatus.Confirmed } == null
+
     private fun preventLosingScheduleChanges() {
-        if (state.value.isEditingEnabled)
+        if (state.value.isEditingEnabled && state.value.assignedLessons.isNotEmpty() && allAssigned())
             viewModelScope.launch {
                 eventChannel.send(Event.SaveBeforeSwitching)
             }
@@ -228,8 +231,9 @@ class ScheduleViewModel(
     }
 
     private fun changeScheduleDate(date: LocalDate) {
+        resetState(date)
+        resetSlots()
         scheduleDateFlow.value = date
-        resetState()
 //        _state.value = _state.value.copy(scheduleDate = scheduleDateFlow.value)
 //        removeAssignedLessons()
     }
@@ -259,7 +263,8 @@ class ScheduleViewModel(
 
     private fun loadPreviousLessons() {
         _assignedLessons.value =
-            _assignedLessons.value + state.value.previouslyAdded.mapNotNull { it.toAssignedLesson() }
+            _assignedLessons.value + state.value.previouslyAdded.filter { it.lesson.date == scheduleDateFlow.value }
+                .mapNotNull { it.toAssignedLesson() }
         _assignedLessons.value.forEach {
             setSlotDetails(
                 it.slotIndex,
@@ -343,17 +348,16 @@ class ScheduleViewModel(
 
     private fun submitData() {
         viewModelScope.launch(Dispatchers.IO) {
-
-            async {
-                databaseViewModel.deleteAllLessonsFromDate(scheduleDateFlow.value)
-                _assignedLessons.value.forEach { assignedLesson: AssignedLesson ->
-                    databaseViewModel.insertLesson(
-                        assignedLesson.toLesson()
-                    )
-                }
+            databaseViewModel.deleteAllLessonsFromDate(scheduleDateFlow.value)
+            _assignedLessons.value.forEach { assignedLesson: AssignedLesson ->
+                databaseViewModel.insertLesson(
+                    assignedLesson.toLesson()
+                )
             }
-            async { eventChannel.send(Event.Success) }
             resetState()
+        }
+        viewModelScope.launch(Dispatchers.IO) {
+            eventChannel.send(Event.Success)
         }
     }
 
@@ -364,18 +368,21 @@ class ScheduleViewModel(
         }
     }
 
-    private fun resetState() {
+    private fun resetState(date: LocalDate = scheduleDateFlow.value) {
         removeAssignedLessons()
         _state.value = ScheduleState(
-            scheduleDate = scheduleDateFlow.value, assignedLessons = emptyList()
+            scheduleDate = date
         )
-//        TODO better reseting for slots
+//        TODO better resetting for slots
     }
 
     private fun removeAssignedLessons() {
         _assignedLessons.value = emptyList()
     }
 
+    private fun resetSlots() {
+        slotDetailsList.clear()
+    }
 
     //additional
     private fun AssignedLesson.toLesson() = Lesson(
