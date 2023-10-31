@@ -74,6 +74,7 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 
+// TODO: Reset schedule when changing view
 
 @Composable
 fun ScheduleScreen(
@@ -85,15 +86,16 @@ fun ScheduleScreen(
         owner, ScheduleViewModelFactory(databaseViewModel)
     )[ScheduleViewModel::class.java]
     val state = viewModel.state.collectAsStateWithLifecycle()
+    val scheduleDate = viewModel.scheduleDate.collectAsStateWithLifecycle()
     val onEvent = viewModel::onEvent
     val context = LocalContext.current
     val datePickerState = rememberMaterialDialogState()
 
-    if (state.value.instructors.size * state.value.lessonTimes.size > 0) {
+    if (viewModel.isDataReadyInitialization()) {
         onEvent(ScheduleEvent.InitSlotDescriptions)
-        if (!state.value.loadedPreviousLessons && state.value.previouslyAdded.isNotEmpty() && state.value.previouslyAdded[0].lesson.date == state.value.scheduleDate)
-            onEvent(ScheduleEvent.LoadPreviousLessons)
     }
+    if (viewModel.arePreviousLessonAvailableAndNotLoaded())
+        onEvent(ScheduleEvent.LoadPreviousLessons)
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
             when (event) {
@@ -144,11 +146,19 @@ fun ScheduleScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
-
-        when (state.value.isEditingEnabled) {
-            true -> EditScheduleScreen(viewModel = viewModel, state = state)
-            false -> ViewScheduleScreen(viewModel = viewModel, state = state)
+        Column {
+            Text(
+                "Schedule for ${scheduleDate.value.pretty()}",
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(5.dp)
+            )
+            when (state.value.isEditingEnabled) {
+                true -> EditScheduleScreen(viewModel = viewModel, state = state)
+                false -> ViewScheduleScreen(viewModel = viewModel, state = state, scheduleDate)
+            }
         }
+
         FloatingActionButton(
             modifier = Modifier
                 .padding(16.dp)
@@ -171,7 +181,7 @@ fun ScheduleScreen(
         negativeButton(text = "Cancel")
     }) {
         datepicker(
-            initialDate = state.value.scheduleDate,
+            initialDate = scheduleDate.value,
             title = "Schedule date",
             colors = DatePickerDefaults.colors(
                 headerBackgroundColor = BlueLogo, dateActiveBackgroundColor = BlueLogo
@@ -193,7 +203,7 @@ fun EditScheduleScreen(
     val students = state.value.students
     val instructors = state.value.instructors
     val lessonTimes = state.value.lessonTimes
-    val arePreviousLessonAvailable = state.value.previouslyAdded.isNotEmpty()
+    val arePreviousLessonAvailable = state.value.previousLessons.isNotEmpty()
     val onEvent = viewModel::onEvent
     val isStudentAssigned = viewModel::isStudentAssigned
     val isLessonConfirmed: (AssignedLesson) -> Boolean = viewModel::isLessonConfirmed
@@ -202,8 +212,6 @@ fun EditScheduleScreen(
     val getLessonTimeFromIndex = viewModel::getLessonTimeFromIndex
     val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
     val getSlotFromLesson: (AssignedLesson) -> SlotDetails = viewModel::getSlot
-    println(students)
-    println(instructors)
 
     DraggableScreen(
         modifier = Modifier.fillMaxSize()
@@ -212,9 +220,7 @@ fun EditScheduleScreen(
         Column {
             Column(
                 modifier = Modifier
-//                    .fillMaxSize()
                     .verticalScroll(rememberScrollState())
-                    .padding(top = 50.dp),
 
                 ) {
                 if (students.isEmpty()) {
@@ -323,7 +329,11 @@ fun AvailableStudentsList(viewModel: ScheduleViewModel, state: State<ScheduleSta
 }
 
 @Composable
-fun ViewScheduleScreen(viewModel: ScheduleViewModel, state: State<ScheduleState>) {
+fun ViewScheduleScreen(
+    viewModel: ScheduleViewModel,
+    state: State<ScheduleState>,
+    scheduleDate: State<LocalDate>,
+) {
     val onEvent = viewModel::onEvent
     val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
     Box(modifier = Modifier.fillMaxSize()) {
@@ -332,12 +342,7 @@ fun ViewScheduleScreen(viewModel: ScheduleViewModel, state: State<ScheduleState>
             verticalArrangement = Arrangement.spacedBy(20.dp),
 //            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                "Schedule for ${state.value.scheduleDate.pretty()}",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(5.dp)
-            )
+
             LessonScheduleTable(
                 state = state,
                 onEvent = onEvent,

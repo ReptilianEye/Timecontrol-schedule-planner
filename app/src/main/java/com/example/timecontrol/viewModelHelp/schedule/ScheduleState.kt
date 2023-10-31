@@ -11,8 +11,8 @@ data class ScheduleState
     val instructors: List<InstructorWithLessons> = emptyList(),
     val students: List<StudentWithLessons> = emptyList(),
     val assignedLessons: List<AssignedLesson> = emptyList(),
-    val previouslyAdded: List<LessonWithStudentAndInstructor> = emptyList(),
-    val lessonsDay: LocalDate = LocalDate.now(),
+    val previousLessons: List<LessonWithStudentAndInstructor> = emptyList(),
+    val initialized: Boolean = false,
     val lessonTimes: List<Pair<String, String>> = listOf(
         Pair("9:00", "11:00"),
         Pair("11:15", "13:15"),
@@ -20,8 +20,6 @@ data class ScheduleState
         Pair("15:45", "17:45"),
         Pair("18:00", "20:00"),
     ),
-    val scheduleDate: LocalDate = LocalDate.now(),
-
     val isSaveBeforeSwitchingDialogOpen: Boolean = false,
     val isEditingEnabled: Boolean = false,
     val loadedPreviousLessons: Boolean = false,

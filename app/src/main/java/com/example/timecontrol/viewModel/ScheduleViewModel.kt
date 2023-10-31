@@ -14,10 +14,11 @@ import com.example.timecontrol.viewModelHelp.schedule.ScheduleState
 import com.example.timecontrol.viewModelHelp.schedule.SlotStatus
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -26,40 +27,42 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ScheduleViewModel(
     private val databaseViewModel: DatabaseViewModel,
-//    var scheduleDate: LocalDate = LocalDate.now()
 ) : ViewModel() {
 
     private val freeSlotDescription = "Free Slot"
 
-    private val scheduleDateFlow = MutableStateFlow(LocalDate.now()) //2023-10-25
+    private val _scheduleDate = MutableStateFlow(LocalDate.now()) //2023-10-25
+    val scheduleDate = _scheduleDate.asStateFlow()
 
     //    private var _instructors = databaseViewModel.getAllCurrentInstructors()
-    private val _instructors = scheduleDateFlow.flatMapLatest {
+    private val _instructors = scheduleDate.flatMapLatest {
         databaseViewModel.getAllCurrentInstructors(it)
     }
-    private val _students = scheduleDateFlow.flatMapLatest {
+    private val _students = scheduleDate.flatMapLatest {
         databaseViewModel.getAllCurrentStudents(it)
     }
 
     private val _assignedLessons: MutableStateFlow<List<AssignedLesson>> =
         MutableStateFlow(listOf())
 
-    private val _previouslyAdded = scheduleDateFlow.flatMapLatest {
+    private val _previousLessons = scheduleDate.flatMapLatest {
+        println(it.toString())
         databaseViewModel.getAllLessonsFromDate(it)
     }
 
     private val _state = MutableStateFlow(ScheduleState())
 
     val state = combine(
-        _state, _students, _instructors, _assignedLessons, _previouslyAdded
-    ) { state, students, instructors, assignedLessons, previouslyAdded ->
+        _state, _students, _instructors, _assignedLessons, _previousLessons,
+    ) { state, students, instructors, assignedLessons, previousLessons ->
         state.copy(
             instructors = instructors,
             students = students,
             assignedLessons = assignedLessons,
-            previouslyAdded = previouslyAdded
+            previousLessons = previousLessons
         )
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), ScheduleState()
@@ -69,52 +72,54 @@ class ScheduleViewModel(
 
     private val eventChannel = Channel<Event>()
     val validationEvents = eventChannel.receiveAsFlow()
-    fun onEvent(event: ScheduleEvent) = when (event) {
-        is ScheduleEvent.AssignLesson -> assignNewLesson(
-            event.student, event.instructorIndex, event.lessonTimeIndex
-        )
+    fun onEvent(event: ScheduleEvent) {
+        println(event)
+        when (event) {
+            is ScheduleEvent.AssignLesson -> assignNewLesson(
+                event.student, event.instructorIndex, event.lessonTimeIndex
+            )
 
-        is ScheduleEvent.RemoveLesson -> {
-            removeLessonAndFreeSlot(event.assignedLesson)
+            is ScheduleEvent.RemoveLesson -> {
+                removeLessonAndFreeSlot(event.assignedLesson)
+            }
+
+            is ScheduleEvent.ConfirmLesson -> updateLessonStatus(
+                event.assignedLesson, SlotStatus.Confirmed
+            )
+
+            is ScheduleEvent.UnconfirmLesson -> updateLessonStatus(
+                event.assignedLesson, SlotStatus.Assigned
+            )
+
+            ScheduleEvent.SaveSchedule -> submitData()
+
+            is ScheduleEvent.OnDrop -> onDrop(event.i, event.j, event.student)
+
+            //should be called only once - on schedule initiation
+            ScheduleEvent.InitSlotDescriptions -> initSlotDescriptions()
+
+            is ScheduleEvent.HandleClick -> {
+                handleOnSlotClick(event.i, event.j)
+            }
+
+            is ScheduleEvent.ChangeScheduleDate -> changeScheduleDate(event.scheduleDate)
+
+            ScheduleEvent.LoadPreviousLessons -> loadPreviousLessons()
+
+            ScheduleEvent.OpenSaveBeforeSwitchingDialog -> {
+                toggleSaveBeforeSwitchingDialog(true)
+            }
+
+            ScheduleEvent.CloseSaveBeforeSwitchingDialog -> closeSaveBeforeSwitchingDialog()
+
+
+            ScheduleEvent.ToggleEditing -> {
+                _state.value = _state.value.copy(isEditingEnabled = !state.value.isEditingEnabled)
+
+            }
+
+            ScheduleEvent.PreventLosingScheduleChanges -> preventLosingScheduleChanges()
         }
-
-        is ScheduleEvent.ConfirmLesson -> updateLessonStatus(
-            event.assignedLesson, SlotStatus.Confirmed
-        )
-
-        is ScheduleEvent.UnconfirmLesson -> updateLessonStatus(
-            event.assignedLesson, SlotStatus.Assigned
-        )
-
-        ScheduleEvent.SaveSchedule -> submitData()
-
-        is ScheduleEvent.OnDrop -> onDrop(event.i, event.j, event.student)
-
-        //should be called only once - on schedule initiation
-        ScheduleEvent.InitSlotDescriptions -> initSlotDescriptions()
-
-        is ScheduleEvent.HandleClick -> {
-            handleOnSlotClick(event.i, event.j)
-        }
-
-        is ScheduleEvent.ChangeScheduleDate -> changeScheduleDate(event.scheduleDate)
-
-        ScheduleEvent.LoadPreviousLessons -> loadPreviousLessons()
-
-        ScheduleEvent.OpenSaveBeforeSwitchingDialog -> {
-            toggleSaveBeforeSwitchingDialog(true)
-        }
-
-        ScheduleEvent.CloseSaveBeforeSwitchingDialog -> closeSaveBeforeSwitchingDialog()
-
-
-        ScheduleEvent.ToggleEditing -> {
-            _state.value =
-                _state.value.copy(isEditingEnabled = !state.value.isEditingEnabled)
-
-        }
-
-        ScheduleEvent.PreventLosingScheduleChanges -> preventLosingScheduleChanges()
     }
 
 
@@ -206,36 +211,29 @@ class ScheduleViewModel(
     fun getSlot(instructorIndex: Int, lessonTimeIndex: Int) =
         slotDetailsList[(instructorIndex to lessonTimeIndex).mapToSlotIndex()]
 
-    private fun getSlot(slotIndex: Int) =
-        slotDetailsList[slotIndex]
+    private fun getSlot(slotIndex: Int) = slotDetailsList[slotIndex]
 
     private fun allAssigned() =
         slotDetailsList.firstOrNull { it.status != SlotStatus.Confirmed } == null
 
     private fun preventLosingScheduleChanges() {
-        if (state.value.isEditingEnabled && state.value.assignedLessons.isNotEmpty() && allAssigned())
-            viewModelScope.launch {
-                eventChannel.send(Event.SaveBeforeSwitching)
-            }
-        else
-            viewModelScope.launch {
-                eventChannel.send(Event.OpenDatePicker)
-            }
+        if (state.value.isEditingEnabled && state.value.assignedLessons.isNotEmpty() && allAssigned()) viewModelScope.launch {
+            eventChannel.send(Event.SaveBeforeSwitching)
+        }
+        else viewModelScope.launch {
+            eventChannel.send(Event.OpenDatePicker)
+        }
     }
 
     private fun toggleSaveBeforeSwitchingDialog(open: Boolean) {
-        _state.value =
-            _state.value.copy(
-                isSaveBeforeSwitchingDialogOpen = open
-            )
+        _state.value = _state.value.copy(
+            isSaveBeforeSwitchingDialogOpen = open
+        )
     }
 
     private fun changeScheduleDate(date: LocalDate) {
-        resetState(date)
-        resetSlots()
-        scheduleDateFlow.value = date
-//        _state.value = _state.value.copy(scheduleDate = scheduleDateFlow.value)
-//        removeAssignedLessons()
+        _scheduleDate.update { date }
+        resetSchedule()
     }
 
     private fun Pair<Int, Int>.getSlot() = slotDetailsList[mapToSlotIndex()]
@@ -256,26 +254,41 @@ class ScheduleViewModel(
         val i = instructor.getIndex()
         val j = lesson.lessonTime.getIndex()
         return if (i != -1 && j != -1) AssignedLesson(
-            (i to j).mapToSlotIndex(),
-            student.id
+            (i to j).mapToSlotIndex(), student.id
         ) else null
     }
 
+    fun arePreviousLessonAvailableAndNotLoaded() =
+        !state.value.loadedPreviousLessons && state.value.previousLessons.isNotEmpty()
+
     private fun loadPreviousLessons() {
-        _assignedLessons.value =
-            _assignedLessons.value + state.value.previouslyAdded.filter { it.lesson.date == scheduleDateFlow.value }
-                .mapNotNull { it.toAssignedLesson() }
-        _assignedLessons.value.forEach {
-            setSlotDetails(
-                it.slotIndex,
-                SlotStatus.Confirmed,
-                databaseViewModel.getStudentById(it.studentId)
-            )
+        if (state.value.previousLessons.isNotEmpty()) {
+
+            //TODO replace with something better one day
+            val previousLessonsFiltered =
+                state.value.previousLessons.filter { it.lesson.date == scheduleDate.value }
+                    .mapNotNull { it.toAssignedLesson() }
+            if (previousLessonsFiltered.isEmpty()) {
+                println(state.value.previousLessons)
+                return
+            }
+//            ? - kod majacy na celu poczekanie az z bazy danych zostana wybrane lekcje z odpowiedniego dnia po zamianie daty
+
+            _assignedLessons.value =
+                _assignedLessons.value + state.value.previousLessons.filter { it.lesson.date == scheduleDate.value }
+                    .mapNotNull { it.toAssignedLesson() }
+            _assignedLessons.value.forEach {
+                setSlotDetails(
+                    it.slotIndex,
+                    SlotStatus.Confirmed,
+                    databaseViewModel.getStudentById(it.studentId)
+                )
+            }
         }
         _state.value = _state.value.copy(loadedPreviousLessons = true);
     }
 
-    //slot functions
+//slot functions
 
     //removes 'student' from slotDetails array
     private fun freeSlotWithStudent(student: StudentWithLessons) {
@@ -320,6 +333,9 @@ class ScheduleViewModel(
         return if (lesson != null) getStudent(lesson.studentId).student.getShortcutName() else freeSlotDescription
     }
 
+    fun isDataReadyInitialization() =
+        !state.value.initialized && state.value.instructors.isNotEmpty() && state.value.lessonTimes.isNotEmpty()
+
     private fun initSlotDescriptions() {
         for (i in state.value.instructors.indices) for (j in state.value.lessonTimes.indices) {
             slotDetailsList.add(
@@ -328,9 +344,11 @@ class ScheduleViewModel(
                 )
             )
         }
+        _state.value = _state.value.copy(initialized = true)
+        println("ilosc slotow = ${slotDetailsList.size}")
     }
 
-    //student functions
+//student functions
 
     //returns index of student in slotDetails array (-1 if student not found)
     private fun findSlotWithStudent(student: StudentWithLessons): SlotDetails? =
@@ -348,7 +366,7 @@ class ScheduleViewModel(
 
     private fun submitData() {
         viewModelScope.launch(Dispatchers.IO) {
-            databaseViewModel.deleteAllLessonsFromDate(scheduleDateFlow.value)
+            databaseViewModel.deleteAllLessonsFromDate(scheduleDate.value)
             _assignedLessons.value.forEach { assignedLesson: AssignedLesson ->
                 databaseViewModel.insertLesson(
                     assignedLesson.toLesson()
@@ -368,12 +386,24 @@ class ScheduleViewModel(
         }
     }
 
-    private fun resetState(date: LocalDate = scheduleDateFlow.value) {
+    private fun resetSchedule() {
         removeAssignedLessons()
-        _state.value = ScheduleState(
-            scheduleDate = date
+        resetSlots()
+        _state.value = _state.value.copy(
+            initialized = false, loadedPreviousLessons = false
         )
-//        TODO better resetting for slots
+    }
+
+    private fun resetState() {
+        _state.value = ScheduleState(
+            initialized = true
+        )
+    }
+
+    private fun removePreviousLessons() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _previousLessons.collect { println(it) }
+        }
     }
 
     private fun removeAssignedLessons() {
@@ -387,7 +417,7 @@ class ScheduleViewModel(
     //additional
     private fun AssignedLesson.toLesson() = Lesson(
         id = 0,
-        date = state.value.lessonsDay,
+        date = scheduleDate.value,
         lessonTime = state.value.lessonTimes[getSlot().lessonTimeIndex],
         studentId = studentId,
         instructorId = state.value.instructors[getSlot().instructorIndex].instructor.id
