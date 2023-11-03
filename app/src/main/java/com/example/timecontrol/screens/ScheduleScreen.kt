@@ -32,6 +32,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,6 +65,7 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModelFactory
 import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
+import com.example.timecontrol.viewModelHelp.schedule.LoadingState
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleState
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
@@ -90,11 +92,14 @@ fun ScheduleScreen(
     val onEvent = viewModel::onEvent
     val context = LocalContext.current
     val datePickerState = rememberMaterialDialogState()
-
-    if (viewModel.isDataReadyInitialization()) {
+    val loadingState = viewModel.loadingState.collectAsState(initial = LoadingState())
+//    if (viewModel.isDataReadyInitialization()) {
+//        onEvent(ScheduleEvent.InitSlotDescriptions)
+//    }
+    if (!state.value.initialized && !loadingState.value.areInstructorsLoading){
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
-    if (viewModel.arePreviousLessonAvailableAndNotLoaded())
+    if (viewModel.arePreviousLessonAvailable())
         onEvent(ScheduleEvent.LoadPreviousLessons)
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->
@@ -106,7 +111,7 @@ fun ScheduleScreen(
                     ).show()
                 }
 
-                ScheduleViewModel.Event.SaveBeforeSwitching -> {
+                ScheduleViewModel.Event.OpenSaveBeforeSwitchingDialog -> {
                     onEvent(ScheduleEvent.OpenSaveBeforeSwitchingDialog)
                 }
 
@@ -144,7 +149,6 @@ fun ScheduleScreen(
 
             )
     }
-
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
             Text(
@@ -196,6 +200,47 @@ fun ScheduleScreen(
 }
 
 @Composable
+fun ViewScheduleScreen(
+    viewModel: ScheduleViewModel,
+    state: State<ScheduleState>,
+    scheduleDate: State<LocalDate>,
+) {
+    val onEvent = viewModel::onEvent
+    val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.padding(top = 30.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+        ) {
+            if (state.value.initialized)
+                LessonScheduleTable(
+                    state = state,
+                    onEvent = onEvent,
+                    getSlot = getSlot,
+                    editable = false
+                )
+
+        }
+        FloatingActionButton(
+            modifier = Modifier
+                .padding(16.dp)
+                .size(45.dp)
+                .align(Alignment.BottomEnd),
+            onClick = {
+                onEvent(ScheduleEvent.ToggleEditing)
+            },
+            containerColor = BlueLogo
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.students_info_edit_icon),
+                contentDescription = "Edit Schedule",
+                modifier = Modifier.fillMaxSize(0.5f)
+            )
+        }
+    }
+}
+
+@Composable
 fun EditScheduleScreen(
     viewModel: ScheduleViewModel, state: State<ScheduleState>,
 ) {
@@ -222,7 +267,7 @@ fun EditScheduleScreen(
                 modifier = Modifier
                     .verticalScroll(rememberScrollState())
 
-                ) {
+            ) {
                 if (students.isEmpty()) {
                     Text(
                         text = "No students available...",
@@ -240,12 +285,13 @@ fun EditScheduleScreen(
                 } else {
                     AvailableStudentsList(viewModel = viewModel, state = state)
                 }
-                LessonScheduleTable(
-                    state = state,
-                    onEvent = onEvent,
-                    getSlot = getSlot,
-                    editable = true
-                )
+                if (state.value.initialized)
+                    LessonScheduleTable(
+                        state = state,
+                        onEvent = onEvent,
+                        getSlot = getSlot,
+                        editable = true
+                    )
 
             }
             Divider(Modifier.padding(15.dp))
@@ -328,47 +374,6 @@ fun AvailableStudentsList(viewModel: ScheduleViewModel, state: State<ScheduleSta
     }
 }
 
-@Composable
-fun ViewScheduleScreen(
-    viewModel: ScheduleViewModel,
-    state: State<ScheduleState>,
-    scheduleDate: State<LocalDate>,
-) {
-    val onEvent = viewModel::onEvent
-    val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.padding(top = 30.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-//            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            LessonScheduleTable(
-                state = state,
-                onEvent = onEvent,
-                getSlot = getSlot,
-                editable = false
-            )
-
-        }
-        FloatingActionButton(
-            modifier = Modifier
-                .padding(16.dp)
-                .size(45.dp)
-                .align(Alignment.BottomEnd),
-            onClick = {
-                onEvent(ScheduleEvent.ToggleEditing)
-            },
-            containerColor = BlueLogo
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.students_info_edit_icon),
-                contentDescription = "Edit Schedule",
-                modifier = Modifier.fillMaxSize(0.5f)
-            )
-        }
-    }
-}
 
 @Composable
 fun LessonScheduleTable(

@@ -38,6 +38,9 @@ interface LessonDao {
     @Query("DELETE FROM Lessons WHERE date = :lessonDate")
     fun deleteAllLessonsFromDate(lessonDate: LocalDate)
 
+    @Query("DELETE FROM Lessons WHERE id = :lessonId")
+    fun deleteLessonById(lessonId: Int)
+
     @Query("SELECT * FROM Lessons WHERE id = :id")
     fun getLessonById(id: Int): LessonWithStudentAndInstructor
 }

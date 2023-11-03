@@ -22,5 +22,5 @@ data class ScheduleState
     ),
     val isSaveBeforeSwitchingDialogOpen: Boolean = false,
     val isEditingEnabled: Boolean = false,
-    val loadedPreviousLessons: Boolean = false,
+//    val loadingState: LoadingState = LoadingState()
 )

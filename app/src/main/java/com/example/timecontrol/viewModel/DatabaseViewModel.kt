@@ -74,8 +74,9 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     fun getAllLessonsFromDate(lessonDate: LocalDate) = repository.getAllLessonsFromDate(lessonDate)
     fun areAnyLessonsFromDate(lessonDate: LocalDate) = repository.areAnyLessonsFromDate(lessonDate)
     fun deleteAllLessonsFromDate(lessonDate: LocalDate) {
-        repository.deleteALLessonsFromDate(lessonDate)
+        repository.deleteAllLessonsFromDate(lessonDate)
     }
+
     fun getLessonById(id: Int): LessonWithStudentAndInstructor {
         val result: Deferred<LessonWithStudentAndInstructor> =
             viewModelScope.async(Dispatchers.IO) {
@@ -108,6 +109,12 @@ class DatabaseViewModel(private val repository: AppRepository) : ViewModel() {
     fun deleteLesson(lesson: Lesson) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteLesson(lesson)
+        }
+    }
+
+    fun deleteLessonById(lessonId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteLessonById(lessonId)
         }
     }
 
