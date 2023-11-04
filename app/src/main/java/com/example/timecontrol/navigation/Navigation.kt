@@ -24,7 +24,7 @@ fun Navigation(
 ) {
     //TODO - add selected index to navigation?
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.ScheduleScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         //Home Screen
         composable(route = Screen.HomeScreen.route) {
             RootLayout(
