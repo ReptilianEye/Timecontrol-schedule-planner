@@ -40,7 +40,7 @@ import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.ui.theme.TimecontrolTheme
 import com.example.timecontrol.uppernavbar.UpperNavbar
 import com.example.timecontrol.viewModel.DatabaseViewModel
-import com.example.timecontrol.viewModel.DatabaseViewModelFactory
+import com.example.timecontrol.viewModelFactory.DatabaseViewModelFactory
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: DatabaseViewModel

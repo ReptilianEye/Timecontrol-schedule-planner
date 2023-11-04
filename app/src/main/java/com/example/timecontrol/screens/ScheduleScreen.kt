@@ -63,7 +63,7 @@ import com.example.timecontrol.slot.Variant
 import com.example.timecontrol.ui.theme.*
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
-import com.example.timecontrol.viewModel.ScheduleViewModelFactory
+import com.example.timecontrol.viewModelFactory.ScheduleViewModelFactory
 import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
 import com.example.timecontrol.viewModelHelp.schedule.LoadingState
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent

@@ -178,11 +178,18 @@ class ScheduleViewModel(
     private fun assignNewLesson(
         student: StudentWithLessons, instructorIndex: Int, lessonTimeIndex: Int,
     ) {
+        removeStudentFromSchedule(student)
         val new = AssignedLesson(
             slotIndex = (instructorIndex to lessonTimeIndex).mapToSlotIndex(),
             studentId = student.student.id
         )
         _assignedLessons.value = _assignedLessons.value + new
+    }
+
+    private fun removeStudentFromSchedule(student: StudentWithLessons) {
+        freeSlotWithStudent(student)
+        _assignedLessons.value =
+            _assignedLessons.value.filter { it.studentId != student.student.id }
     }
 
     //removes lesson and fre
@@ -223,7 +230,7 @@ class ScheduleViewModel(
 
     private fun preventLosingScheduleChanges() {
         viewModelScope.launch {
-            if (state.value.isEditingEnabled && areAllAssignedLessonsConfirmed()) eventChannel.send(
+            if (state.value.isEditingEnabled && !areAllAssignedLessonsConfirmed()) eventChannel.send(
                 Event.OpenSaveBeforeSwitchingDialog
             )
             else eventChannel.send(Event.OpenDatePicker)
@@ -472,13 +479,6 @@ class ScheduleViewModel(
     private fun removeLessonFromAssignedLessons(i: Int, j: Int) {
         val lesson = getLessonFromIndices(i, j)
         if (lesson != null) removeLessonFromAssignedLessons(lesson) else false
-    }
-
-    @Deprecated("not needed")
-    private fun removeStudentFromSchedule(student: StudentWithLessons) {
-        _assignedLessons.value =
-            _assignedLessons.value.filter { it.studentId != student.student.id }
-        freeSlotWithStudent(student)
     }
 
 
