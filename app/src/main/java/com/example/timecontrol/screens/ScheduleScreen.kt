@@ -99,7 +99,7 @@ fun ScheduleScreen(
     if (!state.value.initialized && !loadingState.value.areInstructorsLoading){
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
-    if (viewModel.arePreviousLessonAvailable())
+    if (viewModel.arePreviousLessonNotLoadedAndAvailable())
         onEvent(ScheduleEvent.LoadPreviousLessons)
     LaunchedEffect(key1 = context) {
         viewModel.validationEvents.collect { event ->

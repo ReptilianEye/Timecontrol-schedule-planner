@@ -12,7 +12,6 @@ data class ScheduleState
     val students: List<StudentWithLessons> = emptyList(),
     val assignedLessons: List<AssignedLesson> = emptyList(),
     val previousLessons: List<LessonWithStudentAndInstructor> = emptyList(),
-    val initialized: Boolean = false,
     val lessonTimes: List<Pair<String, String>> = listOf(
         Pair("9:00", "11:00"),
         Pair("11:15", "13:15"),
@@ -22,5 +21,6 @@ data class ScheduleState
     ),
     val isSaveBeforeSwitchingDialogOpen: Boolean = false,
     val isEditingEnabled: Boolean = false,
-//    val loadingState: LoadingState = LoadingState()
+    val initialized: Boolean = false,
+    val previousLessonsLoaded: Boolean = false,
 )

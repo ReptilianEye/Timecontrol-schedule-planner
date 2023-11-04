@@ -20,9 +20,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -60,25 +60,20 @@ class ScheduleViewModel(
 
     //    private var _instructors = databaseViewModel.getAllCurrentInstructors()
     private val _instructors = _scheduleDate.flatMapLatest {
-        val res = databaseViewModel.getAllCurrentInstructors(it)
-        res.collectLatest { toggleAreInstructorsLoading(false) }
-        res
+        databaseViewModel.getAllCurrentInstructors(it).onEach { toggleAreInstructorsLoading(false) }
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), emptyList()
     )
 
     private val _students = _scheduleDate.flatMapLatest {
-        val res = databaseViewModel.getAllCurrentStudents(it)
-        res.collectLatest { toggleAreStudentsLoading(false) }
-        res
+        databaseViewModel.getAllCurrentStudents(it).onEach { toggleAreStudentsLoading(false) }
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), emptyList()
     )
 
     private val _previousLessons = _scheduleDate.flatMapLatest {
-        val res = databaseViewModel.getAllLessonsFromDate(it)
-        res.collectLatest { toggleArePreviousLessonsLoading(false) }
-        res
+        databaseViewModel.getAllLessonsFromDate(it)
+            .onEach { toggleArePreviousLessonsLoading(false) }
     }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(), emptyList()
     )
@@ -256,8 +251,8 @@ class ScheduleViewModel(
         ) else null
     }
 
-    fun arePreviousLessonAvailable() =
-        !loadingState.value.arePreviousLessonsLoading && state.value.previousLessons.isNotEmpty()
+    fun arePreviousLessonNotLoadedAndAvailable() =
+        !state.value.previousLessonsLoaded && !loadingState.value.arePreviousLessonsLoading && state.value.previousLessons.isNotEmpty()
 
     private fun addPreviousLessonsToAssigned() {
 //        if (state.value.previousLessons.isNotEmpty()) {
@@ -282,6 +277,7 @@ class ScheduleViewModel(
                 )
             }
         }
+        _state.value = _state.value.copy(previousLessonsLoaded = true)
     }
 
     //slot functions
