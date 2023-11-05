@@ -25,7 +25,7 @@ interface InstructorDao {
     @Query("SELECT * FROM Instructors")
     fun getAllInstructors(): Flow<List<InstructorWithLessons>>
 
-    @Query("SELECT * FROM Instructors WHERE arrival_date <= :date <= departure_date")
+    @Query("SELECT * FROM Instructors WHERE :date BETWEEN arrival_date and departure_date")
     fun getAllCurrentInstructors(date: LocalDate = LocalDate.now()): Flow<List<InstructorWithLessons>>
 
     @Query(

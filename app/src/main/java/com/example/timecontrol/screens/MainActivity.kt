@@ -32,6 +32,7 @@ import com.example.timecontrol.database.AppDatabase
 import com.example.timecontrol.database.AppRepository
 import com.example.timecontrol.navigation.BottomNavigationItem
 import com.example.timecontrol.navigation.Navigation
+import com.example.timecontrol.navigation.NavigationDestinations
 import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.preferences.MyPreferences
 import com.example.timecontrol.preferences.QuoteController
@@ -39,7 +40,7 @@ import com.example.timecontrol.preferences.dto.Quote
 import com.example.timecontrol.ui.theme.TimecontrolTheme
 import com.example.timecontrol.uppernavbar.UpperNavbar
 import com.example.timecontrol.viewModel.DatabaseViewModel
-import com.example.timecontrol.viewModel.DatabaseViewModelFactory
+import com.example.timecontrol.viewModelFactory.DatabaseViewModelFactory
 
 class MainActivity : ComponentActivity() {
     private lateinit var viewModel: DatabaseViewModel
@@ -93,7 +94,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun RootLayout(navController: NavController, localization: Int, content: @Composable () -> Unit) {
     Column {
-        if (localization != 2) {
+        if (localization != NavigationDestinations.Schedule.index) {  //because drag and drop does not work with it
             UpperNavbar(
                 modifier = Modifier
                     .height(85.dp)

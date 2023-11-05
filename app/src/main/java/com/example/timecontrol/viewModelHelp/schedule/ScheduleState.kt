@@ -1,9 +1,9 @@
 package com.example.timecontrol.viewModelHelp.schedule
 
 import com.example.timecontrol.database.InstructorWithLessons
+import com.example.timecontrol.database.LessonWithStudentAndInstructor
 import com.example.timecontrol.database.StudentWithLessons
 import java.time.LocalDate
-
 
 
 data class ScheduleState
@@ -11,7 +11,7 @@ data class ScheduleState
     val instructors: List<InstructorWithLessons> = emptyList(),
     val students: List<StudentWithLessons> = emptyList(),
     val assignedLessons: List<AssignedLesson> = emptyList(),
-    val lessonsDay: LocalDate = LocalDate.now(),
+    val previousLessons: List<LessonWithStudentAndInstructor> = emptyList(),
     val lessonTimes: List<Pair<String, String>> = listOf(
         Pair("9:00", "11:00"),
         Pair("11:15", "13:15"),
@@ -19,5 +19,8 @@ data class ScheduleState
         Pair("15:45", "17:45"),
         Pair("18:00", "20:00"),
     ),
-
-    )
+    val isSaveBeforeSwitchingDialogOpen: Boolean = false,
+    val isEditingEnabled: Boolean = false,
+    val initialized: Boolean = false,
+    val previousLessonsLoaded: Boolean = false,
+)

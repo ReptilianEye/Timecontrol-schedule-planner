@@ -2,7 +2,6 @@ package com.example.timecontrol.navigation
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -25,7 +24,7 @@ fun Navigation(
 ) {
     //TODO - add selected index to navigation?
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.ScheduleScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         //Home Screen
         composable(route = Screen.HomeScreen.route) {
             RootLayout(
@@ -126,8 +125,3 @@ fun Navigation(
     }
 }
 
-enum class NavigationDestinations(val index: Int) { //index of bottom navbar
-    Community(0),
-    Home(1),
-    Schedule(2)
-}

@@ -1,7 +1,9 @@
-package com.example.timecontrol.viewModel
+package com.example.timecontrol.viewModelFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModel.ScheduleViewModel
 
 class ScheduleViewModelFactory(private val databaseViewModel: DatabaseViewModel) :
     ViewModelProvider.Factory {

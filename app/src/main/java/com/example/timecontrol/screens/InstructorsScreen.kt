@@ -63,7 +63,7 @@ import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.InstructorViewModel
-import com.example.timecontrol.viewModel.InstructorViewModelFactory
+import com.example.timecontrol.viewModelFactory.InstructorViewModelFactory
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorEvent
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorState
 import com.vanpra.composematerialdialogs.MaterialDialog
@@ -128,7 +128,7 @@ fun InstructorsScreen(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add),
-                contentDescription = "Add Student",
+                contentDescription = "Add Instructor",
                 modifier = Modifier.fillMaxSize(0.5f)
             )
         }
