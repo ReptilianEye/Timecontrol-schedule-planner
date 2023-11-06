@@ -36,7 +36,7 @@ import com.example.timecontrol.navigation.NavigationDestinations
 import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.preferences.MyPreferences
 import com.example.timecontrol.preferences.QuoteController
-import com.example.timecontrol.preferences.dto.Quote
+import com.example.timecontrol.preferences.Quote
 import com.example.timecontrol.ui.theme.TimecontrolTheme
 import com.example.timecontrol.uppernavbar.UpperNavbar
 import com.example.timecontrol.viewModel.DatabaseViewModel
@@ -92,17 +92,27 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun RootLayout(navController: NavController, localization: Int, content: @Composable () -> Unit) {
+fun RootLayout(
+    navController: NavController,
+    localization: Int,
+    content: @Composable (Boolean, () -> Unit) -> Unit,
+) {
+    var optionsOpen by remember {
+        mutableStateOf(false)
+    }
+    val toggleOptions = { optionsOpen = !optionsOpen }
     Column {
         if (localization != NavigationDestinations.Schedule.index) {  //because drag and drop does not work with it
             UpperNavbar(
                 modifier = Modifier
                     .height(85.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                onClickLogo = { navController.navigate(Screen.HomeScreen.route) },
+                onClickOptions = toggleOptions
             )
         }
         Box(modifier = Modifier.fillMaxHeight(0.88f)) {
-            content()
+            content(optionsOpen, toggleOptions)
         }
         BotNavBar(navController = navController, localization = localization)
     }

@@ -1,8 +1,6 @@
 package com.example.timecontrol.viewModelHelp.instructor
 
 import com.example.timecontrol.database.InstructorQualification
-import com.example.timecontrol.viewModelHelp.student.StudentsFilterType
-import com.example.timecontrol.viewModelHelp.student.StudentsSortType
 import java.time.LocalDate
 
 sealed class AddInstructorEvent {

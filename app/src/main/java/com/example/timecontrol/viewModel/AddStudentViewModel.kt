@@ -2,10 +2,6 @@ package com.example.timecontrol.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
-import com.example.timecontrol.viewModelHelp.student.AddStudentState
-import com.example.timecontrol.viewModelHelp.student.StudentsFilterType
-import com.example.timecontrol.viewModelHelp.student.StudentsSortType
 import com.example.timecontrol.database.Student
 import com.example.timecontrol.validation.use_case.ValidateArrivalDate
 import com.example.timecontrol.validation.use_case.ValidateBirthDate
@@ -14,8 +10,12 @@ import com.example.timecontrol.validation.use_case.ValidateEmail
 import com.example.timecontrol.validation.use_case.ValidateFirstName
 import com.example.timecontrol.validation.use_case.ValidateLastName
 import com.example.timecontrol.validation.use_case.ValidateLevel
-import com.example.timecontrol.validation.use_case.ValidatePlaceOfStay
 import com.example.timecontrol.validation.use_case.ValidatePhoneNumber
+import com.example.timecontrol.validation.use_case.ValidatePlaceOfStay
+import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
+import com.example.timecontrol.viewModelHelp.student.AddStudentState
+import com.example.timecontrol.viewModelHelp.student.StudentsFilterType
+import com.example.timecontrol.viewModelHelp.student.StudentsSortType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

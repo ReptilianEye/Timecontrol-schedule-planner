@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.timecontrol.preferences.dto.Quote
+import com.example.timecontrol.preferences.Quote
 import com.example.timecontrol.screens.AddStudent
 import com.example.timecontrol.screens.CommunityScreen
 import com.example.timecontrol.screens.HomeScreen
@@ -20,9 +20,8 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
 fun Navigation(
-    viewModel: DatabaseViewModel, context: Context, quote: Quote, owner: ViewModelStoreOwner
+    viewModel: DatabaseViewModel, context: Context, quote: Quote, owner: ViewModelStoreOwner,
 ) {
-    //TODO - add selected index to navigation?
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.HomeScreen.route) {
         //Home Screen
@@ -30,7 +29,7 @@ fun Navigation(
             RootLayout(
                 navController = navController,
                 localization = NavigationDestinations.Home.index,
-                content = {
+                content = { optionsOpen, toggleOptions ->
                     HomeScreen(
                         quote = quote,
                         navController = navController,
@@ -51,12 +50,14 @@ fun Navigation(
             RootLayout(
                 navController = navController,
                 localization = NavigationDestinations.Community.index
-            ) {
+            ) { optionsOpen, toggleOptions ->
                 CommunityScreen(
                     databaseViewModel = viewModel,
                     navController = navController,
                     owner = owner,
-                    navIndex = entry.arguments?.getString("index")?.toInt() ?: 0
+                    navIndex = entry.arguments?.getString("index")?.toInt() ?: 0,
+                    optionsOpen = optionsOpen,
+                    toggleOptions = toggleOptions
                 )
             }
         }
@@ -71,7 +72,7 @@ fun Navigation(
             RootLayout(
                 navController = navController,
                 localization = NavigationDestinations.Community.index,
-                content = {
+                content = { optionsOpen, toggleOptions ->
                     AddStudent(
                         databaseViewModel = viewModel,
                         navController = navController,
@@ -95,6 +96,7 @@ fun Navigation(
                 navController = navController,
                 localization = NavigationDestinations.Schedule.index,
                 content = {
+                        optionsOpen, toggleOptions ->
                     ScheduleScreen(
                         databaseViewModel = viewModel,
                         navController = navController,
@@ -114,6 +116,7 @@ fun Navigation(
                 navController = navController,
                 localization = NavigationDestinations.Community.index
             ) {
+                    optionsOpen, toggleOptions ->
                 StudentDetailsScreen(
                     viewModel = viewModel,
                     navController = navController,

@@ -12,8 +12,8 @@ import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
 import com.example.timecontrol.viewModelHelp.schedule.LoadingState
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleState
-import com.example.timecontrol.viewModelHelp.schedule.SlotStatus
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
+import com.example.timecontrol.viewModelHelp.schedule.SlotStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel

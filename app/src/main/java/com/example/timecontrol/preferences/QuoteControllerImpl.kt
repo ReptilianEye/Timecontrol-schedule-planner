@@ -1,7 +1,6 @@
 package com.example.timecontrol.preferences
 
 import com.example.timecontrol.BuildConfig
-import com.example.timecontrol.preferences.dto.Quote
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.get
@@ -29,17 +28,17 @@ class QuoteControllerImpl(val sharedPreferences: MyPreferences, val client: Http
                 category = category
             )
         }
-        val newQuote: Quote = fetchQuote()
+        val newQuote = fetchQuote()
         saveNewQuote(newQuote)
         return newQuote
     }
 
     private fun saveNewQuote(newQuote: Quote) {
         CoroutineScope(Dispatchers.IO).launch {
-            async { sharedPreferences.saveString(author, newQuote.author) }
-            async { sharedPreferences.saveString(content, newQuote.quote) }
-            async { sharedPreferences.saveString(category, newQuote.category) }
-            async { sharedPreferences.saveInt(savedDate, getDayOfYear()) }
+            sharedPreferences.saveString(author, newQuote.author)
+            sharedPreferences.saveString(content, newQuote.quote)
+            sharedPreferences.saveString(category, newQuote.category)
+            sharedPreferences.saveInt(savedDate, getDayOfYear())
         }
     }
 

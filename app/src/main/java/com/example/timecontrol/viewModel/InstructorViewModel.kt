@@ -12,8 +12,8 @@ import com.example.timecontrol.validation.use_case.ValidatePhoneNumber
 import com.example.timecontrol.validation.use_case.ValidateQualification
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorEvent
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorState
-import com.example.timecontrol.viewModelHelp.instructor.InstructorsSortType
 import com.example.timecontrol.viewModelHelp.instructor.InstructorsFilterType
+import com.example.timecontrol.viewModelHelp.instructor.InstructorsSortType
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

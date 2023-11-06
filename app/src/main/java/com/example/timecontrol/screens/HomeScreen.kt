@@ -30,7 +30,7 @@ import com.example.timecontrol.R
 import com.example.timecontrol.calendaritem.CalendarItem
 import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.navigation.TabbedNavItems
-import com.example.timecontrol.preferences.dto.Quote
+import com.example.timecontrol.preferences.Quote
 import com.example.timecontrol.quote.Quote
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20
@@ -56,8 +56,8 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
 //                        modifier = Modifier.height(172.dp)
         ) {
-            val students by viewModel.students.collectAsState(emptyList())
-            val instructors by viewModel.instructors.collectAsState(emptyList())
+            val students by viewModel.getAllCurrentStudents().collectAsState(initial = emptyList())
+            val instructors by viewModel.getAllCurrentInstructors().collectAsState(initial = emptyList())
             StatsTile(
                 content = students.size.toString(), title = "Students Currently", onClick = {
                     //TODO - do it better with optional arguments

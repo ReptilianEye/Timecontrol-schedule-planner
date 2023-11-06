@@ -60,7 +60,8 @@ import com.example.timecontrol.pretty
 import com.example.timecontrol.prettyTime
 import com.example.timecontrol.slot.Slot
 import com.example.timecontrol.slot.Variant
-import com.example.timecontrol.ui.theme.*
+import com.example.timecontrol.ui.theme.Blue20
+import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModelFactory.ScheduleViewModelFactory
@@ -105,7 +106,6 @@ fun ScheduleScreen(
         viewModel.validationEvents.collect { event ->
             when (event) {
                 ScheduleViewModel.Event.Success -> {
-
                     Toast.makeText(
                         context, "Schedule saved successfully!", Toast.LENGTH_LONG
                     ).show()
@@ -115,7 +115,9 @@ fun ScheduleScreen(
                     onEvent(ScheduleEvent.OpenSaveBeforeSwitchingDialog)
                 }
 
-                ScheduleViewModel.Event.OpenDatePicker -> datePickerState.show()
+                ScheduleViewModel.Event.OpenDatePicker -> {
+                    datePickerState.show()
+                }
             }
         }
     }

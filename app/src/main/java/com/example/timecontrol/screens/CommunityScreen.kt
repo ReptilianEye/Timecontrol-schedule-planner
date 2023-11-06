@@ -27,7 +27,9 @@ fun CommunityScreen(
     databaseViewModel: DatabaseViewModel,
     navController: NavController,
     owner: ViewModelStoreOwner,
-    navIndex: Int = 0,
+    navIndex: Int,
+    optionsOpen: Boolean,
+    toggleOptions: () -> Unit,
 ) {
     val pagerState = rememberPagerState(initialPage = navIndex);
     Column {

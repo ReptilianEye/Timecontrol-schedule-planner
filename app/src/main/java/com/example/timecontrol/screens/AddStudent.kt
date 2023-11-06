@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
-import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
 import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
 import com.example.timecontrol.getMaxLevel
@@ -57,8 +56,9 @@ import com.example.timecontrol.navigation.Screen
 import com.example.timecontrol.navigation.TabbedNavItems
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.AddStudentViewModel
-import com.example.timecontrol.viewModelFactory.AddStudentViewModelFactory
 import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModelFactory.AddStudentViewModelFactory
+import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
