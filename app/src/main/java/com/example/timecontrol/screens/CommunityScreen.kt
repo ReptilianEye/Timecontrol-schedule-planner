@@ -1,6 +1,9 @@
 package com.example.timecontrol.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.runtime.mutableStateOf
@@ -11,36 +14,51 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import com.example.timecontrol.navigation.TabbedNavItems
 import com.example.timecontrol.viewModel.DatabaseViewModel
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CommunityScreen(
     databaseViewModel: DatabaseViewModel,
     navController: NavController,
     owner: ViewModelStoreOwner,
-    navIndex: Int = 0
+    navIndex: Int = 0,
 ) {
-    var tabbedNavIndex by remember { mutableStateOf(navIndex) }
+    val pagerState = rememberPagerState(initialPage = navIndex);
     Column {
-        TabRow(selectedTabIndex = tabbedNavIndex) {
+        val coroutineScope = rememberCoroutineScope()
+        TabRow(selectedTabIndex = pagerState.currentPage) {
             TabbedNavItems.values().forEach { item ->
-                Tab(selected = tabbedNavIndex == item.index, onClick = {
-                    tabbedNavIndex = item.index
-                }, text = {
-                    Text(text = item.name, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                })
+                Tab(selected = pagerState.currentPage == item.index, onClick = {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(item.index)
+                    }
+                },
+                    text = {
+                        Text(text = item.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    })
             }
         }
-        when (tabbedNavIndex) {
-            0 -> StudentsScreen(viewModel = databaseViewModel, navController = navController)
-            1 -> InstructorsScreen(
-                databaseViewModel = databaseViewModel,
-                navController = navController,
-                owner = owner
-            )
+        HorizontalPager(pageCount = 2, state = pagerState) { index ->
+            when (index) {
+                0 -> StudentsScreen(
+                    viewModel = databaseViewModel,
+                    navController = navController
+                )
+
+                1 -> InstructorsScreen(
+                    databaseViewModel = databaseViewModel,
+                    navController = navController,
+                    owner = owner
+                )
+            }
+
+
         }
     }
 
