@@ -1,4 +1,4 @@
-package com.example.timecontrol.screens
+package com.example.timecontrol.screens.communityScreens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
+import com.example.timecontrol.navigation.MyNavigationViewModel
 import com.example.timecontrol.pretty
 import com.example.timecontrol.studentsinfo.StudentsInfo
 import com.example.timecontrol.ui.theme.Blue10
@@ -24,9 +24,9 @@ import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
 fun StudentDetailsScreen(
-    viewModel: DatabaseViewModel, navController: NavController, studentId: Int?
+    databaseViewModel: DatabaseViewModel, navController: MyNavigationViewModel, studentId: Int?
 ) {
-    val student = viewModel.getStudentById(studentId!!)
+    val student = databaseViewModel.getStudentById(studentId!!)
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
@@ -67,7 +67,7 @@ fun StudentDetailsScreen(
                 MyTableCell(text = lesson.levelAfter ?: "?")
                 MyTableCell(text = lesson.duration.toString() + "min.")
                 MyTableCell(
-                    text = viewModel.getInstructorById(lesson.instructorId).instructor.nickname,
+                    text = databaseViewModel.getInstructorById(lesson.instructorId).instructor.nickname,
                 )
             }
         }

@@ -82,7 +82,6 @@ import java.time.LocalDate
 @Composable
 fun ScheduleScreen(
     databaseViewModel: DatabaseViewModel,
-    navController: NavController,
     owner: ViewModelStoreOwner,
 ) {
     val viewModel = ViewModelProvider(

@@ -1,4 +1,4 @@
-package com.example.timecontrol.screens
+package com.example.timecontrol.screens.communityScreens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,9 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.example.timecontrol.R
-import com.example.timecontrol.navigation.Screen
+import com.example.timecontrol.navigation.MyNavigationViewModel
+import com.example.timecontrol.navigation.ScreensRoutes
 import com.example.timecontrol.studentslistitem.StudentsListItem
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.BlueLogo
@@ -32,7 +32,9 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun StudentsScreen(
-    viewModel: DatabaseViewModel, navController: NavController
+    viewModel: DatabaseViewModel,
+    navController: MyNavigationViewModel,
+//    navController: NavController
 ) {
 
     val students by viewModel.students.collectAsStateWithLifecycle(initialValue = emptyList())
@@ -51,7 +53,13 @@ fun StudentsScreen(
                     placeOfStay = student.placeOfStay,
                     departureDate = student.departureDate.format(DateTimeFormatter.ofPattern("dd.MM"))
                         .toString(),
-                    onClick = { navController.navigate(Screen.StudentDetailsScreen.withArgs(student.id.toString())) },
+                    onClick = {
+                        navController.navigate(
+                            ScreensRoutes.StudentDetailsScreen().withArgs(
+                                student.id.toString()
+                            )
+                        )
+                    },
                     background = if (index % 2 == 0) White80 else Blue10,
                     modifier = Modifier
                         .width(390.dp)
@@ -64,7 +72,9 @@ fun StudentsScreen(
                 .padding(16.dp)
                 .size(75.dp)
                 .align(Alignment.BottomEnd),
-            onClick = { navController.navigate(Screen.AddStudentScreen.route) },
+            onClick = {
+                navController.navigate(ScreensRoutes.AddStudentScreen.route)
+            },
             containerColor = BlueLogo
         ) {
             Icon(

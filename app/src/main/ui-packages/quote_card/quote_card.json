@@ -1,0 +1,219 @@
+{
+  "name": "quote_card",
+  "version": 32,
+  "source-key": {
+    "type": "figma",
+    "file": "p48u97ZvCHr4B9GxuEsXNn",
+    "node": "76:100",
+    "version": "4682896308",
+    "component-id": "bf78175611544f25259e6b0cd42c8d109b408a60"
+  },
+  "default": "QuoteCard",
+  "design": {
+    "atoms": [
+      {
+        "type": "group",
+        "id": "top_level",
+        "root": "true"
+      },
+      {
+        "type": "vector",
+        "id": "Rectangle 6"
+      },
+      {
+        "type": "group",
+        "id": "Text Elements"
+      },
+      {
+        "type": "text",
+        "id": "Quote of the day:"
+      },
+      {
+        "type": "text",
+        "id": "content"
+      },
+      {
+        "type": "text",
+        "id": "author"
+      }
+    ],
+    "modes": {
+      "QuoteCard": {
+        "rules": [
+          {
+            "id": "top_level",
+            "is-structured": "false",
+            "children": [
+              "Rectangle 6",
+              "Text Elements",
+              "Quote of the day:"
+            ]
+          },
+          {
+            "id": "Rectangle 6",
+            "border-radius": "20.0",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "0.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "36.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "345.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "101.0"
+              }
+            },
+            "vector-content": "rectangle_6.svg"
+          },
+          {
+            "id": "Text Elements",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "9.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "47.0"
+              }
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "326.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "fixed",
+                "value": "79.0"
+              }
+            },
+            "is-structured": "false",
+            "children": [
+              "content",
+              "author"
+            ],
+            "clip-content": "false"
+          },
+          {
+            "id": "Quote of the day:",
+            "alignment": {
+              "horizontal": {
+                "attachment": "start",
+                "offset": "9.0"
+              },
+              "vertical": {
+                "attachment": "start",
+                "offset": "0.0"
+              }
+            },
+            "font-weight": "700.0",
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "Quote of the day: ",
+            "overflow": "visible",
+            "text-align-vertical": "center",
+            "text-size": "22.0",
+            "line-height": "1.2599999687888406",
+            "typeface": "Caveat"
+          },
+          {
+            "id": "content",
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "fixed",
+                "value": "326.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "shrink"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$content",
+            "italic": "true",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "left",
+            "text-align-vertical": "center",
+            "typeface": "Anonymous Pro"
+          },
+          {
+            "id": "author",
+            "margin": {
+              "left": "5.0",
+              "top": "65.0",
+              "right": "7.0"
+            },
+            "size-constraints": {
+              "width-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              },
+              "height-constraints": {
+                "sizing-mode": "proportional",
+                "value": "1.0"
+              }
+            },
+            "color": {
+              "alpha": "1.0",
+              "hue": "0.0",
+              "saturation": "0.0",
+              "value": "0.0"
+            },
+            "text-content": "$author",
+            "overflow": "visible",
+            "max-lines": "-1",
+            "text-align": "right",
+            "text-align-vertical": "center",
+            "typeface": "Anonymous Pro"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "content": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    },
+    "author": {
+      "data-type": "text",
+      "required": false,
+      "description": ""
+    }
+  },
+  "previews": [
+    {
+      "design": "QuoteCard",
+      "size": {
+        "width": 345.0,
+        "height": 137.0
+      },
+      "parameters": {
+        "content": "QuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuotQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuot",
+        "author": "~author"
+      }
+    }
+  ],
+  "adin-component-search-paths": [],
+  "image-search-paths": [],
+  "vector-search-paths": []
+}

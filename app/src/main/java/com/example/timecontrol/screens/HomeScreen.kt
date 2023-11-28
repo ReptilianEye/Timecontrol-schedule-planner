@@ -1,6 +1,5 @@
 package com.example.timecontrol.screens
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,34 +17,48 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.example.timecontrol.R
 import com.example.timecontrol.calendaritem.CalendarItem
-import com.example.timecontrol.navigation.Screen
-import com.example.timecontrol.navigation.TabbedNavItems
-import com.example.timecontrol.preferences.Quote
-import com.example.timecontrol.quote.Quote
+import com.example.timecontrol.navigation.CommunityNavItem
+import com.example.timecontrol.navigation.MyNavigationViewModel
+import com.example.timecontrol.navigation.ScreensRoutes
+import com.example.timecontrol.quotes.MyPreferences
+import com.example.timecontrol.quotes.Quote
+import com.example.timecontrol.quotes.QuoteController
+import com.example.timecontrol.quotecard.QuoteCard
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
 fun HomeScreen(
-    quote: Quote, navController: NavController, viewModel: DatabaseViewModel, context: Context
+//    navController: NavController,
+    viewModel: DatabaseViewModel,
+    myNavigationViewModel: MyNavigationViewModel,
+//    context: Context,
 ) {
+    val context = LocalContext.current
+    val preferences = remember { MyPreferences(context) }
+    val controller = QuoteController.create(preferences)
+    val quote = produceState(
+        initialValue = Quote(),
+        producer = { value = controller.getTodayQuote() }).value
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Quote(
+        QuoteCard(
             author = quote.author,
             content = quote.quote,
             modifier = Modifier
@@ -57,20 +70,23 @@ fun HomeScreen(
 //                        modifier = Modifier.height(172.dp)
         ) {
             val students by viewModel.getAllCurrentStudents().collectAsState(initial = emptyList())
-            val instructors by viewModel.getAllCurrentInstructors().collectAsState(initial = emptyList())
+            val instructors by viewModel.getAllCurrentInstructors()
+                .collectAsState(initial = emptyList())
             StatsTile(
                 content = students.size.toString(), title = "Students Currently", onClick = {
                     //TODO - do it better with optional arguments
-                    navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Students.index}"
-                    )
+                    myNavigationViewModel.navigate(ScreensRoutes.CommunityScreen(CommunityNavItem.Students))
+//                    navController.navigate(
+//                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Students.index}"
+//                    )
                 }, modifier = Modifier.size(180.dp)
             )
             StatsTile(
                 content = instructors.size.toString(), title = "Instructors Currently", onClick = {
-                    navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Instructors.index}"
-                    )
+                    myNavigationViewModel.navigate(ScreensRoutes.CommunityScreen(CommunityNavItem.Instructors))
+//                    navController.navigate(
+//                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Instructors.index}"
+//                    )
                 }, modifier = Modifier.size(180.dp)
             )
         }
