@@ -32,20 +32,18 @@ import com.example.timecontrol.calendaritem.CalendarItem
 import com.example.timecontrol.navigation.CommunityNavItem
 import com.example.timecontrol.navigation.MyNavigationViewModel
 import com.example.timecontrol.navigation.ScreensRoutes
+import com.example.timecontrol.quotecard.QuoteCard
 import com.example.timecontrol.quotes.MyPreferences
 import com.example.timecontrol.quotes.Quote
 import com.example.timecontrol.quotes.QuoteController
-import com.example.timecontrol.quotecard.QuoteCard
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.viewModel.DatabaseViewModel
 
 @Composable
 fun HomeScreen(
-//    navController: NavController,
     viewModel: DatabaseViewModel,
     myNavigationViewModel: MyNavigationViewModel,
-//    context: Context,
 ) {
     val context = LocalContext.current
     val preferences = remember { MyPreferences(context) }
@@ -74,19 +72,12 @@ fun HomeScreen(
                 .collectAsState(initial = emptyList())
             StatsTile(
                 content = students.size.toString(), title = "Students Currently", onClick = {
-                    //TODO - do it better with optional arguments
                     myNavigationViewModel.navigate(ScreensRoutes.CommunityScreen(CommunityNavItem.Students))
-//                    navController.navigate(
-//                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Students.index}"
-//                    )
                 }, modifier = Modifier.size(180.dp)
             )
             StatsTile(
                 content = instructors.size.toString(), title = "Instructors Currently", onClick = {
                     myNavigationViewModel.navigate(ScreensRoutes.CommunityScreen(CommunityNavItem.Instructors))
-//                    navController.navigate(
-//                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Instructors.index}"
-//                    )
                 }, modifier = Modifier.size(180.dp)
             )
         }

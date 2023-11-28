@@ -6,14 +6,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.ui.text.style.TextOverflow
-
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.ViewModelStoreOwner
-import com.example.timecontrol.navigation.MyNavigationViewModel
 import com.example.timecontrol.navigation.CommunityNavItem
+import com.example.timecontrol.navigation.MyNavigationViewModel
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import kotlinx.coroutines.launch
 
@@ -22,7 +21,6 @@ import kotlinx.coroutines.launch
 fun CommunityScreen(
     navController: MyNavigationViewModel,
     databaseViewModel: DatabaseViewModel,
-//    navController: NavController,
     owner: ViewModelStoreOwner,
     navIndex: Int=0,
 //    optionsOpen: Boolean,
@@ -52,7 +50,6 @@ fun CommunityScreen(
 
                 1 -> InstructorsScreen(
                     databaseViewModel = databaseViewModel,
-//                    navController = navController,
                     owner = owner
                 )
             }

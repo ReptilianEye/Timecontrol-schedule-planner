@@ -34,7 +34,6 @@ import java.time.format.DateTimeFormatter
 fun StudentsScreen(
     viewModel: DatabaseViewModel,
     navController: MyNavigationViewModel,
-//    navController: NavController
 ) {
 
     val students by viewModel.students.collectAsStateWithLifecycle(initialValue = emptyList())

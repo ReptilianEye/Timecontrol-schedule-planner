@@ -51,9 +51,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
 import com.example.timecontrol.getMaxLevel
-import com.example.timecontrol.navigation.ScreensRoutes
 import com.example.timecontrol.navigation.CommunityNavItem
 import com.example.timecontrol.navigation.MyNavigationViewModel
+import com.example.timecontrol.navigation.ScreensRoutes
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.AddStudentViewModel
 import com.example.timecontrol.viewModel.DatabaseViewModel

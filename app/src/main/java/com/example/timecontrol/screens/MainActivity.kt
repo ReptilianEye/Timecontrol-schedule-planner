@@ -18,7 +18,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,13 +51,12 @@ class MainActivity : ComponentActivity() {
         val factory = DatabaseViewModelFactory(repository)
         databaseViewModel = ViewModelProvider(this, factory)[DatabaseViewModel::class.java]
         setContent {
-//            val preferences = remember { MyPreferences(this) }
-//            val controller = QuoteController.create(preferences)
-//            val quote = produceState(
-//                initialValue = Quote(),
-//                producer = { value = controller.getTodayQuote() })
+            //TODO Think about rememberSavable solution
+//            val myNavigationViewModel = rememberSaveable {
+//                    MyNavigationViewModel()
+//                }
+            val myNavigationViewModel = MyNavigationViewModel()
             TimecontrolTheme {
-                val myNavigationViewModel = MyNavigationViewModel()
 
                 // A surface container using the 'background' color from the theme
                 RootLayout(
@@ -78,14 +77,12 @@ class MainActivity : ComponentActivity() {
                 icon = R.drawable.community_icon,
                 hasNews = false,
                 route = ScreensRoutes.CommunityScreen().getBaseRoute()
-            ),
-            BottomNavigationItem(
+            ), BottomNavigationItem(
                 title = "Home",
                 icon = R.drawable.home_icon,
                 hasNews = false,
                 route = ScreensRoutes.HomeScreen.getBaseRoute()
-            ),
-            BottomNavigationItem(
+            ), BottomNavigationItem(
                 title = "Schedule",
                 icon = R.drawable.schedule_icon,
                 hasNews = false,
@@ -101,28 +98,21 @@ fun RootLayout(
     myNavigationViewModel: MyNavigationViewModel,
     databaseViewModel: DatabaseViewModel,
     owner: ViewModelStoreOwner,
-//    navController: NavController,
-//    localization: Int,
-//    content: @Composable (Boolean, () -> Unit) -> Unit,
 ) {
 //    var optionsOpen by remember {
 //        mutableStateOf(false)
 //    }
 //    val toggleOptions = { optionsOpen = !optionsOpen }
-//    var localization by rememberSaveable {
-//        mutableStateOf(NavigationDestinations.Home.index)
-//    }
-//    val setLocalization = { newLoc: Int -> localization = newLoc }
-//    val navHostController = rememberNavController()
-//    val navController = MyNavigationViewModel(navHostController)
+
     val localization = myNavigationViewModel.localization.collectAsStateWithLifecycle()
+
     Column {
         if (localization.value != ScreensRoutes.ScheduleScreen) {  //because drag and drop does not work with it
             UpperNavbar(
                 modifier = Modifier
                     .height(85.dp)
                     .fillMaxWidth(),
-//                onClickLogo = { localization = NavigationDestinations.Home.index },
+                onClickLogo = { myNavigationViewModel.navigate(ScreensRoutes.HomeScreen) },
 //                onClickOptions = toggleOptions
             )
         }
@@ -137,15 +127,11 @@ fun RootLayout(
                 )
 
                 ScreensRoutes.HomeScreen -> HomeScreen(
-//                    navController = ,
-                    viewModel = databaseViewModel,
-                    myNavigationViewModel = myNavigationViewModel
-//                    context =
+                    viewModel = databaseViewModel, myNavigationViewModel = myNavigationViewModel
                 )
 
                 ScreensRoutes.ScheduleScreen -> ScheduleScreen(
-                    databaseViewModel = databaseViewModel,
-                    owner = owner
+                    databaseViewModel = databaseViewModel, owner = owner
                 )
 
                 ScreensRoutes.AddStudentScreen -> AddStudent(
@@ -161,47 +147,35 @@ fun RootLayout(
                 )
             }
         }
-//        Box(modifier = Modifier.fillMaxHeight(0.88f)) {
-//            content(optionsOpen, toggleOptions)
-//        }
-//        BotNavBar(setLocation=setLocation, navController = navController, localization = localization)
         BotNavBar(navController = myNavigationViewModel, localization = localization.value)
     }
 }
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-//fun BotNavBar(navController: NavController, localization: Int) {
 fun BotNavBar(navController: MyNavigationViewModel, localization: ScreensRoutes) {
-//fun BotNavBar(setLocalization: (Int) -> Unit, localization: Int) {
-    var selectedItemIndex by remember {
-        mutableStateOf(localization)
+    var selectedItemIndex by rememberSaveable {
+        mutableStateOf(localization.mapToBottomNavIndex())
     }
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color.Transparent
+        modifier = Modifier.fillMaxSize(), color = Color.Transparent
     ) {
         Scaffold(
             bottomBar = ({
                 NavigationBar {
                     MainActivity.navItems.forEachIndexed { index, item ->
-                        NavigationBarItem(
-                            selected = selectedItemIndex.mapToBottomNavIndex() == index,
-                            onClick = {
-                                val destination = navController.parseScreenRoute(item.route)
-                                selectedItemIndex = destination
-//                                setLocalization(index)
-//                                navController.navigate(item.route)
-                                navController.navigate(destination)
-                            },
-                            icon = {
-                                Box {
-                                    Icon(
-                                        painter = painterResource(id = item.icon),
-                                        contentDescription = item.title
-                                    )
-                                }
-                            })
+                        NavigationBarItem(selected = selectedItemIndex == index, onClick = {
+                            val destination = navController.parseScreenRoute(item.route)
+                            selectedItemIndex = index
+                            navController.navigate(destination)
+                        }, icon = {
+                            Box {
+                                Icon(
+                                    painter = painterResource(id = item.icon),
+                                    contentDescription = item.title
+                                )
+                            }
+                        })
                     }
                 }
             })

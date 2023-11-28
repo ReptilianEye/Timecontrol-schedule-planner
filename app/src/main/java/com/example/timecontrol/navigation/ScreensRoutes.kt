@@ -1,9 +1,5 @@
 package com.example.timecontrol.navigation
 
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
-import io.ktor.util.reflect.instanceOf
-
 sealed class ScreensRoutes(val route: String) {
     fun getBaseRoute() = route
     override fun equals(other: Any?) =
@@ -66,8 +62,6 @@ sealed class ScreensRoutes(val route: String) {
         }
     }
 
-    //    object StudentsScreen : ScreensRoutes("students_screen")
-//    object InstructorsScreen : ScreensRoutes("instructors_screen")
     object ScheduleScreen : ScreensRoutes("schedule_screen")
     object AddStudentScreen : ScreensRoutes("add_student_screen")
     class StudentDetailsScreen(private val studentId: Int = -1) :
@@ -105,18 +99,16 @@ sealed class ScreensRoutes(val route: String) {
 //        }
 //    }
 
-//object ScreenRoutesSaver: Saver<ScreensRoutes, Map<String,Any>>{
+//object ScreenRoutesSaver : Saver<ScreensRoutes, Map<String, Any>> {
 //    override fun restore(value: Map<String, Any>): ScreensRoutes? {
-//
-//    //        TODO("Not yet implemented")
+//        return ScreensRoutes()
 //
 //    }
 //
 //    override fun SaverScope.save(value: ScreensRoutes): Map<String, Any> {
 //        return mapOf(
-//            "route" to value.getBaseRoute()
+//            "tab" to value.mapToBottomNavIndex()
 //        )
-////        TODO("Not yet implemented")
 //    }
 //
 //}

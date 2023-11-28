@@ -72,7 +72,6 @@ import java.time.LocalDate
 @Composable
 fun InstructorsScreen(
     databaseViewModel: DatabaseViewModel,
-//    navController: NavController,
     owner: ViewModelStoreOwner
 ) {
     val instructorViewModel = ViewModelProvider(
