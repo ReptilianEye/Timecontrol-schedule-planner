@@ -3,7 +3,6 @@ package com.example.timecontrol.viewModelHelp.schedule
 import com.example.timecontrol.database.InstructorWithLessons
 import com.example.timecontrol.database.LessonWithStudentAndInstructor
 import com.example.timecontrol.database.StudentWithLessons
-import java.time.LocalDate
 
 
 data class ScheduleState

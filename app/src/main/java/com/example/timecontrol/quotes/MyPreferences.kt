@@ -1,4 +1,4 @@
-package com.example.timecontrol.preferences
+package com.example.timecontrol.quotes
 
 import android.content.Context
 import androidx.preference.PreferenceManager

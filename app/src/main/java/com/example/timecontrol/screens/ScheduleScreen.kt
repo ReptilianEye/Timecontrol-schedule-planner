@@ -46,7 +46,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.example.timecontrol.DragTarget
 import com.example.timecontrol.DraggableScreen
 import com.example.timecontrol.DropItem
@@ -60,7 +59,8 @@ import com.example.timecontrol.pretty
 import com.example.timecontrol.prettyTime
 import com.example.timecontrol.slot.Slot
 import com.example.timecontrol.slot.Variant
-import com.example.timecontrol.ui.theme.*
+import com.example.timecontrol.ui.theme.Blue20
+import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModel.ScheduleViewModel
 import com.example.timecontrol.viewModelFactory.ScheduleViewModelFactory
@@ -74,14 +74,12 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.LocalDate
 
 // TODO: Reset schedule when changing view
 
 @Composable
 fun ScheduleScreen(
     databaseViewModel: DatabaseViewModel,
-    navController: NavController,
     owner: ViewModelStoreOwner,
 ) {
     val viewModel = ViewModelProvider(
@@ -93,9 +91,6 @@ fun ScheduleScreen(
     val context = LocalContext.current
     val datePickerState = rememberMaterialDialogState()
     val loadingState = viewModel.loadingState.collectAsState(initial = LoadingState())
-//    if (viewModel.isDataReadyInitialization()) {
-//        onEvent(ScheduleEvent.InitSlotDescriptions)
-//    }
     if (!state.value.initialized && !loadingState.value.areInstructorsLoading){
         onEvent(ScheduleEvent.InitSlotDescriptions)
     }
@@ -105,7 +100,6 @@ fun ScheduleScreen(
         viewModel.validationEvents.collect { event ->
             when (event) {
                 ScheduleViewModel.Event.Success -> {
-
                     Toast.makeText(
                         context, "Schedule saved successfully!", Toast.LENGTH_LONG
                     ).show()
@@ -115,7 +109,9 @@ fun ScheduleScreen(
                     onEvent(ScheduleEvent.OpenSaveBeforeSwitchingDialog)
                 }
 
-                ScheduleViewModel.Event.OpenDatePicker -> datePickerState.show()
+                ScheduleViewModel.Event.OpenDatePicker -> {
+                    datePickerState.show()
+                }
             }
         }
     }
@@ -159,7 +155,7 @@ fun ScheduleScreen(
             )
             when (state.value.isEditingEnabled) {
                 true -> EditScheduleScreen(viewModel = viewModel, state = state)
-                false -> ViewScheduleScreen(viewModel = viewModel, state = state, scheduleDate)
+                false -> ViewScheduleScreen(viewModel = viewModel, state = state)
             }
         }
 
@@ -203,7 +199,6 @@ fun ScheduleScreen(
 fun ViewScheduleScreen(
     viewModel: ScheduleViewModel,
     state: State<ScheduleState>,
-    scheduleDate: State<LocalDate>,
 ) {
     val onEvent = viewModel::onEvent
     val getSlot: (Int, Int) -> SlotDetails = viewModel::getSlot
@@ -244,13 +239,9 @@ fun ViewScheduleScreen(
 fun EditScheduleScreen(
     viewModel: ScheduleViewModel, state: State<ScheduleState>,
 ) {
-    val screenWidth = LocalConfiguration.current.screenWidthDp
     val students = state.value.students
     val instructors = state.value.instructors
-    val lessonTimes = state.value.lessonTimes
-    val arePreviousLessonAvailable = state.value.previousLessons.isNotEmpty()
     val onEvent = viewModel::onEvent
-    val isStudentAssigned = viewModel::isStudentAssigned
     val isLessonConfirmed: (AssignedLesson) -> Boolean = viewModel::isLessonConfirmed
     val getInstructorFromIndex = viewModel::getInstructorFromIndex
     val getStudent = viewModel::getStudent

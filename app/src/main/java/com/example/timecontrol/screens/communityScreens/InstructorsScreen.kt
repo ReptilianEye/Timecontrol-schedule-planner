@@ -1,4 +1,4 @@
-package com.example.timecontrol.screens
+package com.example.timecontrol.screens.communityScreens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,7 +51,6 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.example.timecontrol.R
 import com.example.timecontrol.database.InstructorQualification
 import com.example.timecontrol.database.getFullName
@@ -72,7 +71,8 @@ import java.time.LocalDate
 
 @Composable
 fun InstructorsScreen(
-    databaseViewModel: DatabaseViewModel, navController: NavController, owner: ViewModelStoreOwner
+    databaseViewModel: DatabaseViewModel,
+    owner: ViewModelStoreOwner
 ) {
     val instructorViewModel = ViewModelProvider(
         owner, InstructorViewModelFactory(databaseViewModel)

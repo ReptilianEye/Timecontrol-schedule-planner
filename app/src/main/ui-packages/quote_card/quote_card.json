@@ -1,14 +1,14 @@
 {
-  "name": "quote",
+  "name": "quote_card",
   "version": 32,
   "source-key": {
     "type": "figma",
     "file": "p48u97ZvCHr4B9GxuEsXNn",
     "node": "76:100",
-    "version": "4071684689",
+    "version": "4682896308",
     "component-id": "bf78175611544f25259e6b0cd42c8d109b408a60"
   },
-  "default": "Quote",
+  "default": "QuoteCard",
   "design": {
     "atoms": [
       {
@@ -38,7 +38,7 @@
       }
     ],
     "modes": {
-      "Quote": {
+      "QuoteCard": {
         "rules": [
           {
             "id": "top_level",
@@ -47,8 +47,7 @@
               "Rectangle 6",
               "Text Elements",
               "Quote of the day:"
-            ],
-            "clip-content": "false"
+            ]
           },
           {
             "id": "Rectangle 6",
@@ -94,7 +93,7 @@
               },
               "height-constraints": {
                 "sizing-mode": "fixed",
-                "value": "82.16949462890625"
+                "value": "79.0"
               }
             },
             "is-structured": "false",
@@ -127,8 +126,8 @@
             "overflow": "visible",
             "text-align-vertical": "center",
             "text-size": "22.0",
-            "line-height": "1.2102272727272727",
-            "typeface": "Inter"
+            "line-height": "1.2599999687888406",
+            "typeface": "Caveat"
           },
           {
             "id": "content",
@@ -148,6 +147,7 @@
               "value": "0.0"
             },
             "text-content": "$content",
+            "italic": "true",
             "overflow": "visible",
             "max-lines": "-1",
             "text-align": "left",
@@ -157,8 +157,8 @@
           {
             "id": "author",
             "margin": {
-              "left": "265.0",
-              "top": "62.0",
+              "left": "5.0",
+              "top": "65.0",
               "right": "7.0"
             },
             "size-constraints": {
@@ -180,7 +180,7 @@
             "text-content": "$author",
             "overflow": "visible",
             "max-lines": "-1",
-            "text-align": "left",
+            "text-align": "right",
             "text-align-vertical": "center",
             "typeface": "Anonymous Pro"
           }
@@ -202,10 +202,10 @@
   },
   "previews": [
     {
-      "design": "Quote",
+      "design": "QuoteCard",
       "size": {
         "width": 345.0,
-        "height": 170.0
+        "height": 137.0
       },
       "parameters": {
         "content": "QuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuotQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuoteQuot",

@@ -1,4 +1,4 @@
-package com.example.timecontrol.screens
+package com.example.timecontrol.screens.communityScreens
 
 import android.widget.Toast
 import androidx.compose.foundation.border
@@ -48,17 +48,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import androidx.navigation.NavController
-import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
 import com.example.timecontrol.R
 import com.example.timecontrol.database.Levels
 import com.example.timecontrol.getMaxLevel
-import com.example.timecontrol.navigation.Screen
-import com.example.timecontrol.navigation.TabbedNavItems
+import com.example.timecontrol.navigation.CommunityNavItem
+import com.example.timecontrol.navigation.MyNavigationViewModel
+import com.example.timecontrol.navigation.ScreensRoutes
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.viewModel.AddStudentViewModel
-import com.example.timecontrol.viewModelFactory.AddStudentViewModelFactory
 import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModelFactory.AddStudentViewModelFactory
+import com.example.timecontrol.viewModelHelp.student.AddStudentEvent
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -70,7 +70,9 @@ import java.time.format.DateTimeFormatter
 // TODO - add email as an input
 @Composable
 fun AddStudent(
-    databaseViewModel: DatabaseViewModel, navController: NavController, owner: ViewModelStoreOwner
+    databaseViewModel: DatabaseViewModel,
+    navController: MyNavigationViewModel,
+    owner: ViewModelStoreOwner,
 ) {
     val addStudentViewModel = ViewModelProvider(
         owner, AddStudentViewModelFactory(databaseViewModel)
@@ -86,7 +88,7 @@ fun AddStudent(
                         context, "Student has been added successfully!", Toast.LENGTH_LONG
                     ).show()
                     navController.navigate(
-                        "${Screen.CommunityScreen.route}?index=${TabbedNavItems.Students.index}"
+                        ScreensRoutes.CommunityScreen(CommunityNavItem.Students).getFullRoute()
                     )
                 }
             }
@@ -356,7 +358,7 @@ fun AddStudent(
                 .align(Alignment.BottomStart), onClick = {
                 addStudentViewModel.onEvent(AddStudentEvent.Cancel)
                 navController.navigate(
-                    Screen.CommunityScreen.route
+                    ScreensRoutes.CommunityScreen(CommunityNavItem.Students).getFullRoute()
                 )
             }, containerColor = MaterialTheme.colors.onError
         ) {

@@ -1,14 +1,12 @@
-package com.example.timecontrol.preferences
+package com.example.timecontrol.quotes
 
 import com.example.timecontrol.BuildConfig
-import com.example.timecontrol.preferences.dto.Quote
 import io.ktor.client.HttpClient
 import io.ktor.client.features.ClientRequestException
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -23,23 +21,26 @@ class QuoteControllerImpl(val sharedPreferences: MyPreferences, val client: Http
 
     override suspend fun getTodayQuote(): Quote {
         if (getSavedDate() == getDayOfYear()) {
-            return Quote(
-                quote = getContent(),
-                author = getAuthor(),
-                category = category
-            )
+            val author = getAuthor()
+            val quote = getContent()
+            if ((author + quote).isNotEmpty())
+                return Quote(
+                    quote = quote,
+                    author = author,
+                    category = category
+                )
         }
-        val newQuote: Quote = fetchQuote()
+        val newQuote = fetchQuote()
         saveNewQuote(newQuote)
         return newQuote
     }
 
     private fun saveNewQuote(newQuote: Quote) {
         CoroutineScope(Dispatchers.IO).launch {
-            async { sharedPreferences.saveString(author, newQuote.author) }
-            async { sharedPreferences.saveString(content, newQuote.quote) }
-            async { sharedPreferences.saveString(category, newQuote.category) }
-            async { sharedPreferences.saveInt(savedDate, getDayOfYear()) }
+            sharedPreferences.saveString(author, newQuote.author)
+            sharedPreferences.saveString(content, newQuote.quote)
+            sharedPreferences.saveString(category, newQuote.category)
+            sharedPreferences.saveInt(savedDate, getDayOfYear())
         }
     }
 
@@ -72,6 +73,8 @@ class QuoteControllerImpl(val sharedPreferences: MyPreferences, val client: Http
             println(e.message)
             emptyList()
         }
+        if (response.isEmpty())
+            return Quote()
         return response.first()
     }
 
