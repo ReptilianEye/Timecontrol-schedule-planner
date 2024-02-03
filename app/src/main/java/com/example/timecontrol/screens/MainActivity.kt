@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material3.Icon
@@ -23,11 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.timecontrol.R
+import com.example.timecontrol.components.TitleBar
 import com.example.timecontrol.database.AppDatabase
 import com.example.timecontrol.database.AppRepository
 import com.example.timecontrol.navigation.BottomNavigationItem
@@ -37,7 +35,6 @@ import com.example.timecontrol.screens.communityScreens.AddStudent
 import com.example.timecontrol.screens.communityScreens.CommunityScreen
 import com.example.timecontrol.screens.communityScreens.StudentDetailsScreen
 import com.example.timecontrol.ui.theme.TimecontrolTheme
-import com.example.timecontrol.uppernavbar.UpperNavbar
 import com.example.timecontrol.viewModel.DatabaseViewModel
 import com.example.timecontrol.viewModelFactory.DatabaseViewModelFactory
 
@@ -108,12 +105,8 @@ fun RootLayout(
 
     Column {
         if (localization.value != ScreensRoutes.ScheduleScreen) {  //because drag and drop does not work with it
-            UpperNavbar(
-                modifier = Modifier
-                    .height(85.dp)
-                    .fillMaxWidth(),
-                onClickLogo = { myNavigationViewModel.navigate(ScreensRoutes.HomeScreen) },
-//                onClickOptions = toggleOptions
+            TitleBar(
+                onLogoClick = { myNavigationViewModel.navigate(ScreensRoutes.HomeScreen) }
             )
         }
         Box(modifier = Modifier.fillMaxHeight(0.88f)) {
