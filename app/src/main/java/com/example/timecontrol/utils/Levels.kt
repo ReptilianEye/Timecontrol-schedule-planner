@@ -1,7 +1,15 @@
 package com.example.timecontrol.database
-data class Level(val level: String, val skills: List<String>)
 
-val Levels = listOf(
+data class Level(val level: String, val skills: List<String>) : Comparable<Level> {
+    override fun compareTo(other: Level): Int {
+        return level.compareTo(other.level)
+    }
+    fun isBetween(bounds:Pair<Level,Level>): Boolean {
+        return bounds.first <= this && this <= bounds.second
+    }
+}
+
+val LEVELS = listOf(
     Level(
         "1A", listOf(
             "SEA (Spot, Environment, Activity) assessment",
@@ -44,11 +52,16 @@ val Levels = listOf(
         )
     ), Level(
         "2H", listOf(
-            "Body-drag upwind", "Body-drag with the board", "Self-rescue and pack down introduction"
+            "Body-drag upwind",
+            "Body-drag with the board",
+            "Self-rescue and pack down introduction"
         )
     ), Level(
         "2I", listOf(
-            "ROW (Right of Way) rules introduction", "Steady-pull", "Waterstart", "Controlled stop"
+            "ROW (Right of Way) rules introduction",
+            "Steady-pull",
+            "Waterstart",
+            "Controlled stop"
         )
     ), Level(
         "3J", listOf(
