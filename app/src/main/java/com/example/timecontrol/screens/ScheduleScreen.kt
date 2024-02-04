@@ -55,14 +55,12 @@ import com.example.timecontrol.database.getShortcutName
 import com.example.timecontrol.instructorcell.InstructorCell
 import com.example.timecontrol.lessonslistitem.LessonsListItem
 import com.example.timecontrol.lessontimecell.LessonTimeCell
-import com.example.timecontrol.utils.pretty
-import com.example.timecontrol.utils.prettyTime
 import com.example.timecontrol.slot.Slot
 import com.example.timecontrol.slot.Variant
 import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.ui.theme.BlueLogo
-import com.example.timecontrol.viewModels.DatabaseViewModel
-import com.example.timecontrol.viewModels.ScheduleViewModel
+import com.example.timecontrol.utils.pretty
+import com.example.timecontrol.utils.prettyTime
 import com.example.timecontrol.viewModelFactory.ScheduleViewModelFactory
 import com.example.timecontrol.viewModelHelp.schedule.AssignedLesson
 import com.example.timecontrol.viewModelHelp.schedule.LoadingState
@@ -70,6 +68,8 @@ import com.example.timecontrol.viewModelHelp.schedule.ScheduleEvent
 import com.example.timecontrol.viewModelHelp.schedule.ScheduleState
 import com.example.timecontrol.viewModelHelp.schedule.SlotDetails
 import com.example.timecontrol.viewModelHelp.schedule.SlotStatus
+import com.example.timecontrol.viewModels.DatabaseViewModel
+import com.example.timecontrol.viewModels.ScheduleViewModel
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.date.datepicker

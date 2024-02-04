@@ -36,12 +36,7 @@ import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.ui.theme.White80
 import com.example.timecontrol.utils.LevelController
 import com.example.timecontrol.viewModels.DatabaseViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.newSingleThreadContext
-import java.lang.Thread.sleep
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -60,9 +55,6 @@ fun StudentsScreen(
         students.filter { student -> filters.all { it.check(student) } }
     }
 
-//    map {
-//        it.filter { student -> filterController.filter(student) }
-//    }
         .collectAsStateWithLifecycle(initialValue = emptyList())
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
@@ -78,12 +70,6 @@ fun StudentsScreen(
             if (students.isEmpty()) Text(text = "No students fulfill the criteria.")
 
             FilterBar({ filteringDialogOpen = true }, filterController)
-
-//            TextField(
-//                value = startsWith,
-//                onValueChange = { startsWith = it },
-//                label = { Text("Search") })
-
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(3.dp)

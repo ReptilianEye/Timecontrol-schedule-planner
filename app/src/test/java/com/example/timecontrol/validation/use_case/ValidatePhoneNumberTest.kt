@@ -1,7 +1,6 @@
 package com.example.timecontrol.validation.use_case
 
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
