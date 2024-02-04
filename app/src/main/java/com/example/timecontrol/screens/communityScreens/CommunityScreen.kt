@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.timecontrol.navigation.CommunityNavItem
 import com.example.timecontrol.navigation.MyNavigationViewModel
-import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModels.DatabaseViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

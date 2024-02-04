@@ -18,7 +18,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.IntSize
-import com.example.timecontrol.viewModel.ScheduleViewModel
+import com.example.timecontrol.viewModels.ScheduleViewModel
 
 internal val LocalDragTargetInfo = compositionLocalOf { DragTargetInfo() }
 

@@ -1,4 +1,4 @@
-package com.example.timecontrol.viewModel
+package com.example.timecontrol.viewModels
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel

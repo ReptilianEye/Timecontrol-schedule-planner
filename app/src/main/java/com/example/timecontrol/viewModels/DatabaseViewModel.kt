@@ -1,4 +1,4 @@
-package com.example.timecontrol.viewModel
+package com.example.timecontrol.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
