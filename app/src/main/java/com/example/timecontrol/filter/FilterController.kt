@@ -55,7 +55,6 @@ sealed class Filter<T> {
     ) : Filter<Pair<LevelController, LevelController>>() {
         override fun get() = levelsFiltered
         override fun setFilter(value: Pair<LevelController, LevelController>) {
-//            levelsFiltered = value
             filterController.setLevelsFilter(value)
         }
 
@@ -81,7 +80,6 @@ sealed class Filter<T> {
         }
 
         override fun setFilter(value: Boolean) {
-//            available = value
             filterController.setAvailableFilter(value)
         }
 
@@ -104,7 +102,6 @@ sealed class Filter<T> {
         override fun get() = departed
 
         override fun setFilter(value: Boolean) {
-//            departed = value
             filterController.setDepartedFilter(value)
         }
 
@@ -124,7 +121,6 @@ sealed class Filter<T> {
     ) : Filter<Boolean>() {
         override fun get() = incoming
         override fun setFilter(value: Boolean) {
-//            incoming = value
             filterController.setIncomingFilter(value)
         }
 
