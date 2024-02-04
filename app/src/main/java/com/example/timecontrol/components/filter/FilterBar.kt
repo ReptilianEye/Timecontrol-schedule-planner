@@ -1,9 +1,10 @@
-package com.example.timecontrol.components
+package com.example.timecontrol.components.filter
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material3.Icon
@@ -21,10 +22,9 @@ import com.example.timecontrol.R
 import com.example.timecontrol.filter.FilterController
 import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.ui.theme.BlueLogo
-import com.example.timecontrol.utils.LevelController
 
 @Composable
-fun FilterBar(filterController: FilterController) {
+fun FilterBar(onOpen: () -> Unit, filterController: FilterController) {
 //    val filterController = FilterController().apply {
 ////        setAgeFilter(1 to 2)
 ////        setLevelsFilter(
@@ -43,7 +43,10 @@ fun FilterBar(filterController: FilterController) {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             item {
                 Button(
-                    onClick = { /*open filter*/ },
+                    onClick = {
+                        println("Filter button clicked")
+                        onOpen()
+                    },
                     colors = ButtonDefaults.buttonColors(
                         backgroundColor = BlueLogo,
                         contentColor = Color.White
@@ -56,27 +59,22 @@ fun FilterBar(filterController: FilterController) {
                     Text(text = "Filter")
                 }
             }
-            filters.forEach {
-                if (it.isActive()) {
-                    item {
-                        Button(
-                            onClick = { it.resetFilter() },
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Blue20,
-                                contentColor = Color.Black
-                            ),
-                            shape = RoundedCornerShape(20.dp),
-                        ) {
-                            Text(text = it.toString())
-                            Icon(
-                                painter = painterResource(id = R.drawable.cancelicon),
-                                contentDescription = null
-                            )
-                        }
-                    }
+            itemsIndexed(filters.filter { it.isActive() }) { _, filter ->
+                Button(
+                    onClick = { filter.resetFilter() },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Blue20,
+                        contentColor = Color.Black
+                    ),
+                    shape = RoundedCornerShape(20.dp),
+                ) {
+                    Text(text = filter.toString())
+                    Icon(
+                        painter = painterResource(id = R.drawable.cancelicon),
+                        contentDescription = null
+                    )
                 }
             }
-
         }
     }
 }
@@ -84,7 +82,7 @@ fun FilterBar(filterController: FilterController) {
 @Composable
 @Preview(showBackground = true, heightDp = 100)
 fun FilterBarPreview() {
-    FilterBar(FilterController())
+    FilterBar({}, FilterController())
 }
 
 

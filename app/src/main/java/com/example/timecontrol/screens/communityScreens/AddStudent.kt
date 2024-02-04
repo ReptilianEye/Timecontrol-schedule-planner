@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.timecontrol.R
+import com.example.timecontrol.components.LevelSelector
 import com.example.timecontrol.navigation.CommunityNavItem
 import com.example.timecontrol.navigation.MyNavigationViewModel
 import com.example.timecontrol.navigation.ScreensRoutes
@@ -311,35 +312,36 @@ fun AddStudent(
 
 
                 if (!newKiter) {
+                    LevelSelector(levelsCheckState = levelsCheckState)
                     //Levels
-                    Text(text = "Select level (hold to see level details)")
-                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 64.dp)) {
-                        itemsIndexed(levelsCheckState) { i, _ ->
-                            Box(
-                                modifier = Modifier
-                                    .border(0.5.dp, Color.Black)
-                                    .padding(1.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                ) {
-                                    Checkbox(
-                                        checked = levelsCheckState[i].value,
-                                        onCheckedChange = {
-                                            if (it) for (j in 0..i) levelsCheckState[j].value =
-                                                true //mark all lower levels and itself
-                                            else levelsCheckState[i].value = false //uncheck
-                                        })
-                                    Text(
-                                        text = LevelController.getLevel(i).level,
-                                        fontSize = 16.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                }
-                            }
-
-                        }
-                    }
+//                    Text(text = "Select level (hold to see level details)")
+//                    LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 64.dp)) {
+//                        itemsIndexed(levelsCheckState) { i, _ ->
+//                            Box(
+//                                modifier = Modifier
+//                                    .border(0.5.dp, Color.Black)
+//                                    .padding(1.dp)
+//                            ) {
+//                                Row(
+//                                    verticalAlignment = Alignment.CenterVertically,
+//                                ) {
+//                                    Checkbox(
+//                                        checked = levelsCheckState[i].value,
+//                                        onCheckedChange = {
+//                                            if (it) for (j in 0..i) levelsCheckState[j].value =
+//                                                true //mark all lower levels and itself
+//                                            else levelsCheckState[i].value = false //uncheck
+//                                        })
+//                                    Text(
+//                                        text = LevelController.getLevel(i).level,
+//                                        fontSize = 16.sp,
+//                                        fontWeight = FontWeight.Bold
+//                                    )
+//                                }
+//                            }
+//
+//                        }
+//                    }
                     if (state.levelError != null) {
                         Text(text = state.levelError!!, color = MaterialTheme.colors.error)
                     }

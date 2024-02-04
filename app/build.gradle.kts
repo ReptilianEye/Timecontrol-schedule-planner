@@ -5,6 +5,7 @@ plugins {
     id("com.google.relay") version "0.3.08"
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.21"
+    id("com.google.gms.google-services")
 }
 android {
     namespace = "com.example.timecontrol"
@@ -55,6 +56,10 @@ android {
 }
 
 dependencies {
+
+    // Importy the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
+    implementation("com.google.firebase:firebase-analytics")
 
     // .collectAsStateWithLifecycle
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")

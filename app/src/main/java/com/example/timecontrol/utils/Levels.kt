@@ -2,10 +2,9 @@ package com.example.timecontrol.utils
 
 import androidx.compose.runtime.MutableState
 
-data class LevelController(val level: String, val skills: List<String>) : Comparable<LevelController> {
+data class LevelController(val level: String, val skills: List<String>) :
+    Comparable<LevelController> {
     override fun compareTo(other: LevelController) = level.compareTo(other.level)
-
-
 
     fun isBetween(bounds: Pair<LevelController, LevelController>): Boolean =
         bounds.first <= this && this <= bounds.second
@@ -18,7 +17,14 @@ data class LevelController(val level: String, val skills: List<String>) : Compar
 
         fun getLevel(i: Int): LevelController = getLevels()[i]
         fun getLevels(): List<LevelController> = LEVELS
-        fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>) = levelsCheckState.indexOfLast { it.value }.let { if(it != -1)  getLevels()[it].level else "D" }
+        fun getMinMaxLevel() = getLevels().first() to getLevels().last()
+        fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>) =
+            levelsCheckState.indexOfLast { it.value }
+                .let { if (it != -1) getLevels()[it].level else "D" }
+
+        fun getMinLevel(levelsCheckState: List<MutableState<Boolean>>) =
+            levelsCheckState.indexOfFirst { it.value }
+                .let { if (it != -1) getLevels()[it].level else "D" }
 
         private val LEVELS = listOf(
             LevelController(

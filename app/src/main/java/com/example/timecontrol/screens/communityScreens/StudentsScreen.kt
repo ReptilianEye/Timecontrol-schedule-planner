@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.TextField
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,7 +25,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.timecontrol.R
-import com.example.timecontrol.components.FilterBar
+import com.example.timecontrol.components.filter.FilterBar
+import com.example.timecontrol.components.filter.FilterPanel
 import com.example.timecontrol.filter.FilterController
 import com.example.timecontrol.navigation.MyNavigationViewModel
 import com.example.timecontrol.navigation.ScreensRoutes
@@ -34,10 +34,14 @@ import com.example.timecontrol.studentslistitem.StudentsListItem
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.BlueLogo
 import com.example.timecontrol.ui.theme.White80
+import com.example.timecontrol.utils.LevelController
 import com.example.timecontrol.viewModels.DatabaseViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.newSingleThreadContext
+import java.lang.Thread.sleep
 import java.time.format.DateTimeFormatter
 
 @Composable
@@ -45,7 +49,13 @@ fun StudentsScreen(
     viewModel: DatabaseViewModel,
     navController: MyNavigationViewModel,
 ) {
+    var filteringDialogOpen by remember { mutableStateOf(false) }
     val filterController = FilterController()
+    filterController.setAgeFilter(18 to 100)
+    filterController.setLevelsFilter(LevelController.fromString("1A") to LevelController.fromString("1B"))
+    filterController.setAvailableFilter(true)
+    filterController.setDepartedFilter(true)
+    filterController.setIncomingFilter(true)
     val students by viewModel.students.combine(filterController.filters) { students, filters ->
         students.filter { student -> filters.all { it.check(student) } }
     }
@@ -56,10 +66,18 @@ fun StudentsScreen(
         .collectAsStateWithLifecycle(initialValue = emptyList())
     Box(modifier = Modifier.fillMaxSize()) {
         Column {
+            if (filteringDialogOpen) {
+                FilterPanel(
+                    filterController = filterController,
+                    onDismiss = { filteringDialogOpen = false },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
 
             if (students.isEmpty()) Text(text = "No students fulfill the criteria.")
 
-            FilterBar(filterController)
+            FilterBar({ filteringDialogOpen = true }, filterController)
 
 //            TextField(
 //                value = startsWith,

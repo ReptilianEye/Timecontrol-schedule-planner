@@ -7,6 +7,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 
+fun ClosedFloatingPointRange<Float>.toPair() = this.start.toInt() to this.endInclusive.toInt()
 
 fun LocalDate.pretty(pattern: String = "dd.MM"): String =
     this.format(DateTimeFormatter.ofPattern(pattern))

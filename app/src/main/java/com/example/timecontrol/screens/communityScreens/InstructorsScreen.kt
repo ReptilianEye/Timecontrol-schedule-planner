@@ -72,7 +72,7 @@ import java.time.LocalDate
 @Composable
 fun InstructorsScreen(
     databaseViewModel: DatabaseViewModel,
-    owner: ViewModelStoreOwner
+    owner: ViewModelStoreOwner,
 ) {
     val instructorViewModel = ViewModelProvider(
         owner, InstructorViewModelFactory(databaseViewModel)
@@ -138,7 +138,7 @@ fun InstructorsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddInstructorDialog(
-    state: AddInstructorState, onEvent: (AddInstructorEvent) -> Unit, modifier: Modifier = Modifier
+    state: AddInstructorState, onEvent: (AddInstructorEvent) -> Unit, modifier: Modifier = Modifier,
 ) {
     AlertDialog(modifier = modifier,
         properties = DialogProperties(usePlatformDefaultWidth = false),

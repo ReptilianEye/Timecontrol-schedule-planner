@@ -1,6 +1,5 @@
 package com.example.timecontrol.filter
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.timecontrol.database.Student
@@ -14,58 +13,79 @@ import java.time.Period
 
 
 //default: all people currently on place
-sealed class Filter() {
-    abstract val viewModel: FilterController
-    abstract fun resetFilter()
+sealed class Filter<T> {
+    abstract val filterController: FilterController
+    open fun resetFilter() {
+        setFilter(default)
+    }
+
+    abstract fun get(): T
+    abstract fun setFilter(value: T)
     abstract fun isActive(): Boolean
     abstract fun check(student: Student): Boolean
     abstract override fun toString(): String
+    abstract val default: T
+
     data class Age(
-        var ageFiltered: Pair<Int, Int>? = null, override val viewModel: FilterController,
-    ) : Filter() {
-        override fun resetFilter() {
-            viewModel.setAgeFilter(null)
+        override val filterController: FilterController,
+        override val default: Pair<Int, Int> = 1 to 100,
+        var ageFiltered: Pair<Int, Int> = default,
+    ) : Filter<Pair<Int, Int>>() {
+        override fun get() = ageFiltered
+
+        override fun setFilter(value: Pair<Int, Int>) {
+            filterController.setAgeFilter(value)
         }
 
-        override fun isActive() = ageFiltered != null
+        override fun isActive() = ageFiltered != default
         override fun check(student: Student): Boolean {
             if (!isActive()) return true
             val age = Period.between(student.birthDate, LocalDate.now()).years
-            return (age in ageFiltered!!.first..ageFiltered!!.second)
+            return (age in ageFiltered.first..ageFiltered.second)
         }
 
-        override fun toString() = "Age: ${ageFiltered?.first} - ${ageFiltered?.second}"
+        override fun toString() = "Age: ${ageFiltered.first} - ${ageFiltered.second}"
 
     }
 
     data class Levels(
-        var levelsFiltered: Pair<LevelController, LevelController>? = null,
-        override val viewModel: FilterController,
-    ) : Filter() {
-        override fun resetFilter() {
-            viewModel.setLevelsFilter(null)
+        override val filterController: FilterController,
+        override val default: Pair<LevelController, LevelController> = LevelController.getMinMaxLevel(),
+        var levelsFiltered: Pair<LevelController, LevelController> = default,
+    ) : Filter<Pair<LevelController, LevelController>>() {
+        override fun get() = levelsFiltered
+        override fun setFilter(value: Pair<LevelController, LevelController>) {
+//            levelsFiltered = value
+            filterController.setLevelsFilter(value)
         }
 
-        override fun isActive(): Boolean = levelsFiltered != null
+        override fun isActive(): Boolean = levelsFiltered != default
         override fun check(student: Student): Boolean {
             if (!isActive()) return true
             val studentLevel = LevelController.fromString(student.level)
-            return studentLevel >= levelsFiltered!!.first && studentLevel <= levelsFiltered!!.second
+            return studentLevel >= levelsFiltered.first && studentLevel <= levelsFiltered.second
         }
 
         override fun toString() =
-            "Levels: ${levelsFiltered?.first?.level} - ${levelsFiltered?.second?.level}"
+            "Levels: ${levelsFiltered.first.level} - ${levelsFiltered.second.level}"
     }
 
     data class Available(
-        var areAvailable: Boolean = true,
-        override val viewModel: FilterController,
-    ) : Filter() {
+        override val filterController: FilterController,
+        override val default: Boolean = true,
+        var available: Boolean = default,
+    ) : Filter<Boolean>() {
+        override fun get() = available
         override fun resetFilter() {
-            viewModel.setAvailableFilter(false)
+            setFilter(false)
         }
 
-        override fun isActive() = areAvailable
+        override fun setFilter(value: Boolean) {
+//            available = value
+            filterController.setAvailableFilter(value)
+        }
+
+        override fun isActive() = available == default
         override fun check(student: Student): Boolean {
             if (!isActive()) return true
             return student.arrivalDate.isBefore(LocalDate.now()) && student.departureDate.isAfter(
@@ -76,10 +96,16 @@ sealed class Filter() {
         override fun toString() = "Available"
     }
 
-    data class Departed(var departed: Boolean = false, override val viewModel: FilterController) :
-        Filter() {
-        override fun resetFilter() {
-            viewModel.setDepartedFilter(false)
+    data class Departed(
+        override val filterController: FilterController,
+        override val default: Boolean = false,
+        var departed: Boolean = default,
+    ) : Filter<Boolean>() {
+        override fun get() = departed
+
+        override fun setFilter(value: Boolean) {
+//            departed = value
+            filterController.setDepartedFilter(value)
         }
 
         override fun isActive() = departed
@@ -91,10 +117,15 @@ sealed class Filter() {
         override fun toString() = "Departed"
     }
 
-    data class Incoming(var incoming: Boolean = false, override val viewModel: FilterController) :
-        Filter() {
-        override fun resetFilter() {
-            viewModel.setDepartedFilter(false)
+    data class Incoming(
+        override val filterController: FilterController,
+        override val default: Boolean = false,
+        var incoming: Boolean = default,
+    ) : Filter<Boolean>() {
+        override fun get() = incoming
+        override fun setFilter(value: Boolean) {
+//            incoming = value
+            filterController.setIncomingFilter(value)
         }
 
         override fun isActive() = incoming
@@ -109,34 +140,38 @@ sealed class Filter() {
 }
 
 class FilterController : ViewModel() {
-    private var ageFiltered = MutableStateFlow(Filter.Age(viewModel = this))
-    private var levelsFiltered = MutableStateFlow(Filter.Levels(viewModel = this))
-    private var areAvailable = MutableStateFlow(Filter.Available(viewModel = this))
-    private var departed = MutableStateFlow(Filter.Departed(viewModel = this))
-    private var incoming = MutableStateFlow(Filter.Incoming(viewModel = this))
+
+    val ageFiltered = MutableStateFlow(Filter.Age(filterController = this))
+    var levelsFiltered = MutableStateFlow(Filter.Levels(filterController = this))
+    var available = MutableStateFlow(Filter.Available(filterController = this))
+    var departed = MutableStateFlow(Filter.Departed(filterController = this))
+    var incoming = MutableStateFlow(Filter.Incoming(filterController = this))
     val filters = combine(
-        ageFiltered, levelsFiltered, areAvailable, departed, incoming
+        ageFiltered, levelsFiltered, available, departed, incoming
     ) { age, levels, available, departed, incoming ->
         listOf(age, levels, available, departed, incoming)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(2000), emptyList())
 
-    fun filter(student: Student): Boolean {
-        return filters.value.all { it.check(student) }
+    fun getAllFilters() = filters.value
+
+    fun setAgeFilter(newAge: Pair<Int, Int>) {
+        ageFiltered.value = ageFiltered.value.copy(ageFiltered = newAge)
     }
 
-    fun setAgeFilter(age: Pair<Int, Int>?) {
-        ageFiltered.value = ageFiltered.value.copy(ageFiltered = age)
+    fun setLevelsFilter(newLevels: Pair<LevelController, LevelController>) {
+        levelsFiltered.value = levelsFiltered.value.copy(levelsFiltered = newLevels)
     }
 
-    fun setLevelsFilter(levels: Pair<LevelController, LevelController>?) {
-        levelsFiltered.value = levelsFiltered.value.copy(levelsFiltered = levels)
+    fun setAvailableFilter(newAvailable: Boolean) {
+        available.value = available.value.copy(available = newAvailable)
     }
 
-    fun setAvailableFilter(available: Boolean) {
-        areAvailable.value = areAvailable.value.copy(areAvailable = available)
+    fun setDepartedFilter(newDeparted: Boolean) {
+        departed.value = departed.value.copy(departed = newDeparted)
     }
 
-    fun setDepartedFilter(departed: Boolean) {
-        this.departed.value = this.departed.value.copy(departed = departed)
+    fun setIncomingFilter(newIncoming: Boolean) {
+        incoming.value = incoming.value.copy(incoming = newIncoming)
     }
+
 }
