@@ -38,7 +38,7 @@ import com.example.timecontrol.quotes.Quote
 import com.example.timecontrol.quotes.QuoteController
 import com.example.timecontrol.statstile.StatsTile
 import com.example.timecontrol.ui.theme.Blue20
-import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModels.DatabaseViewModel
 
 @Composable
 fun HomeScreen(

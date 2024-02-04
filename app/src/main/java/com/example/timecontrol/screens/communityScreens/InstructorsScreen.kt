@@ -55,13 +55,13 @@ import com.example.timecontrol.R
 import com.example.timecontrol.database.InstructorQualification
 import com.example.timecontrol.database.getFullName
 import com.example.timecontrol.instructordetails.InstructorDetails
-import com.example.timecontrol.pretty
-import com.example.timecontrol.toLocalDate
-import com.example.timecontrol.toMillis
+import com.example.timecontrol.utils.pretty
+import com.example.timecontrol.utils.toLocalDate
+import com.example.timecontrol.utils.toMillis
 import com.example.timecontrol.ui.theme.Blue20
 import com.example.timecontrol.ui.theme.BlueLogo
-import com.example.timecontrol.viewModel.DatabaseViewModel
-import com.example.timecontrol.viewModel.InstructorViewModel
+import com.example.timecontrol.viewModels.DatabaseViewModel
+import com.example.timecontrol.viewModels.InstructorViewModel
 import com.example.timecontrol.viewModelFactory.InstructorViewModelFactory
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorEvent
 import com.example.timecontrol.viewModelHelp.instructor.AddInstructorState
@@ -72,7 +72,7 @@ import java.time.LocalDate
 @Composable
 fun InstructorsScreen(
     databaseViewModel: DatabaseViewModel,
-    owner: ViewModelStoreOwner
+    owner: ViewModelStoreOwner,
 ) {
     val instructorViewModel = ViewModelProvider(
         owner, InstructorViewModelFactory(databaseViewModel)
@@ -138,7 +138,7 @@ fun InstructorsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddInstructorDialog(
-    state: AddInstructorState, onEvent: (AddInstructorEvent) -> Unit, modifier: Modifier = Modifier
+    state: AddInstructorState, onEvent: (AddInstructorEvent) -> Unit, modifier: Modifier = Modifier,
 ) {
     AlertDialog(modifier = modifier,
         properties = DialogProperties(usePlatformDefaultWidth = false),

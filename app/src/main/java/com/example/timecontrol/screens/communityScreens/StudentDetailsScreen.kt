@@ -16,15 +16,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.timecontrol.navigation.MyNavigationViewModel
-import com.example.timecontrol.pretty
+import com.example.timecontrol.utils.pretty
 import com.example.timecontrol.studentsinfo.StudentsInfo
 import com.example.timecontrol.ui.theme.Blue10
 import com.example.timecontrol.ui.theme.White80
-import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModels.DatabaseViewModel
 
 @Composable
 fun StudentDetailsScreen(
-    databaseViewModel: DatabaseViewModel, navController: MyNavigationViewModel, studentId: Int?
+    databaseViewModel: DatabaseViewModel, navController: MyNavigationViewModel, studentId: Int?,
 ) {
     val student = databaseViewModel.getStudentById(studentId!!)
     LazyColumn(
@@ -78,7 +78,7 @@ fun StudentDetailsScreen(
 
 @Composable
 fun RowScope.MyTableCell(
-    text: String, header: Boolean = false
+    text: String, header: Boolean = false,
 ) {
     Text(
         text = text,

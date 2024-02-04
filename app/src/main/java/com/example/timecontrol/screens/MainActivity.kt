@@ -35,7 +35,7 @@ import com.example.timecontrol.screens.communityScreens.AddStudent
 import com.example.timecontrol.screens.communityScreens.CommunityScreen
 import com.example.timecontrol.screens.communityScreens.StudentDetailsScreen
 import com.example.timecontrol.ui.theme.TimecontrolTheme
-import com.example.timecontrol.viewModel.DatabaseViewModel
+import com.example.timecontrol.viewModels.DatabaseViewModel
 import com.example.timecontrol.viewModelFactory.DatabaseViewModelFactory
 
 class MainActivity : ComponentActivity() {

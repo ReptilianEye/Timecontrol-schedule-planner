@@ -1,17 +1,13 @@
-package com.example.timecontrol
+package com.example.timecontrol.utils
 
 import androidx.compose.runtime.MutableState
-import com.example.timecontrol.database.Levels
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-//get max level from checked for student input
-fun getMaxLevel(levelsCheckState: List<MutableState<Boolean>>): String {
-    for (i in levelsCheckState.lastIndex downTo 0) if (levelsCheckState[i].value) return Levels[i].level
-    return "D"
-}
+
+fun ClosedFloatingPointRange<Float>.toPair() = this.start.toInt() to this.endInclusive.toInt()
 
 fun LocalDate.pretty(pattern: String = "dd.MM"): String =
     this.format(DateTimeFormatter.ofPattern(pattern))

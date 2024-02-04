@@ -72,7 +72,8 @@ sealed class ScreensRoutes(val route: String) {
 
         companion object {
             fun parse(route: String): ScreensRoutes {
-                return StudentDetailsScreen(0)
+                val studentId = route.split("/").last().toInt()
+                return StudentDetailsScreen(studentId)
             }
         }
     }
